@@ -1,4 +1,5 @@
 import json
+import logging
 import random
 from collections import deque
 from typing import Deque, List
@@ -60,6 +61,7 @@ def all_players_except_winner(
 
 
 def main():
+    logging.basicConfig()
     cards = read_cards()
     shuffle_deck(cards)
 
@@ -94,17 +96,17 @@ def main():
         # beginning from pole, reveal card
         # trigger abilities
 
-        print(board)
+        logging.debug(board)
 
         # resolve phase
         # from pole, find the winning power (lowest for defense, highest for attack), in case of multiple cards with the same power, the card closest from pole wins (linearly, not bilinearly).
         for resolving_card in board.resolve_cards():
-            print(resolving_card)
+            logging.debug(resolving_card)
             resolving_card.card.on_reveal()
 
         # Before power
         for resolving_card in board.resolve_cards():
-            print(resolving_card)
+            logging.debug(resolving_card)
             resolving_card.card.before_power()
 
         winning_card = board.resolve_power()
@@ -120,9 +122,9 @@ def main():
             ):
                 resolving_card.card.on_lose()
 
-        print("")
-        print("Winning card!", winning_card)
-        print("")
+        logging.debug("")
+        logging.debug("Winning card!", winning_card)
+        logging.debug("")
         victories[winning_card.player] += 1
         for active_card in board.losing_cards():
             active_card.player.add_card_to_hand(active_card.card)
@@ -142,11 +144,11 @@ def main():
                 new_card = cards.popleft()
                 player.add_card_to_hand(new_card, index=cycled_card_index)
 
-            print("CYCLE!")
+            logging.debug("CYCLE!")
 
-    print("")
-    print("Victories", victories)
-    print("")
+    logging.debug("")
+    logging.debug("Victories", victories)
+    logging.debug("")
 
 
 if __name__ == "__main__":
