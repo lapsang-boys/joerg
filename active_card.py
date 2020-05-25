@@ -1,6 +1,6 @@
-from player import Player
 from card import Card
 from order import Order
+from player import Player
 
 
 class ActiveCard:

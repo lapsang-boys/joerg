@@ -3,10 +3,10 @@ import random
 from collections import deque
 from typing import Deque, List
 
+from board import Board
 from card import Card
 from order import Order
 from player import Player
-
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUM_PLAYERS = 4

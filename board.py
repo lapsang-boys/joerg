@@ -1,9 +1,9 @@
 from typing import List
 
+from active_card import ActiveCard
 from card import Card
 from order import Order
 from player import Player
-from active_card import ActiveCard
 
 
 class Board:
