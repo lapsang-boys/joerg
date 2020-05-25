@@ -6,6 +6,9 @@ from cards.card import Card
 from order import Order
 
 
+_NAME_LOOKUP = ["Emil", "Henry", "Robin", "Bob"]
+
+
 class Player:
     def __init__(self, num: int):
         self.num = num
@@ -42,4 +45,4 @@ class Player:
         logging.debug("not implemented: set_card_visible")
 
     def __repr__(self):
-        return f"Player {self.num}"
+        return f"Player {_NAME_LOOKUP[self.num]}"
