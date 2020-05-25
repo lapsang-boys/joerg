@@ -4,6 +4,15 @@ from collections import deque
 from enum import Enum
 from typing import Any, Deque, List, Mapping, Optional, Tuple
 
+from cards import (
+    ON_WIN_CARDS,
+    ON_LOSE_CARDS,
+    ON_REVEAL_CARDS,
+    ON_CYCLE_CARDS,
+    ON_HAND_ENTER_CARDS,
+    BEFORE_POWER_CARDS,
+)
+
 ## Card ideas:
 # Mess with deck
 # Change order
@@ -11,49 +20,6 @@ from typing import Any, Deque, List, Mapping, Optional, Tuple
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUM_PLAYERS = 4
 STARTING_HAND_SIZE = 3
-
-ON_WIN_CARDS = [
-    "Räv",
-    "Falken",
-]
-
-ON_LOSE_CARDS = [
-    "Biet",
-    "Fjäril",
-    "Gamle älgen",
-    "Skatan",
-]
-
-ON_REVEAL_CARDS = [
-    "Förtryckt Aborre",
-    "Pilgiftsgroda",
-    "Igelkotten",
-    "Myrslok",
-    "Uttern",
-    "Groda",
-    "Sälspion",
-    "Ekorren",
-    "Fiskmås",
-    "Vildsvinet",
-    "Storbent hare",
-    "Falken",
-    "Igelkotten 2 - The Return of Glen",
-    "Vässlan",
-    "Myggan",
-    "Hungrig Varg",
-]
-
-ON_CYCLE_CARDS = [
-    "Blodhund",
-]
-
-ON_HAND_ENTER_CARDS = [
-    "Tuppen",
-]
-
-BEFORE_POWER_CARDS = [
-    "Lilla Björn",
-]
 
 
 class Order(Enum):
