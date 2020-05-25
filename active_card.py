@@ -23,34 +23,78 @@ def assert_same_handsizes(func: Callable[["Board"], None]):
     return wrapper_func
 
 
+def assert_card_only_in_one_place(func: Callable[["Board"], None]):
+    def wrapper_func(active_card: "ActiveCard", board: "Board"):
+        return_value = func(active_card, board)
+
+        for card in board.original_deck:
+            card_in_player_hands = [any([c == card for c in p.hand]) for p in board.players].count(True)
+            card_is_played = [c.card == card for c in board.played_cards].count(True)
+            card_in_deck = [c == card for c in board.deck].count(True)
+            card_in_graveyard = sum([[c == card for c in graveyard].count(True) for graveyard in board.graveyard.values()])
+            assert card_in_player_hands + card_is_played + card_in_deck + card_in_graveyard != 0, f"Card has disappeared! {card}"
+            assert card_in_player_hands + card_is_played + card_in_deck + card_in_graveyard == 1, f"Card is in multiple places at the same time! {card} -- Player Hands: {card_in_player_hands} | Played Cards: {card_is_played} | In Deck: {card_in_deck} | Graveyards: {card_in_graveyard}"
+
+        return return_value
+
+    return wrapper_func
+
+
+def assert_same_deck_size(func: Callable[["Board"], None]):
+    def wrapper_func(active_card: "ActiveCard", board: "Board"):
+        old_deck_size = len(board.deck)
+        return_value = func(active_card, board)
+        assert old_deck_size == len(board.deck), f"Deck has not same size! Old: {old_deck_size} == New: {len(board.deck)}"
+        return return_value
+
+    return wrapper_func
+
+
 class ActiveCard:
     def __init__(self, player: Player, card: Card, order: Order):
         self.player: Player = player
         self.card: Card = card
         self.order: Order = order
 
+    @assert_same_deck_size
+    @assert_card_only_in_one_place
     @assert_same_handsizes
     def on_win(self, board: "Board") -> None:
         self.card.on_win(board, self.player, self.order)
-        pass
 
+    @assert_same_deck_size
+    @assert_card_only_in_one_place
     @assert_same_handsizes
     def on_lose(self, board: "Board") -> None:
         self.card.on_lose(board, self.player, self.order)
-        pass
 
+    @assert_same_deck_size
+    @assert_card_only_in_one_place
+    @assert_same_handsizes
     def on_reveal(self) -> None:
         pass
 
-    def on_cycle(self) -> None:
-        pass
+    @assert_same_deck_size
+    @assert_card_only_in_one_place
+    @assert_same_handsizes
+    def on_cycle(self, board: "Board") -> None:
+        self.card.on_cycle(board, self.player)
 
+    @assert_same_deck_size
+    @assert_card_only_in_one_place
+    @assert_same_handsizes
     def on_hand_enter(self) -> None:
         pass
 
+    @assert_same_deck_size
+    @assert_card_only_in_one_place
+    @assert_same_handsizes
     def before_power(self) -> None:
         pass
 
+    @assert_same_deck_size
+    @assert_card_only_in_one_place
+    @assert_same_handsizes
     def power_resolve(self) -> None:
         pass
 

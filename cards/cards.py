@@ -126,9 +126,6 @@ class Magpie(Card):
 
             pile.remove(chosen_card)
 
-        assert not isinstance(
-            board.played_cards[index].card, type(self)
-        ), "Card on table is still Magpie!"
         assert len(pile) == 0, "Player didn't pick from magpie pile!"
 
 
@@ -276,13 +273,19 @@ class KingoftheForest(Card):
         LOGGER.debug("KingoftheForest on_reveal")
 
 
+### HERE ---------------------------------------------------------------------------
+
 @name("Blodhund")
 class Bloodhound(Card):
     def __init__(self):
         super().__init__()
 
-    def on_cycle(self):
-        LOGGER.debug("Bloodhound cycle")
+    def on_cycle(self, board: Board, player: Player) -> None:
+        LOGGER.info("Bloodhound cycle")
+        chosen_card = board.player_picks(player, board.deck)
+        board.deck.remove(chosen_card)
+        LOGGER.info(f"Chosen_card {chosen_card}")
+        player.add_card_to_hand(chosen_card)
 
 
 @name("Tuppen")

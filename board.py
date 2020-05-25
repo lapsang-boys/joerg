@@ -11,6 +11,7 @@ from player import Player
 class Board:
     def __init__(self, deck: Deque[Card], number_of_players: int):
         self.pole: Player
+        self.original_deck: List[Card] = list(deck)
         self.deck: Deque[Card] = deck
         self.played_cards: List[ActiveCard] = []
         self.players: List[Player] = []
@@ -99,8 +100,6 @@ class Board:
         return random.choice(self.get_opponents(player))
 
     def cycle_event(self, triggering_player: Player) -> None:
-        old_deck_size = len(self.deck)
-
         falling_behind_players = self.all_players_except_winner(triggering_player)
 
         cycled_cards = []
@@ -109,8 +108,6 @@ class Board:
             cycled_cards.append(cycled_card)
         self.add_cycled_cards_to_bottom_of_deck(cycled_cards)
 
-        assert old_deck_size == len(self.deck), "Not all cards returned to deck!"
-
     def cycle_for_player(self, player: Player) -> Card:
         random_card = player.get_random_card_from_hand()
 
@@ -118,13 +115,9 @@ class Board:
 
         return random_card
 
-    def player_cycle_card(self, player: Player, card: Card) -> Card:
-        card.on_cycle()
+    def player_cycle_card(self, player: Player, card: Card):
         player.remove_card_from_hand(card)
-
-        new_card = self.draw_card()
-        player.add_card_to_hand(new_card)
-        return new_card
+        card.on_cycle(self, player)
 
     def put_card_at_bottom_of_deck(self, card: Card) -> None:
         self.deck.append(card)

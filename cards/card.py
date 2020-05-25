@@ -37,8 +37,9 @@ class Card(ABC):
     def on_reveal(self) -> None:
         pass
 
-    def on_cycle(self) -> None:
-        pass
+    def on_cycle(self, board: "Board", player: "Player") -> None:
+        new_card = board.draw_card()
+        player.add_card_to_hand(new_card)
 
     def on_hand_enter(self) -> None:
         pass
