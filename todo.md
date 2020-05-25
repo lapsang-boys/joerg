@@ -58,3 +58,8 @@
 - Single card revealed
 - Won last stick
 - Lost last stick
+
+## New card ideas
+
+- Mess with deck (change order)
+- Change other cards orders (attack to defense, etc)

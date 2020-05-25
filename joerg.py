@@ -13,9 +13,6 @@ from cards import (
     BEFORE_POWER_CARDS,
 )
 
-## Card ideas:
-# Mess with deck
-# Change order
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUM_PLAYERS = 4
