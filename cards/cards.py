@@ -1,6 +1,6 @@
 import json
 from collections import deque
-from typing import Deque
+from typing import Deque, List
 
 from active_card import ActiveCard
 from board import Board
@@ -98,7 +98,38 @@ class Magpie(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        LOGGER.info("MAGPIE LOST!")
+        LOGGER.debug("MAGPIE LOST!")
+        # On Lose: Cycle Skatan, and all players puts 1 card from their hand
+        # into 1 pile. Owner of Skatan picks 1 card and returns the rest
+        # randomly.
+
+        pile: List[Card] = []
+        index = board.get_card_index(self)
+        magpie = board.played_cards[index]
+
+        board.put_card_at_bottom_of_deck(magpie.card.copy())
+        new_card = board.draw_card()
+        pile.append(new_card)
+
+        for opponent in board.get_opponents(player):
+            throw_away_card = board.player_picks(opponent, opponent.hand)
+            opponent.remove_card_from_hand(throw_away_card)
+            pile.append(throw_away_card)
+
+        for picking_player in board.players_in_pole_order_from_player(player):
+            chosen_card = board.player_picks(picking_player, pile)
+            LOGGER.debug(chosen_card, picking_player, pile)
+            if picking_player == player:
+                board.played_cards[index].card = chosen_card
+            else:
+                picking_player.add_card_to_hand(chosen_card)
+
+            pile.remove(chosen_card)
+
+        assert not isinstance(
+            board.played_cards[index].card, type(self)
+        ), "Card on table is still Magpie!"
+        assert len(pile) == 0, "Player didn't pick from magpie pile!"
 
 
 @name("Förtryckt Aborre")
