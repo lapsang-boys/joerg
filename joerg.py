@@ -1,6 +1,7 @@
 import logging
 from typing import List
 
+from log import new_logger
 from board import Board
 from cards.cards import read_cards
 from player import Player
@@ -22,9 +23,9 @@ def main():
     victories = {p: 0 for p in board.players}
     round_number = 0
     while max(victories.values()) < NUMBER_OF_WINNING_ROUNDS_NEEDED:
-        logger.info(" ")
-        logger.info(f"Round {round_number} start!")
-        logger.info(" ")
+        LOGGER.info(" ")
+        LOGGER.info(f"Round {round_number} start!")
+        LOGGER.info(" ")
 
         board.begin_round()
         board.set_pole(pole_player)
@@ -34,7 +35,7 @@ def main():
             chosen_order = player.select_order()
             board.commit_card(player, random_card, chosen_order)
 
-        logger.info(f"{board}")
+        LOGGER.info(f"{board}")
 
         for resolving_card in board.resolve_cards():
             resolving_card.card.on_reveal()
@@ -43,14 +44,14 @@ def main():
             resolving_card.card.before_power()
 
         for resolving_card in board.resolve_cards():
-            logger.info(f"{resolving_card}")
+            LOGGER.info(f"{resolving_card}")
 
         winning_card = board.resolve_power()
-        logger.info("")
-        logger.info("")
-        logger.info("")
-        logger.info(f"Winning card! {winning_card}")
-        logger.info("")
+        LOGGER.info("")
+        LOGGER.info("")
+        LOGGER.info("")
+        LOGGER.info(f"Winning card! {winning_card}")
+        LOGGER.info("")
         victories[winning_card.player] += 1
         if victories[winning_card.player] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
             break
@@ -74,8 +75,8 @@ def main():
 
         if victories[winning_card.player] == 2:
             cycled_cards = []
-            logger.info(f"Cycle! {winning_card.player} has reached 2 wins.")
-            logger.info(" ")
+            LOGGER.info(f"Cycle! {winning_card.player} has reached 2 wins.")
+            LOGGER.info(" ")
             for player in board.all_players_except_winner(
                 winning_player=winning_card.player
             ):
@@ -88,26 +89,21 @@ def main():
 
             board.add_cycled_cards_to_bottom_of_deck(cycled_cards)
 
-        logger.info("Round finished!")
-        logger.info("")
-        logger.info("-" * 80)
-        logger.info("")
+        LOGGER.info("Round finished!")
+        LOGGER.info("")
+        LOGGER.info("-" * 80)
+        LOGGER.info("")
         round_number += 1
 
-    logger.info("")
+    LOGGER.info("")
     winner = max(victories, key=lambda x: victories[x])
-    logger.info(f"Winning player: {winner}")
-    logger.info("Victories")
+    LOGGER.info(f"Winning player: {winner}")
+    LOGGER.info("")
+    LOGGER.info("Victories")
     for player in victories:
-        logger.info(f"\t{player} won {victories[player]} sticks")
+        LOGGER.info(f"\t{player} won {victories[player]} sticks")
 
 
 if __name__ == "__main__":
-    logger = logging.getLogger("asdf")
-    logger.propagate = False
-    logger.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler()
-    formatter = logging.Formatter("%(message)s")
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
+    LOGGER = new_logger("joerg")
     main()

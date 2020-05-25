@@ -1,5 +1,4 @@
 import json
-import logging
 from collections import deque
 from typing import Deque
 
@@ -7,6 +6,9 @@ from board import Board
 from cards.card import Card
 from order import Order
 from player import Player
+from log import new_logger
+
+LOGGER = new_logger("cards")
 
 
 def name(n: str):
@@ -31,7 +33,7 @@ class Fox(Card):
         b_card = board.player_picks(b, b.hand)
         board.trade(a, a_card, b, b_card)
 
-        logging.debug("FOX WON! Trade has been made!")
+        LOGGER.info("FOX WON! Trade has been made!")
 
 
 @name("Falken")
@@ -40,13 +42,13 @@ class Falcon(Card):
         super().__init__()
 
     def on_win(self, board: Board, player: Player, order: Order):
-        logging.debug("FALCON WON!")
+        LOGGER.info("FALCON WON!")
         opponent = board.player_picks_opponent(player)
         for card in opponent.hand:
-            logging.debug(f"FALCON SEES: {card}")
+            LOGGER.info(f"FALCON SEES: {card}")
 
     def on_reveal(self):
-        logging.debug("Falcon on_reveal")
+        LOGGER.debug("Falcon on_reveal")
 
 
 @name("Biet")
@@ -55,7 +57,7 @@ class Bee(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        logging.info("BEE LOST!")
+        LOGGER.info("BEE LOST!")
         opponent = board.player_picks_opponent(player)
         random_card = opponent.get_random_card_from_hand()
         opponent.set_card_visible(random_card)
@@ -67,8 +69,7 @@ class Butterfly(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        logging.info("BUTTERFLY LOST!")
-
+        LOGGER.info("BUTTERFLY LOST!")
 
 @name("Gamle älgen")
 class OldElk(Card):
@@ -76,7 +77,7 @@ class OldElk(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        logging.info("OLDELK LOST!")
+        LOGGER.info("OLDELK LOST!")
 
 
 @name("Skatan")
@@ -85,7 +86,7 @@ class Magpie(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        logging.info("MAGPIE LOST!")
+        LOGGER.info("MAGPIE LOST!")
 
 
 @name("Förtryckt Aborre")
@@ -94,7 +95,7 @@ class SupressedPerch(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("SupressedPerch on_reveal")
+        LOGGER.debug("SupressedPerch on_reveal")
 
 
 @name("Pilgiftsgroda")
@@ -103,7 +104,7 @@ class PoisonDartFrog(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("PoisonDartFrog on_reveal")
+        LOGGER.debug("PoisonDartFrog on_reveal")
 
 
 @name("Igelkotten")
@@ -112,7 +113,7 @@ class Hedgehog(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Hedgehog on_reveal")
+        LOGGER.debug("Hedgehog on_reveal")
 
 
 @name("Myrslok")
@@ -121,7 +122,7 @@ class Anteater(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Anteater on_reveal")
+        LOGGER.debug("Anteater on_reveal")
 
 
 @name("Uttern")
@@ -130,7 +131,7 @@ class Otter(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Otter on_reveal")
+        LOGGER.debug("Otter on_reveal")
 
 
 @name("Groda")
@@ -139,7 +140,7 @@ class Frog(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Frog on_reveal")
+        LOGGER.debug("Frog on_reveal")
 
 
 @name("Sälspion")
@@ -148,7 +149,7 @@ class SpySeal(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("SpySeal on_reveal")
+        LOGGER.debug("SpySeal on_reveal")
 
 
 @name("Ekorren")
@@ -157,7 +158,7 @@ class Squirrel(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Squirrel on_reveal")
+        LOGGER.debug("Squirrel on_reveal")
 
 
 @name("Fiskmås")
@@ -166,7 +167,7 @@ class Seagull(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Seagull on_reveal")
+        LOGGER.debug("Seagull on_reveal")
 
 
 @name("Vildsvinet")
@@ -175,7 +176,7 @@ class Boar(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Boar on_reveal")
+        LOGGER.debug("Boar on_reveal")
 
 
 @name("Storbent hare")
@@ -184,7 +185,7 @@ class BigLeggedHare(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("BigLeggedHare on_reveal")
+        LOGGER.debug("BigLeggedHare on_reveal")
 
 
 @name("Igelkotten 2 - The Return of Glen")
@@ -193,7 +194,7 @@ class Hedgehog2TheReturnofGlen(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Hedgehog2TheReturnofGlen on_reveal")
+        LOGGER.debug("Hedgehog2TheReturnofGlen on_reveal")
 
 
 @name("Vässlan")
@@ -202,7 +203,7 @@ class Weasel(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Weasel on_reveal")
+        LOGGER.debug("Weasel on_reveal")
 
 
 @name("Myggan")
@@ -211,7 +212,7 @@ class Mosquito(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("Mosquito on_reveal")
+        LOGGER.debug("Mosquito on_reveal")
 
 
 @name("Hungrig Varg")
@@ -220,7 +221,7 @@ class HungryWolf(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("HungryWolf on_reveal")
+        LOGGER.debug("HungryWolf on_reveal")
 
 
 @name("Skogens Konung")
@@ -229,7 +230,7 @@ class KingoftheForest(Card):
         super().__init__()
 
     def on_reveal(self):
-        logging.debug("KingoftheForest on_reveal")
+        LOGGER.debug("KingoftheForest on_reveal")
 
 
 @name("Blodhund")
@@ -238,7 +239,7 @@ class Bloodhound(Card):
         super().__init__()
 
     def on_cycle(self):
-        logging.debug("Bloodhound cycle")
+        LOGGER.debug("Bloodhound cycle")
 
 
 @name("Tuppen")
@@ -247,7 +248,7 @@ class Rooster(Card):
         super().__init__()
 
     def on_hand_enter(self):
-        logging.debug("Rooster on_hand_enter")
+        LOGGER.debug("Rooster on_hand_enter")
 
 
 @name("Lilla Björn")
@@ -256,7 +257,7 @@ class UrsaMinor(Card):
         super().__init__()
 
     def before_power(self):
-        logging.debug("UrsaMinor before_power")
+        LOGGER.debug("UrsaMinor before_power")
 
 
 @name("Svan")
@@ -265,7 +266,7 @@ class Swan(Card):
         super().__init__()
 
     def power_resolve(self):
-        logging.debug("swan power_resolve")
+        LOGGER.debug("swan power_resolve")
 
 
 @name("Myra")
