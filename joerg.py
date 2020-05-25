@@ -71,7 +71,6 @@ def main():
         for active_card in board.losing_cards():
             active_card.player.add_card_to_hand(active_card.card)
 
-
         if victories[winning_card.player] == 2:
             cycled_cards = []
             LOGGER.info(f"Cycle! {winning_card.player} has reached 2 wins.")

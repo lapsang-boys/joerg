@@ -74,6 +74,7 @@ class Butterfly(Card):
         board.set_pole(tmp_pole_player)
         LOGGER.info(f"Make {player} pole next turn!")
 
+
 @name("Gamle älgen")
 class OldElk(Card):
     def __init__(self):

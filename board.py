@@ -47,7 +47,7 @@ class Board:
 
     def get_previous_player(self, player: Player) -> Player:
         origin_player_index = self.players.index(player)
-        return self.players[origin_player_index-1 % self.number_of_players()]
+        return self.players[origin_player_index - 1 % self.number_of_players()]
 
     def resolve_cards(self):
         start_index = self.get_pole_index()
