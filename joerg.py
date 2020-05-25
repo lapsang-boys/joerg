@@ -46,6 +46,8 @@ def joerg_round(board: Board, victories):
         elif resolving_card.card != winning_card:
             resolving_card.on_lose(board)
 
+    board.add_to_graveyard(board.round_winner, board.round_winning_card)
+
     for active_card in board.losing_cards():
         active_card.player.add_card_to_hand(active_card.card)
 

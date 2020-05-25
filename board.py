@@ -1,5 +1,6 @@
 import random
-from typing import List, Any, Union, Deque, Optional
+from collections import defaultdict
+from typing import List, Any, Union, Deque, Optional, Dict
 
 from active_card import ActiveCard
 from cards.card import Card
@@ -15,6 +16,7 @@ class Board:
         self.players: List[Player] = []
         self.round_winning_card: Optional[Card]
         self.round_winner: Optional[Player]
+        self.graveyard: Dict[Player, List[Card]] = defaultdict(list)
 
         for p in range(number_of_players):
             self.players.append(Player(p))
@@ -216,6 +218,9 @@ class Board:
         self.set_round_winner(best_card.player)
         self.set_round_winning_card(best_card.card.copy())
         return best_card.card
+
+    def add_to_graveyard(self, player: Player, card: Card) -> None:
+        self.graveyard[player].append(card)
 
     def set_round_winner(self, player: Player) -> None:
         self.round_winner = player
