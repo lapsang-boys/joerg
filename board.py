@@ -1,3 +1,4 @@
+import random
 from typing import List
 
 from active_card import ActiveCard
@@ -29,6 +30,12 @@ class Board:
         start_index = self.get_pole_index()
         for i in range(self.number_of_players()):
             yield self.cards[(start_index + i) % self.number_of_players()]
+
+    def get_opponents(self, player: Player) -> List[Player]:
+        return [p for p in self.player_order if p != player]
+
+    def get_random_opponent(self, player: Player) -> Player:
+        return random.choice(self.get_opponents(player))
 
     def get_pole_index(self) -> int:
         return next(
