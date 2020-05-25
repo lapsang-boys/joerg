@@ -1,6 +1,8 @@
 
 # Joerg
 
+![Python application](https://github.com/lapsang-boys/joerg/workflows/Python%20application/badge.svg)
+
 WIP
 
 ## Installation
