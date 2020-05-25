@@ -3,7 +3,6 @@ import random
 from typing import List, Optional, Tuple
 
 from cards.card import Card
-from order import Order
 
 _NAME_LOOKUP = ["Emil", "Henry", "Robin", "Bob"]
 
@@ -17,10 +16,6 @@ class Player:
         assert card in self.hand
         index = self.hand.index(card)
         return (index, self.hand.pop(index))
-
-    def select_order(self) -> Order:
-        random_order = random.choice([Order.attack, Order.defense])
-        return random_order
 
     def get_random_card_from_hand(self) -> Card:
         return random.choice(self.hand)

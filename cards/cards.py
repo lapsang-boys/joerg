@@ -2,8 +2,8 @@ import json
 from collections import deque
 from typing import Deque
 
-from board import Board
 from active_card import ActiveCard
+from board import Board
 from cards.card import Card
 from log import new_logger
 from order import Order
@@ -16,6 +16,7 @@ def name(n: str):
     def wrapper_name(func):
         def wrapper_func(*args, **kwargs):
             return (n, func(*args, **kwargs))
+
         return wrapper_func
 
     return wrapper_name

@@ -30,6 +30,18 @@ class Board:
     def shuffle_deck(self) -> None:
         random.shuffle(self.deck)
 
+    def progress_pole(self) -> None:
+        next_player = self.get_next_player(self.get_pole_player())
+        self.set_pole(next_player)
+
+    def resolve_on_reveal(self) -> None:
+        for resolving_card in self.get_played_cards():
+            resolving_card.card.on_reveal()
+
+    def resolve_before_power(self) -> None:
+        for resolving_card in self.get_played_cards():
+            resolving_card.card.before_power()
+
     def begin_round(self) -> None:
         # Flush old cards.
         self.played_cards = []
@@ -63,7 +75,7 @@ class Board:
 
     def deal_cards(self, starting_hand_size: int) -> None:
         for player in self.players:
-            for j in range(starting_hand_size):
+            for _ in range(starting_hand_size):
                 card = self.deck.pop()
                 player.add_card_to_hand(card)
 
