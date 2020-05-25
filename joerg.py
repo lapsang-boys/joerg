@@ -1,5 +1,6 @@
-import sys
+import logging
 import random
+import sys
 
 from board import Board
 from cards.cards import read_cards
@@ -49,33 +50,27 @@ def main():
         LOGGER.info("")
         LOGGER.info("")
         LOGGER.info("")
-        LOGGER.info(f"Winning card! {winning_card}")
+        LOGGER.info(f"Winning card! {winning_card} played by {board.round_winner}")
         LOGGER.info("")
-        victories[winning_card.player] += 1
-        if victories[winning_card.player] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
+        victories[board.round_winner] += 1
+        if victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
             break
 
         for resolving_card in board.get_played_cards():
-            if (
-                "On Win" in resolving_card.card.ruling
-                and resolving_card.card == winning_card.card
-            ):
+            if resolving_card.card == winning_card:
                 resolving_card.on_win(board)
-            elif (
-                "On Lose" in resolving_card.card.ruling
-                and resolving_card.card != winning_card.card
-            ):
+            elif resolving_card.card != winning_card:
                 resolving_card.on_lose(board)
 
         for active_card in board.losing_cards():
             active_card.player.add_card_to_hand(active_card.card)
 
-        if victories[winning_card.player] == 2:
+        if victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1:
             cycled_cards = []
-            LOGGER.info(f"Cycle! {winning_card.player} has reached 2 wins.")
+            LOGGER.info(f"Cycle! {board.round_winner} has reached 2 wins.")
             LOGGER.info(" ")
             for player in board.all_players_except_winner(
-                winning_player=winning_card.player
+                winning_player=board.round_winner
             ):
                 cycled_card_index, random_card = player.pop_random_card()
                 random_card.on_cycle()
@@ -103,8 +98,8 @@ def main():
 
 
 if __name__ == "__main__":
-    LOGGER = new_logger("joerg")
+    LOGGER = new_logger("joerg", logging.INFO)
     seed = random.randrange(sys.maxsize)
-    rng = random.Random(seed)
-    LOGGER.info(f"Seed was: {seed}")
+    random.seed(seed)
+    LOGGER.warning(f"Seed was: {seed}")
     main()

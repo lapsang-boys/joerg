@@ -3,6 +3,7 @@ from collections import deque
 from typing import Deque
 
 from board import Board
+from active_card import ActiveCard
 from cards.card import Card
 from log import new_logger
 from order import Order
@@ -15,7 +16,6 @@ def name(n: str):
     def wrapper_name(func):
         def wrapper_func(*args, **kwargs):
             return (n, func(*args, **kwargs))
-
         return wrapper_func
 
     return wrapper_name
@@ -29,8 +29,8 @@ class Fox(Card):
     def on_win(self, board: Board, player: Player, order: Order):
         opponents = board.get_opponents(player)
         a, b = board.player_picks(player, opponents, 2)
-        a_card = board.player_picks(a, a.hand)
-        b_card = board.player_picks(b, b.hand)
+        a_card: Card = board.player_picks(a, a.hand)
+        b_card: Card = board.player_picks(b, b.hand)
         board.trade(a, a_card, b, b_card)
 
         LOGGER.info("FOX WON! Trade has been made!")
@@ -82,6 +82,13 @@ class OldElk(Card):
 
     def on_lose(self, board: Board, player: Player, order: Order):
         LOGGER.info("OLDELK LOST!")
+        # On Lose: Byt detta kort mot en motspelares kort som också förlorade.
+        opponent_played_cards = board.get_opponent_played_cards(player)
+        opponent_losing_cards = [
+            c for c in opponent_played_cards if board.is_losing_card(c.card)
+        ]
+        chosen_card: ActiveCard = board.player_picks(player, opponent_losing_cards)
+        board.swap_ownage_of_played_cards(self, chosen_card.card)
 
 
 @name("Skatan")

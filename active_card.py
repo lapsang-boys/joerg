@@ -1,6 +1,11 @@
+from typing import TYPE_CHECKING
+
 from cards.card import Card
 from order import Order
 from player import Player
+
+if TYPE_CHECKING:
+    from board import Board
 
 
 class ActiveCard:

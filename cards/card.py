@@ -1,8 +1,11 @@
 from abc import ABC
-from typing import Any, List, Mapping, Optional
+from typing import Any, Mapping, Optional, TYPE_CHECKING
 
 from order import Order
-from trigger import Trigger
+
+if TYPE_CHECKING:
+    from board import Board
+    from player import Player
 
 
 class Card(ABC):
@@ -11,19 +14,17 @@ class Card(ABC):
         self.power: int
         self.ruling: str
         self.flavor: Optional[str]
-        self.triggers: List[Trigger]
 
     def from_json(self, payload: Mapping[str, Any]) -> "Card":
-        self.name = payload.get("name")
-        self.power = payload.get("power")
-        self.ruling = payload.get("ruling")
-        self.flavor = payload.get("flavor")
-        # self.triggers = self.add_triggers(self.name)
-
-        assert self.name, f"Missing name from payload: {payload}"
-        assert self.power, f"Missing power from payload: {payload}"
-        assert self.ruling, f"Missing ruling from payload: {payload}"
+        assert payload.get("power"), f"Missing power from payload {payload}"
+        assert payload.get("name"), f"Missing name from payload: {payload}"
+        assert payload.get("ruling"), f"Missing ruling from payload: {payload}"
         # Flavor is optional
+
+        self.name = str(payload.get("name"))
+        self.ruling = str(payload.get("ruling"))
+        self.flavor = str(payload.get("flavor"))
+        self.power = int(payload.get("power", 0))
 
         return self
 
@@ -51,10 +52,20 @@ class Card(ABC):
     def __repr__(self):
         return f"<{self.power}> {self.name}"
 
+    def copy(self) -> "Card":
+        new_card = Card()
+        new_card.name = self.name
+        new_card.power = self.power
+        new_card.ruling = self.ruling
+        new_card.flavor = self.flavor
+        return new_card
+
     # TODO(_): Has lots of fun collisions.
     def __hash__(self):
         return hash(self.name)
 
     # TODO(_): Has lots of fun collisions.
-    def __eq__(self, other: "Card") -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Card):
+            return NotImplemented
         return self.name == other.name
