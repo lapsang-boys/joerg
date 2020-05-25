@@ -40,8 +40,7 @@ class Falcon(Card):
 
     def on_win(self, board: Board, player: Player, order: Order):
         logging.debug("FALCON WON!")
-        opponents = board.get_opponents(player)
-        opponent = board.player_picks(player, opponents)
+        opponent = board.player_picks_opponent(player)
         for card in opponent.hand:
             logging.debug(f"FALCON SEES: {card}")
 

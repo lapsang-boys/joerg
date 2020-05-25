@@ -37,6 +37,10 @@ class Board:
         for i in range(self.number_of_players()):
             yield self.cards[(start_index + i) % self.number_of_players()]
 
+    def player_picks_opponent(self, player: Player) -> Player:
+        opponents = self.get_opponents(player)
+        return self.player_picks(player, opponents)
+
     def get_opponents(self, player: Player) -> List[Player]:
         return [p for p in self.player_order if p != player]
 
