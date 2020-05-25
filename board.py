@@ -1,5 +1,5 @@
 import random
-from typing import List, Any, Union, Deque
+from typing import List, Any, Union, Deque, Optional
 
 from active_card import ActiveCard
 from cards.card import Card
@@ -13,8 +13,8 @@ class Board:
         self.deck: Deque[Card] = deck
         self.played_cards: List[ActiveCard] = []
         self.players: List[Player] = []
-        self.round_winning_card: Card
-        self.round_winner: Player
+        self.round_winning_card: Optional[Card]
+        self.round_winner: Optional[Player]
 
         for p in range(number_of_players):
             self.players.append(Player(p))
@@ -45,6 +45,8 @@ class Board:
     def begin_round(self) -> None:
         # Flush old cards.
         self.played_cards = []
+        self.round_winner = None
+        self.round_winning_card = None
 
     def commit_card(self, player: Player, card: Card, order: Order):
         self.played_cards.append(ActiveCard(player, card, order))
