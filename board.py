@@ -49,7 +49,7 @@ class Board:
         origin_player_index = self.players.index(player)
         return self.players[origin_player_index - 1 % self.number_of_players()]
 
-    def resolve_cards(self):
+    def get_played_cards(self):
         start_index = self.get_pole_index()
         for i in range(self.number_of_players()):
             yield self.cards[(start_index + i) % self.number_of_players()]
@@ -112,11 +112,11 @@ class Board:
             pole_active_card = self.get_pole()
             return pole_active_card.order
 
-    def locked_order_cards(self) -> List[ActiveCard]:
-        return list(self.resolve_cards())
-
     def get_pole_player(self) -> Player:
         return self.pole
+
+    def get_opponent_played_cards(self, player: Player) -> List[ActiveCard]:
+        return [ac for ac in self.get_played_cards() if ac.player != player]
 
     def get_next_player(self, player: Player) -> Player:
         start_index = self.players.index(player)
@@ -136,7 +136,7 @@ class Board:
                 # Higher is better.
                 return a.power > b.power
 
-        for active_card in self.locked_order_cards():
+        for active_card in self.get_played_cards():
             if not best_card or is_better(active_card.card, best_card.card):
                 best_card = active_card
 

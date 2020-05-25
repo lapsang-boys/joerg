@@ -1,10 +1,9 @@
-import logging
-from typing import List
+import sys
+import random
 
 from board import Board
 from cards.cards import read_cards
 from log import new_logger
-from player import Player
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUMBER_OF_PLAYERS = 4
@@ -37,13 +36,13 @@ def main():
 
         LOGGER.info(f"{board}")
 
-        for resolving_card in board.resolve_cards():
+        for resolving_card in board.get_played_cards():
             resolving_card.card.on_reveal()
 
-        for resolving_card in board.resolve_cards():
+        for resolving_card in board.get_played_cards():
             resolving_card.card.before_power()
 
-        for resolving_card in board.resolve_cards():
+        for resolving_card in board.get_played_cards():
             LOGGER.info(f"{resolving_card}")
 
         winning_card = board.resolve_power()
@@ -56,7 +55,7 @@ def main():
         if victories[winning_card.player] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
             break
 
-        for resolving_card in board.resolve_cards():
+        for resolving_card in board.get_played_cards():
             if (
                 "On Win" in resolving_card.card.ruling
                 and resolving_card.card == winning_card.card
@@ -105,4 +104,7 @@ def main():
 
 if __name__ == "__main__":
     LOGGER = new_logger("joerg")
+    seed = random.randrange(sys.maxsize)
+    rng = random.Random(seed)
+    LOGGER.info(f"Seed was: {seed}")
     main()
