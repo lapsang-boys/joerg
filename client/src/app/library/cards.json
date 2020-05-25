@@ -239,6 +239,14 @@
 			"flavor": "",
 			"imgSrc": "älg.png",
 			"legendary": false
+		},
+		{
+			"name": "Mullvaden",
+			"power": 3,
+			"ruling": "On Lose: Byt det här kortet mot valfritt kort i en stickhög som har lägre styrka.",
+			"flavor": "",
+			"imgSrc": "vässlan.png",
+			"legendary": false
 		}
 	]
 }

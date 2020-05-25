@@ -1,0 +1,24 @@
+<div class="container">
+	<div class="content">
+		<div id="header">
+			<h2 class="title">{{ this.card?.name }}</h2>
+			<h2 class="cost">{{ this.card?.power }}</h2>
+		</div>
+		<div id="img-container">
+			<img src="assets/art/{{ this.card?.imgSrc }}">
+			<img *ngIf="this.card?.legendary" src="assets/legendary.svg" class="emblem">
+		</div>
+		<div id="text">
+			<div id="desc">
+				{{ this.card?.ruling }}
+			</div>
+			<div *ngIf="this.card.flavor" id="flavor">
+				{{ this.card?.flavor }}
+			</div>
+		</div>
+	</div>
+	<div class="border">
+		<img src="assets/border.png">
+	</div>
+</div>
+

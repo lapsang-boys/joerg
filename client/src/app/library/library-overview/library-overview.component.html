@@ -1,1 +1,7 @@
-<p>library-overview works!</p>
+<h1>The Library</h1>
+<div class="library-container">
+	<div *ngFor="let card of this.cards" class="card-wrapper">
+		<app-card-front [card]="card"></app-card-front>
+	</div>
+</div>
+
