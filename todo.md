@@ -1,8 +1,6 @@
 
 ## Events
 
-- On Win
-- On Lose
 - On reveal
 - On cycle
 - Before power
