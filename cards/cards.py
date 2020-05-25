@@ -141,7 +141,11 @@ class Mole(Card):
 
     def on_lose(self, board: Board, player: Player, order: Order):
         LOGGER.info("MOLE LOST!")
-        possible_cards = [c for c in flatten([cs for cs in board.graveyard.values()]) if c.power < self.power]
+        possible_cards = [
+            c
+            for c in flatten([cs for cs in board.graveyard.values()])
+            if c.power < self.power
+        ]
         if not possible_cards:
             LOGGER.info("No valid targets!")
             return
@@ -157,7 +161,6 @@ class Mole(Card):
                 break
 
         board.played_cards[mole_index].card = chosen_card
-
 
 
 # HERE ---------------------------------------------------------------------------
