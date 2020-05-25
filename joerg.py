@@ -5,6 +5,7 @@ import sys
 from board import Board
 from cards.cards import read_cards
 from log import new_logger
+from logo import print_logo
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUMBER_OF_PLAYERS = 4
@@ -102,4 +103,5 @@ if __name__ == "__main__":
     seed = random.randrange(sys.maxsize)
     random.seed(seed)
     LOGGER.warning(f"Seed was: {seed}")
+    print_logo()
     main()
