@@ -36,7 +36,7 @@ jobs:
         pytest
     - name: Sort imports with isort
       run: |
-        isort --check-only --recursive
+        isort --check-only --recursive --no-inline-sort
     - name: Check formatting with black
       run: |
         black --check .
