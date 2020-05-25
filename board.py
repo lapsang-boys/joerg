@@ -141,10 +141,12 @@ class Board:
         start_index = self.players.index(player)
         return self.players[(start_index + 1) % self.number_of_players()]
 
+    def get_card_index(self, card: Card) -> int:
+        return next(idx for idx, ac in enumerate(self.played_cards) if ac.card == card)
+
     def swap_ownage_of_played_cards(self, card1: Card, card2: Card) -> None:
-        cards = self.played_cards
-        index_card1 = next(idx for idx, ac in enumerate(cards) if ac.card == card1)
-        index_card2 = next(idx for idx, ac in enumerate(cards) if ac.card == card2)
+        index_card1 = self.get_card_index(card1)
+        index_card2 = self.get_card_index(card2)
 
         tmp_card = self.played_cards[index_card1].card
         self.played_cards[index_card1].card = self.played_cards[index_card2].card
