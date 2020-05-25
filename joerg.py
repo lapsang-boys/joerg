@@ -63,6 +63,10 @@ def main():
         for resolving_card in board.resolve_cards():
             logger.debug(f"{resolving_card}")
         winning_card = board.resolve_power()
+        victories[winning_card.player] += 1
+        if victories[winning_card.player] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
+            break
+
         for resolving_card in board.resolve_cards():
             if (
                 "On Win" in resolving_card.card.ruling
@@ -80,7 +84,6 @@ def main():
         logger.debug("")
         logger.debug(f"Winning card! {winning_card}")
         logger.debug("")
-        victories[winning_card.player] += 1
         for active_card in board.losing_cards():
             active_card.player.add_card_to_hand(active_card.card)
 
@@ -106,7 +109,7 @@ def main():
 
         logger.debug("Round finished!")
         logger.debug("")
-        logger.debug("-"*80)
+        logger.debug("-" * 80)
         logger.debug("")
         round_number += 1
 
