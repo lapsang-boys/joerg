@@ -6,7 +6,7 @@ from cards.cards import read_cards
 from player import Player
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
-NUM_PLAYERS = 4
+NUMBER_OF_PLAYERS = 4
 STARTING_HAND_SIZE = NUMBER_OF_WINNING_ROUNDS_NEEDED + 1
 LIBRARY_PATH = "./cards/cards.json"
 
@@ -14,55 +14,43 @@ LIBRARY_PATH = "./cards/cards.json"
 def main():
     deck = read_cards(LIBRARY_PATH)
 
-    players: List[Player] = []
-    for p in range(NUM_PLAYERS):
-        players.append(Player(p))
-
-    board = Board(players, deck)
+    board = Board(deck, number_of_players=NUMBER_OF_PLAYERS)
     pole_player = board.randomly_assign_pole()
     board.shuffle_deck()
     board.deal_cards(STARTING_HAND_SIZE)
 
-    victories = {p: 0 for p in players}
+    victories = {p: 0 for p in board.players}
     round_number = 0
     while max(victories.values()) < NUMBER_OF_WINNING_ROUNDS_NEEDED:
-        logger.debug(" ")
-        logger.debug(f"Round {round_number} start!")
-        logger.debug(" ")
+        logger.info(" ")
+        logger.info(f"Round {round_number} start!")
+        logger.info(" ")
+
         board.begin_round()
         board.set_pole(pole_player)
 
-        # trade phase
-        # pick card, pick player
-
-        # commit phase
-        # choose card, choose position
-
-        for player in players:
+        for player in board.players:
             _, random_card = player.pop_random_card()
             chosen_order = player.select_order()
             board.commit_card(player, random_card, chosen_order)
 
-        # reveal phase
-        # beginning from pole, reveal card
-        # trigger abilities
+        logger.info(f"{board}")
 
-        logger.debug(f"{board}")
-
-        # resolve phase
-        # from pole, find the winning power (lowest for defense, highest for attack), in case of multiple cards with the same power, the card closest from pole wins (linearly, not bilinearly).
         for resolving_card in board.resolve_cards():
-            # logger.debug(f"{resolving_card}")
             resolving_card.card.on_reveal()
 
-        # Before power
         for resolving_card in board.resolve_cards():
-            # logger.debug(f"{resolving_card}")
             resolving_card.card.before_power()
 
         for resolving_card in board.resolve_cards():
-            logger.debug(f"{resolving_card}")
+            logger.info(f"{resolving_card}")
+
         winning_card = board.resolve_power()
+        logger.info("")
+        logger.info("")
+        logger.info("")
+        logger.info(f"Winning card! {winning_card}")
+        logger.info("")
         victories[winning_card.player] += 1
         if victories[winning_card.player] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
             break
@@ -79,22 +67,15 @@ def main():
             ):
                 resolving_card.on_lose(board)
 
-        logger.debug("")
-        logger.debug("")
-        logger.debug("")
-        logger.debug(f"Winning card! {winning_card}")
-        logger.debug("")
         for active_card in board.losing_cards():
             active_card.player.add_card_to_hand(active_card.card)
 
         pole_player = board.get_next_player(pole_player)
 
-        # Cycle
-        # When any player recieves their second victory, all other players cycles 1 card.
         if victories[winning_card.player] == 2:
             cycled_cards = []
-            logger.debug("CYCLE!")
-            logger.debug(" ")
+            logger.info(f"Cycle! {winning_card.player} has reached 2 wins.")
+            logger.info(" ")
             for player in board.all_players_except_winner(
                 winning_player=winning_card.player
             ):
@@ -107,24 +88,25 @@ def main():
 
             board.add_cycled_cards_to_bottom_of_deck(cycled_cards)
 
-        logger.debug("Round finished!")
-        logger.debug("")
-        logger.debug("-" * 80)
-        logger.debug("")
+        logger.info("Round finished!")
+        logger.info("")
+        logger.info("-" * 80)
+        logger.info("")
         round_number += 1
 
-    logger.debug(f"Victories {victories}")
+    logger.info("")
+    winner = max(victories, key=lambda x: victories[x])
+    logger.info(f"Winning player: {winner}")
+    logger.info("Victories")
+    for player in victories:
+        logger.info(f"\t{player} won {victories[player]} sticks")
 
 
 if __name__ == "__main__":
     logger = logging.getLogger("asdf")
     logger.propagate = False
-    for handler in logger.handlers:
-        logger.removeHandler(handler)
     logger.setLevel(logging.DEBUG)
     ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    # create formatter and add it to the handlers
     formatter = logging.Formatter("%(message)s")
     ch.setFormatter(formatter)
     logger.addHandler(ch)

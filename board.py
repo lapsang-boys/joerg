@@ -8,11 +8,13 @@ from player import Player
 
 
 class Board:
-    def __init__(self, player_order: List[Player], deck: Deque[Card]):
+    def __init__(self, deck: Deque[Card], number_of_players: int):
         pole: Player
         self.deck: Deque[Card] = deck
         self.cards: List[ActiveCard] = []
-        self.player_order: List[Player] = player_order
+        self.players: List[Player] = []
+        for p in range(number_of_players):
+            self.players.append(Player(p))
 
     def randomly_assign_pole(self) -> Player:
         pole_player = self.get_random_player()
@@ -33,7 +35,7 @@ class Board:
         self.cards.append(ActiveCard(player, card, order))
 
     def number_of_players(self) -> int:
-        return len(self.player_order)
+        return len(self.players)
 
     def player_picks(
         self, player: Player, items: List[Any], num: int = 1
@@ -53,7 +55,7 @@ class Board:
         return self.player_picks(player, opponents)
 
     def deal_cards(self, starting_hand_size: int) -> None:
-        for player in self.player_order:
+        for player in self.players:
             for j in range(starting_hand_size):
                 card = self.deck.pop()
                 player.add_card_to_hand(card)
@@ -65,10 +67,10 @@ class Board:
         return self.deck.popleft()
 
     def get_opponents(self, player: Player) -> List[Player]:
-        return [p for p in self.player_order if p != player]
+        return [p for p in self.players if p != player]
 
     def get_random_player(self) -> Player:
-        return random.choice(self.player_order)
+        return random.choice(self.players)
 
     def get_random_opponent(self, player: Player) -> Player:
         return random.choice(self.get_opponents(player))
@@ -83,7 +85,7 @@ class Board:
         return self.cards[pole_index]
 
     def all_players_except_winner(self, winning_player: Player) -> List[Player]:
-        return [p for p in self.player_order if p != winning_player]
+        return [p for p in self.players if p != winning_player]
 
     def resolved_order(self) -> Order:
         orders = [c.order for c in self.cards]
@@ -110,8 +112,8 @@ class Board:
         return list(self.resolve_cards())
 
     def get_next_player(self, player: Player) -> Player:
-        start_index = self.player_order.index(player)
-        return self.player_order[(start_index + 1) % self.number_of_players()]
+        start_index = self.players.index(player)
+        return self.players[(start_index + 1) % self.number_of_players()]
 
     def resolve_power(self) -> ActiveCard:
         best_card = None
