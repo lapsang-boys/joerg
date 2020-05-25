@@ -1,5 +1,4 @@
 import logging
-import random
 
 from board import Board
 from cards.card import Card
@@ -26,10 +25,12 @@ class Fox(Card):
 
     def on_win(self, board: Board, player: Player, order: Order):
         opponents = board.get_opponents(player)
-        a, b = random.sample(opponents, 2)
-        board.trade(a, a.get_random_card_from_hand(), b, b.get_random_card_from_hand())
+        a, b = board.player_picks(player, opponents, 2)
+        a_card = board.player_picks(a, a.hand)
+        b_card = board.player_picks(b, b.hand)
+        board.trade(a, a_card, b, b_card)
 
-        logging.info("FOX WON! Trade has been made!")
+        logging.debug("FOX WON! Trade has been made!")
 
 
 @name("Falken")
@@ -38,10 +39,11 @@ class Falcon(Card):
         super().__init__()
 
     def on_win(self, board: Board, player: Player, order: Order):
-        logging.info("FALCON WON!")
-        opponent = board.get_random_opponent(player)
+        logging.debug("FALCON WON!")
+        opponents = board.get_opponents(player)
+        opponent = board.player_picks(player, opponents)
         for card in opponent.hand:
-            logging.info(f"FALCON SEES: {card}")
+            logging.debug(f"FALCON SEES: {card}")
 
     def on_reveal(self):
         logging.debug("Falcon on_reveal")

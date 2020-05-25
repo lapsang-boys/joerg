@@ -1,5 +1,5 @@
 import random
-from typing import List
+from typing import List, Any, Union
 
 from active_card import ActiveCard
 from cards.card import Card
@@ -25,6 +25,12 @@ class Board:
 
     def number_of_players(self) -> int:
         return len(self.player_order)
+
+    def player_picks(self, player: Player, items: List[Any], num: int = 1) -> Union[List[Any], Any]:
+        if num == 1:
+            return random.choice(items)
+        else:
+            return random.sample(items, num)
 
     def resolve_cards(self):
         start_index = self.get_pole_index()
