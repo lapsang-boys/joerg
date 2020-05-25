@@ -3,8 +3,10 @@ import random
 from typing import List, Optional, Tuple
 
 from cards.card import Card
+from log import new_logger
 
 _NAME_LOOKUP = ["Emil", "Henry", "Robin", "Bob"]
+LOGGER = new_logger("player", logging.DEBUG)
 
 
 class Player:
@@ -27,16 +29,12 @@ class Player:
         else:
             self.hand.append(card)
 
-    def pop_random_card(self) -> Tuple[int, Card]:
-        assert len(self.hand) > 0
-        card = self.hand[random.randint(0, self.hand_size() - 1)]
-        return self.remove_card_from_hand(card)
-
     def hand_size(self) -> int:
         return len(self.hand)
 
     def set_card_visible(self, card: Card) -> None:
-        logging.debug("not implemented: set_card_visible")
+        print(f"{self} shows {card}")
+        LOGGER.debug("not implemented: set_card_visible")
 
     def __repr__(self):
         return f"Player {_NAME_LOOKUP[self.num]}"
