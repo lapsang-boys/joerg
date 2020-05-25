@@ -71,7 +71,6 @@ def main():
         for active_card in board.losing_cards():
             active_card.player.add_card_to_hand(active_card.card)
 
-        pole_player = board.get_next_player(pole_player)
 
         if victories[winning_card.player] == 2:
             cycled_cards = []
@@ -89,6 +88,7 @@ def main():
 
             board.add_cycled_cards_to_bottom_of_deck(cycled_cards)
 
+        pole_player = board.get_next_player(board.get_pole_player())
         LOGGER.info("Round finished!")
         LOGGER.info("")
         LOGGER.info("-" * 80)

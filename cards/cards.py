@@ -70,6 +70,9 @@ class Butterfly(Card):
 
     def on_lose(self, board: Board, player: Player, order: Order):
         LOGGER.info("BUTTERFLY LOST!")
+        tmp_pole_player = board.get_previous_player(player)
+        board.set_pole(tmp_pole_player)
+        LOGGER.info(f"Make {player} pole next turn!")
 
 @name("Gamle älgen")
 class OldElk(Card):

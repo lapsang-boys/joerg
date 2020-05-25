@@ -45,6 +45,10 @@ class Board:
         else:
             return random.sample(items, num)
 
+    def get_previous_player(self, player: Player) -> Player:
+        origin_player_index = self.players.index(player)
+        return self.players[origin_player_index-1 % self.number_of_players()]
+
     def resolve_cards(self):
         start_index = self.get_pole_index()
         for i in range(self.number_of_players()):
@@ -110,6 +114,9 @@ class Board:
 
     def locked_order_cards(self) -> List[ActiveCard]:
         return list(self.resolve_cards())
+
+    def get_pole_player(self) -> Player:
+        return self.pole
 
     def get_next_player(self, player: Player) -> Player:
         start_index = self.players.index(player)
