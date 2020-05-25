@@ -15,6 +15,7 @@ class Player:
         return (index, self.hand.pop(index))
 
     def add_card_to_hand(self, card: Card, index: Optional[int] = None) -> None:
+        card.on_hand_enter()
         if index is not None:
             self.hand.insert(index, card)
         else:

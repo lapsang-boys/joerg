@@ -11,7 +11,7 @@ from player import Player
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUM_PLAYERS = 4
-STARTING_HAND_SIZE = 3
+STARTING_HAND_SIZE = NUMBER_OF_WINNING_ROUNDS_NEEDED + 1
 LIBRARY_PATH = "./cards/cards.json"
 
 
@@ -116,6 +116,11 @@ def main():
             print(resolving_card)
             resolving_card.card.on_reveal()
 
+        # Before power
+        for resolving_card in board.resolve_cards():
+            print(resolving_card)
+            resolving_card.card.before_power()
+
         winning_card = board.resolve_power()
         for resolving_card in board.resolve_cards():
             if (
@@ -146,6 +151,7 @@ def main():
                 players, winning_player=winning_card.player
             ):
                 cycled_card_index, random_card = player.pop_random_card()
+                random_card.on_cycle()
                 cycled_cards.append(random_card)
                 new_card = cards.popleft()
                 player.add_card_to_hand(new_card, index=cycled_card_index)
@@ -153,8 +159,7 @@ def main():
             print("CYCLE!")
 
     print("")
-    print(victories)
-    print([len(p.hand) for p in players])
+    print("Victories", victories)
     print("")
 
 
