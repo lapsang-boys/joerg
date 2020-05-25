@@ -1,10 +1,8 @@
 import json
 import random
 from collections import deque
-from enum import Enum
 from typing import Any, Deque, List, Mapping, Optional, Tuple
 
-from order import Order
 from cards import (
     ON_WIN_CARDS,
     ON_LOSE_CARDS,
@@ -13,23 +11,12 @@ from cards import (
     ON_HAND_ENTER_CARDS,
     BEFORE_POWER_CARDS,
 )
-
+from order import Order
+from trigger import Trigger
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUM_PLAYERS = 4
 STARTING_HAND_SIZE = 3
-
-
-class Trigger(Enum):
-    on_win = 1
-    on_lose = 2
-    on_reveal = 3
-    on_cycle = 4
-    on_hand_enter = 5
-    before_power = 6
-
-    def __repr__(self):
-        return self.name
 
 
 class InvalidLibraryFileError(Exception):
