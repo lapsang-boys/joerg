@@ -77,7 +77,9 @@ def end_of_game(board: Board):
 def init_game() -> Board:
     deck = read_cards(LIBRARY_PATH)
 
-    board = Board(deck, number_of_players=NUMBER_OF_PLAYERS, starting_hand_size=STARTING_HAND_SIZE)
+    board = Board(
+        deck, number_of_players=NUMBER_OF_PLAYERS, starting_hand_size=STARTING_HAND_SIZE
+    )
     board.randomly_assign_pole()
     board.shuffle_deck()
     board.deal_cards()
@@ -92,25 +94,22 @@ def main():
     LOGGER.warning(f"Seed was: {seed}")
     board = init_game()
 
-    round_number = 0
-    while max(board.victories.values()) < NUMBER_OF_WINNING_ROUNDS_NEEDED:
-        LOGGER.info(" ")
-        LOGGER.info(f"Round {round_number} start!")
-        LOGGER.info(" ")
-        joerg_round(board)
-        LOGGER.info("")
-        LOGGER.info("Round finished!")
-        LOGGER.info("")
-        LOGGER.info("-" * 80)
-        round_number += 1
-
-    end_of_game(board)
+    try:
+        round_number = 0
+        while max(board.victories.values()) < NUMBER_OF_WINNING_ROUNDS_NEEDED:
+            LOGGER.info(" ")
+            LOGGER.info(f"Round {round_number} start!")
+            LOGGER.info(" ")
+            joerg_round(board)
+            LOGGER.info("")
+            LOGGER.info("Round finished!")
+            LOGGER.info("")
+            LOGGER.info("-" * 80)
+            round_number += 1
+    except Victory:
+        end_of_game(board)
 
 
 if __name__ == "__main__":
     LOGGER = new_logger("joerg", logging.INFO)
-    while True:
-        try:
-            main()
-        except Victory:
-            pass
+    main()

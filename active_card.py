@@ -10,9 +10,9 @@ if TYPE_CHECKING:
 
 def assert_same_handsizes(func: Callable[["Board"], None]):
     def wrapper_func(active_card: "ActiveCard", board: "Board"):
-        old_hand_sizes: List[int] = [len(p.hand) for p in board.players]
+        old_hand_sizes: List[int] = [p.hand_size() for p in board.players]
         return_value = func(active_card, board)
-        new_hand_sizes: List[int] = [len(p.hand) for p in board.players]
+        new_hand_sizes: List[int] = [p.hand_size() for p in board.players]
 
         assert (
             old_hand_sizes == new_hand_sizes
@@ -28,12 +28,25 @@ def assert_card_only_in_one_place(func: Callable[["Board"], None]):
         return_value = func(active_card, board)
 
         for card in board.original_deck:
-            card_in_player_hands = [any([c == card for c in p.hand]) for p in board.players].count(True)
+            card_in_player_hands = [
+                any([c == card for c in p.hand]) for p in board.players
+            ].count(True)
             card_is_played = [c.card == card for c in board.played_cards].count(True)
             card_in_deck = [c == card for c in board.deck].count(True)
-            card_in_graveyard = sum([[c == card for c in graveyard].count(True) for graveyard in board.graveyard.values()])
-            assert card_in_player_hands + card_is_played + card_in_deck + card_in_graveyard != 0, f"Card has disappeared! {card}"
-            assert card_in_player_hands + card_is_played + card_in_deck + card_in_graveyard == 1, f"Card is in multiple places at the same time! {card} -- Player Hands: {card_in_player_hands} | Played Cards: {card_is_played} | In Deck: {card_in_deck} | Graveyards: {card_in_graveyard}"
+            card_in_graveyard = sum(
+                [
+                    [c == card for c in graveyard].count(True)
+                    for graveyard in board.graveyard.values()
+                ]
+            )
+            assert (
+                card_in_player_hands + card_is_played + card_in_deck + card_in_graveyard
+                != 0
+            ), f"Card has disappeared! {card}"
+            assert (
+                card_in_player_hands + card_is_played + card_in_deck + card_in_graveyard
+                == 1
+            ), f"Card is in multiple places at the same time! {card} -- Player Hands: {card_in_player_hands} | Played Cards: {card_is_played} | In Deck: {card_in_deck} | Graveyards: {card_in_graveyard}"
 
         return return_value
 
@@ -44,7 +57,9 @@ def assert_same_deck_size(func: Callable[["Board"], None]):
     def wrapper_func(active_card: "ActiveCard", board: "Board"):
         old_deck_size = len(board.deck)
         return_value = func(active_card, board)
-        assert old_deck_size == len(board.deck), f"Deck has not same size! Old: {old_deck_size} == New: {len(board.deck)}"
+        assert old_deck_size == len(
+            board.deck
+        ), f"Deck has not same size! Old: {old_deck_size} == New: {len(board.deck)}"
         return return_value
 
     return wrapper_func

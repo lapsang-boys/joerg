@@ -274,7 +274,8 @@ class KingoftheForest(Card):
         LOGGER.debug("KingoftheForest on_reveal")
 
 
-### HERE ---------------------------------------------------------------------------
+# HERE ---------------------------------------------------------------------------
+
 
 @name("Blodhund")
 class Bloodhound(Card):

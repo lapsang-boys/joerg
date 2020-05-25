@@ -9,7 +9,9 @@ from player import Player
 
 
 class Board:
-    def __init__(self, deck: Deque[Card], number_of_players: int, starting_hand_size: int):
+    def __init__(
+        self, deck: Deque[Card], number_of_players: int, starting_hand_size: int
+    ):
         self.pole: Player
         self.original_deck: List[Card] = list(deck)
         self.deck: Deque[Card] = deck
@@ -58,7 +60,9 @@ class Board:
         self.round_winning_card = None
 
         for p in self.players:
-            assert self.starting_hand_size - len(p.hand) == len(self.graveyard[p]), f"Player does not have the right number of cards on hand! Starting hand size: {self.starting_hand_size} | {p} Hand: {p.hand} | Graveyard: {self.graveyard[p]} | "
+            assert self.starting_hand_size - p.hand_size() == len(
+                self.graveyard[p]
+            ), f"Player does not have the right number of cards on hand! Starting hand size: {self.starting_hand_size} | {p} Hand: {p.hand} | Graveyard: {self.graveyard[p]} | "
 
     def commit_card(self, player: Player, card: Card, order: Order):
         self.played_cards.append(ActiveCard(player, card, order))
@@ -93,7 +97,7 @@ class Board:
                 card = self.deck.pop()
                 player.add_card_to_hand(card)
 
-        assert len(player.hand) == self.starting_hand_size
+        assert player.hand_size() == self.starting_hand_size
 
     def draw_card(self) -> Card:
         # TODO(_): Undefined behavior when deck is empty.
