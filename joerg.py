@@ -1,8 +1,9 @@
 import json
 import random
 from collections import deque
-from typing import Deque, List, Optional, Tuple
+from typing import Deque, List
 
+from active_card import ActiveCard
 from card import Card
 from order import Order
 from player import Player
@@ -63,16 +64,6 @@ def trade(card1: Card, player1: Player, card2, player2) -> None:
 
     assert card2 in player1.hand
     assert card1 in player2.hand
-
-
-class ActiveCard:
-    def __init__(self, player: Player, card: Card, order: Order):
-        self.player: Player = player
-        self.card: Card = card
-        self.order: Order = order
-
-    def __repr__(self) -> str:
-        return f"{self.player}: {self.card} {self.order}"
 
 
 class Board:
