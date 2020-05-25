@@ -76,7 +76,6 @@ def end_of_game(board: Board):
 
 def init_game() -> Board:
     deck = read_cards(LIBRARY_PATH)
-
     board = Board(
         deck, number_of_players=NUMBER_OF_PLAYERS, starting_hand_size=STARTING_HAND_SIZE
     )

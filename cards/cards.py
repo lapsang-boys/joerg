@@ -49,7 +49,7 @@ class Falcon(Card):
             LOGGER.info(f"FALCON SEES: {card}")
 
     def on_reveal(self):
-        LOGGER.debug("Falcon on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Falcon on_reveal")
 
 
 @name("Biet")
@@ -130,22 +130,55 @@ class Magpie(Card):
         assert len(pile) == 0, "Player didn't pick from magpie pile!"
 
 
+def flatten(a):
+    return sum(a, [])
+
+
+@name("Mullvaden")
+class Mole(Card):
+    def __init__(self):
+        super().__init__()
+
+    def on_lose(self, board: Board, player: Player, order: Order):
+        LOGGER.info("MOLE LOST!")
+        possible_cards = [c for c in flatten([cs for cs in board.graveyard.values()]) if c.power < self.power]
+        if not possible_cards:
+            LOGGER.info("No valid targets!")
+            return
+
+        mole_index = board.get_card_index(self)
+        chosen_card = board.player_picks(player, possible_cards)
+        for p in board.graveyard:
+            if chosen_card in board.graveyard[p]:
+                index = board.graveyard[p].index(chosen_card)
+                board.graveyard[p].pop(index)
+                board.graveyard[p].insert(index, self)
+                LOGGER.info(f"Swapped with card: {chosen_card}")
+                break
+
+        board.played_cards[mole_index].card = chosen_card
+
+
+
+# HERE ---------------------------------------------------------------------------
+
+
 @name("Förtryckt Aborre")
 class SupressedPerch(Card):
     def __init__(self):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("SupressedPerch on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- SupressedPerch on_reveal")
 
 
-@name("Pilgiftsgroda")
-class PoisonDartFrog(Card):
+@name("Paddan")
+class Toad(Card):
     def __init__(self):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("PoisonDartFrog on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Toad on_reveal")
 
 
 @name("Igelkotten")
@@ -154,7 +187,7 @@ class Hedgehog(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Hedgehog on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Hedgehog on_reveal")
 
 
 @name("Myrslok")
@@ -163,7 +196,7 @@ class Anteater(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Anteater on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Anteater on_reveal")
 
 
 @name("Uttern")
@@ -172,7 +205,7 @@ class Otter(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Otter on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Otter on_reveal")
 
 
 @name("Groda")
@@ -181,7 +214,7 @@ class Frog(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Frog on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Frog on_reveal")
 
 
 @name("Sälspion")
@@ -190,7 +223,7 @@ class SpySeal(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("SpySeal on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- SpySeal on_reveal")
 
 
 @name("Ekorren")
@@ -199,7 +232,7 @@ class Squirrel(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Squirrel on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Squirrel on_reveal")
 
 
 @name("Fiskmås")
@@ -208,7 +241,7 @@ class Seagull(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Seagull on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Seagull on_reveal")
 
 
 @name("Vildsvinet")
@@ -217,7 +250,7 @@ class Boar(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Boar on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Boar on_reveal")
 
 
 @name("Storbent hare")
@@ -226,7 +259,7 @@ class BigLeggedHare(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("BigLeggedHare on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- BigLeggedHare on_reveal")
 
 
 @name("Igelkotten 2 - The Return of Glen")
@@ -235,7 +268,7 @@ class Hedgehog2TheReturnofGlen(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Hedgehog2TheReturnofGlen on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Hedgehog2TheReturnofGlen on_reveal")
 
 
 @name("Vässlan")
@@ -244,7 +277,7 @@ class Weasel(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Weasel on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Weasel on_reveal")
 
 
 @name("Myggan")
@@ -253,7 +286,7 @@ class Mosquito(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("Mosquito on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- Mosquito on_reveal")
 
 
 @name("Hungrig Varg")
@@ -262,7 +295,7 @@ class HungryWolf(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("HungryWolf on_reveal")
+        LOGGER.debug("NOT IMPLEMENTED -- HungryWolf on_reveal")
 
 
 @name("Skogens Konung")
@@ -271,10 +304,7 @@ class KingoftheForest(Card):
         super().__init__()
 
     def on_reveal(self):
-        LOGGER.debug("KingoftheForest on_reveal")
-
-
-# HERE ---------------------------------------------------------------------------
+        LOGGER.debug("NOT IMPLEMENTED -- KingoftheForest on_reveal")
 
 
 @name("Blodhund")
@@ -296,7 +326,7 @@ class Rooster(Card):
         super().__init__()
 
     def on_hand_enter(self):
-        LOGGER.debug("Rooster on_hand_enter")
+        LOGGER.debug("NOT IMPLEMENTED -- Rooster on_hand_enter")
 
 
 @name("Lilla Björn")
@@ -317,7 +347,7 @@ class Swan(Card):
         super().__init__()
 
     def power_resolve(self):
-        LOGGER.debug("swan power_resolve")
+        LOGGER.debug("NOT IMPLEMENTED -- swan power_resolve")
 
 
 @name("Myra")
@@ -346,9 +376,12 @@ class BlueTit(Card):
 
 _LOOKUP = dict(
     [
+        Ant(),
         Anteater(),
         Bee(),
         BigLeggedHare(),
+        Bloodhound(),
+        BlueTit(),
         Boar(),
         Butterfly(),
         Falcon(),
@@ -359,23 +392,21 @@ _LOOKUP = dict(
         HungryWolf(),
         KingoftheForest(),
         Magpie(),
+        Mole(),
         Mosquito(),
         OldElk(),
         Otter(),
-        PoisonDartFrog(),
+        Rooster(),
         Seagull(),
         SpySeal(),
         Squirrel(),
-        SupressedPerch(),
-        Weasel(),
-        Bloodhound(),
-        Rooster(),
-        UrsaMinor(),
-        Swan(),
-        Ant(),
-        Wolverine(),
         StagBeetle(),
-        BlueTit(),
+        SupressedPerch(),
+        Swan(),
+        Toad(),
+        UrsaMinor(),
+        Weasel(),
+        Wolverine(),
     ]
 )
 
