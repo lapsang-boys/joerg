@@ -5,7 +5,6 @@ from typing import List, Optional, Tuple
 from cards.card import Card
 from order import Order
 
-
 _NAME_LOOKUP = ["Emil", "Henry", "Robin", "Bob"]
 
 

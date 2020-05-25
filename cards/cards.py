@@ -4,9 +4,9 @@ from typing import Deque
 
 from board import Board
 from cards.card import Card
+from log import new_logger
 from order import Order
 from player import Player
-from log import new_logger
 
 LOGGER = new_logger("cards")
 

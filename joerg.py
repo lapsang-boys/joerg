@@ -1,9 +1,9 @@
 import logging
 from typing import List
 
-from log import new_logger
 from board import Board
 from cards.cards import read_cards
+from log import new_logger
 from player import Player
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
