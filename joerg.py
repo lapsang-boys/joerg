@@ -14,21 +14,6 @@ STARTING_HAND_SIZE = NUMBER_OF_WINNING_ROUNDS_NEEDED + 1
 LIBRARY_PATH = "./cards/cards.json"
 
 
-def cycle(board: Board):
-    cycled_cards = []
-    LOGGER.info(f"Cycle! {board.round_winner} has reached 2 wins.")
-    LOGGER.info(" ")
-    for player in board.all_players_except_winner(winning_player=board.round_winner):
-        cycled_card_index, random_card = player.pop_random_card()
-        random_card.on_cycle()
-        cycled_cards.append(random_card)
-
-        new_card = board.draw_card()
-        player.add_card_to_hand(new_card, index=cycled_card_index)
-
-    board.add_cycled_cards_to_bottom_of_deck(cycled_cards)
-
-
 def joerg_round(board: Board, victories):
     board.begin_round()
 
@@ -65,7 +50,9 @@ def joerg_round(board: Board, victories):
         active_card.player.add_card_to_hand(active_card.card)
 
     if victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1:
-        cycle(board)
+        LOGGER.info(f"Cycle! {board.round_winner} has reached 2 wins.")
+        LOGGER.info(" ")
+        board.cycle_event(board.round_winner)
 
     board.progress_pole()
 

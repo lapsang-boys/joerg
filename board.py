@@ -94,6 +94,42 @@ class Board:
     def get_random_opponent(self, player: Player) -> Player:
         return random.choice(self.get_opponents(player))
 
+    def cycle_event(self, triggering_player: Player) -> None:
+        old_deck_size = len(self.deck)
+
+        falling_behind_players = self.all_players_except_winner(triggering_player)
+
+        cycled_cards = []
+        for player in falling_behind_players:
+            cycled_card = self.cycle_for_player(player)
+            cycled_cards.append(cycled_card)
+        self.add_cycled_cards_to_bottom_of_deck(cycled_cards)
+
+        assert old_deck_size == len(self.deck), "Not all cards returned to deck!"
+
+    def cycle_for_player(self, player: Player) -> Card:
+        random_card = player.get_random_card_from_hand()
+
+        self.player_cycle_card(player, random_card)
+
+        return random_card
+
+    def player_cycle_card(self, player: Player, card: Card) -> Card:
+        card.on_cycle()
+        player.remove_card_from_hand(card)
+
+        new_card = self.draw_card()
+        player.add_card_to_hand(new_card)
+        return new_card
+
+    def put_card_at_bottom_of_deck(self, card: Card) -> None:
+        self.deck.append(card)
+
+    def players_in_pole_order_from_player(self, player: Player) -> List[Player]:
+        start_index = self.players.index(player)
+        for i in range(self.number_of_players()):
+            yield self.players[(i + start_index) % self.number_of_players()]
+
     def get_pole_index(self) -> int:
         return next(
             index
