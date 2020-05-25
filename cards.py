@@ -27,6 +27,7 @@ ON_REVEAL_CARDS = [
     "Vässlan",
     "Myggan",
     "Hungrig Varg",
+    "Skogens Konung",
 ]
 
 ON_CYCLE_CARDS = [

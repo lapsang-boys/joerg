@@ -173,6 +173,12 @@
 			"power": 2,
 			"ruling": "On Hand Enter: Yell KuckeliKuuu! Tuppen becomes 1 power.",
 			"flavor": ""
+		},
+		{
+			"name": "Skogens Konung",
+			"power": 4,
+			"ruling": "Överraskning: Titta på alla ouppvända kort.",
+			"flavor": ""
 		}
 	]
 }
