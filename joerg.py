@@ -4,6 +4,7 @@ from collections import deque
 from enum import Enum
 from typing import Any, Deque, List, Mapping, Optional, Tuple
 
+from order import Order
 from cards import (
     ON_WIN_CARDS,
     ON_LOSE_CARDS,
@@ -17,14 +18,6 @@ from cards import (
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUM_PLAYERS = 4
 STARTING_HAND_SIZE = 3
-
-
-class Order(Enum):
-    attack = 1
-    defense = 2
-
-    def __repr__(self):
-        return self.name
 
 
 class Trigger(Enum):
