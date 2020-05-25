@@ -1,9 +1,8 @@
 import json
-from collections import deque
 import random
+from collections import deque
 from enum import Enum
-from typing import Optional, List, Mapping, Any, Deque, Tuple
-
+from typing import Any, Deque, List, Mapping, Optional, Tuple
 
 ## Card ideas:
 # Mess with deck
