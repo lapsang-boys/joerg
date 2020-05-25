@@ -130,16 +130,15 @@ class Magpie(Card):
         assert len(pile) == 0, "Player didn't pick from magpie pile!"
 
 
-def flatten(a):
-    return sum(a, [])
-
-
 @name("Mullvaden")
 class Mole(Card):
     def __init__(self):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
+        def flatten(a):
+            return sum(a, [])
+
         LOGGER.info("MOLE LOST!")
         possible_cards = [
             c
