@@ -99,5 +99,18 @@ class Board:
         winning_card = self.resolve_power()
         return [c for c in all_cards if c != winning_card]
 
+    def trade(self, card1: Card, player1: Player, card2: Card, player2: Player) -> None:
+        assert card1 in player1.hand
+        assert card2 in player2.hand
+
+        index1, _ = player1.remove_card_from_hand(card1)
+        index2, _ = player2.remove_card_from_hand(card2)
+
+        player1.add_card_to_hand(card2, index=index1)
+        player2.add_card_to_hand(card1, index=index2)
+
+        assert card2 in player1.hand
+        assert card1 in player2.hand
+
     def __repr__(self):
         return f"Pole: {self.pole}\nResolved order: {self.resolved_order()}"

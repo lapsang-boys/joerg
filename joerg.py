@@ -53,20 +53,6 @@ def randomly_assign_pole(players: List[Player]) -> Player:
     return random.choice(players)
 
 
-def trade(card1: Card, player1: Player, card2, player2) -> None:
-    assert card1 in player1.hand
-    assert card2 in player2.hand
-
-    index1, _ = player1.remove_card_from_hand(card1)
-    index2, _ = player2.remove_card_from_hand(card2)
-
-    player1.add_card_to_hand(card2, index=index1)
-    player2.add_card_to_hand(card1, index=index2)
-
-    assert card2 in player1.hand
-    assert card1 in player2.hand
-
-
 def all_players_except_winner(
     players: List[Player], winning_player: Player
 ) -> List[Player]:
