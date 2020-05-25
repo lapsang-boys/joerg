@@ -34,7 +34,7 @@ class Fox(Card):
         b_card: Card = board.player_picks(b, b.hand)
         board.trade(a, a_card, b, b_card)
 
-        LOGGER.info("FOX WON! Trade has been made!")
+        LOGGER.debug("FOX WON! Trade has been made!")
 
 
 @name("Falken")
@@ -43,10 +43,10 @@ class Falcon(Card):
         super().__init__()
 
     def on_win(self, board: Board, player: Player, order: Order):
-        LOGGER.info("FALCON WON!")
+        LOGGER.debug("FALCON WON!")
         opponent = board.player_picks_opponent(player)
         for card in opponent.hand:
-            LOGGER.info(f"FALCON SEES: {card}")
+            LOGGER.debug(f"FALCON SEES: {card}")
 
     def on_reveal(self):
         LOGGER.debug("NOT IMPLEMENTED -- Falcon on_reveal")
@@ -58,7 +58,7 @@ class Bee(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        LOGGER.info("BEE LOST!")
+        LOGGER.debug("BEE LOST!")
         opponent = board.player_picks_opponent(player)
         random_card = opponent.get_random_card_from_hand()
         opponent.set_card_visible(random_card)
@@ -70,10 +70,10 @@ class Butterfly(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        LOGGER.info("BUTTERFLY LOST!")
+        LOGGER.debug("BUTTERFLY LOST!")
         tmp_pole_player = board.get_previous_player(player)
         board.set_pole(tmp_pole_player)
-        LOGGER.info(f"Make {player} pole next turn!")
+        LOGGER.debug(f"Make {player} pole next turn!")
 
 
 @name("Gamle älgen")
@@ -82,14 +82,14 @@ class OldElk(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        LOGGER.info("OLDELK LOST!")
+        LOGGER.debug("OLDELK LOST!")
         # On Lose: Byt detta kort mot en motspelares kort som också förlorade.
         opponent_played_cards = board.get_opponent_played_cards(player)
         opponent_losing_cards = [
             c for c in opponent_played_cards if board.is_losing_card(c.card)
         ]
         chosen_card: ActiveCard = board.player_picks(player, opponent_losing_cards)
-        LOGGER.info(f"Chosen card: {chosen_card}")
+        LOGGER.debug(f"Chosen card: {chosen_card}")
         board.swap_ownage_of_played_cards(self, chosen_card.card)
 
 
@@ -139,14 +139,14 @@ class Mole(Card):
         def flatten(a):
             return sum(a, [])
 
-        LOGGER.info("MOLE LOST!")
+        LOGGER.debug("MOLE LOST!")
         possible_cards = [
             c
             for c in flatten([cs for cs in board.graveyard.values()])
             if c.power < self.power
         ]
         if not possible_cards:
-            LOGGER.info("No valid targets!")
+            LOGGER.info("MOLE: No valid targets!")
             return
 
         mole_index = board.get_card_index(self)
@@ -156,7 +156,7 @@ class Mole(Card):
                 index = board.graveyard[p].index(chosen_card)
                 board.graveyard[p].pop(index)
                 board.graveyard[p].insert(index, self)
-                LOGGER.info(f"Swapped with card: {chosen_card}")
+                LOGGER.debug(f"Swapped with card: {chosen_card}")
                 break
 
         board.played_cards[mole_index].card = chosen_card
@@ -315,10 +315,10 @@ class Bloodhound(Card):
         super().__init__()
 
     def on_cycle(self, board: Board, player: Player) -> None:
-        LOGGER.info("Bloodhound cycle")
+        LOGGER.debug("Bloodhound cycle")
         chosen_card = board.player_picks(player, board.deck)
         board.deck.remove(chosen_card)
-        LOGGER.info(f"Chosen_card {chosen_card}")
+        LOGGER.debug(f"Chosen_card {chosen_card}")
         player.add_card_to_hand(chosen_card)
 
 
@@ -338,7 +338,7 @@ class UrsaMinor(Card):
 
     def before_power(self, board: Board, player: Player, order: Order):
         # Innan styrka tar effekt vid strid, välj en ny Polstjärneposition. Legendary.
-        LOGGER.info("UrsaMinor before_power")
+        LOGGER.debug("UrsaMinor before_power")
         new_pole_player = board.player_picks(player, board.players)
         board.set_pole(new_pole_player)
 
