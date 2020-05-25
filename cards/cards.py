@@ -1,11 +1,12 @@
+import json
 import logging
+from collections import deque
+from typing import Deque
 
 from board import Board
 from cards.card import Card
 from order import Order
 from player import Player
-
-logging.basicConfig(level=logging.INFO)
 
 
 def name(n: str):
@@ -53,8 +54,11 @@ class Bee(Card):
     def __init__(self):
         super().__init__()
 
-    def on_lose(self):
-        logging.debug("BEE LOST!")
+    def on_lose(self, board: Board, player: Player, order: Order):
+        logging.info("BEE LOST!")
+        opponent = board.player_picks_opponent(player)
+        random_card = opponent.get_random_card_from_hand()
+        opponent.set_card_visible(random_card)
 
 
 @name("Fjäril")
@@ -62,8 +66,8 @@ class Butterfly(Card):
     def __init__(self):
         super().__init__()
 
-    def on_lose(self):
-        logging.debug("BUTTERFLY LOST!")
+    def on_lose(self, board: Board, player: Player, order: Order):
+        logging.info("BUTTERFLY LOST!")
 
 
 @name("Gamle älgen")
@@ -71,8 +75,8 @@ class OldElk(Card):
     def __init__(self):
         super().__init__()
 
-    def on_lose(self):
-        logging.debug("OLDELK LOST!")
+    def on_lose(self, board: Board, player: Player, order: Order):
+        logging.info("OLDELK LOST!")
 
 
 @name("Skatan")
@@ -80,8 +84,8 @@ class Magpie(Card):
     def __init__(self):
         super().__init__()
 
-    def on_lose(self):
-        logging.debug("MAGPIE LOST!")
+    def on_lose(self, board: Board, player: Player, order: Order):
+        logging.info("MAGPIE LOST!")
 
 
 @name("Förtryckt Aborre")
@@ -332,3 +336,24 @@ def json_read_card(payload):
     assert card_class, f"Missing in lookup: {name}"
 
     return card_class.from_json(payload)
+
+
+class InvalidLibraryFileError(Exception):
+    def __init__(self, msg="Unable to read 'cards' field from library."):
+        super().__init__(msg)
+
+
+def read_cards(library_path: str) -> Deque[Card]:
+    with open(library_path, "r") as fp:
+        raw_object = json.load(fp)
+
+    raw_cards = raw_object.get("cards", None)
+    if not raw_cards:
+        raise InvalidLibraryFileError()
+
+    cards = [json_read_card(rc) for rc in raw_cards]
+    assert len(cards) == len(
+        set(cards)
+    ), "Name collision in library! Two cards with same name."
+
+    return deque(cards)

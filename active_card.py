@@ -13,7 +13,8 @@ class ActiveCard:
         self.card.on_win(board, self.player, self.order)
         pass
 
-    def on_lose(self) -> None:
+    def on_lose(self, board: "Board") -> None:
+        self.card.on_lose(board, self.player, self.order)
         pass
 
     def on_reveal(self) -> None:

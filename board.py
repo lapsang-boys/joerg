@@ -1,5 +1,5 @@
 import random
-from typing import List, Any, Union
+from typing import List, Any, Union, Deque
 
 from active_card import ActiveCard
 from cards.card import Card
@@ -8,13 +8,22 @@ from player import Player
 
 
 class Board:
-    def __init__(self, player_order: List[Player]):
+    def __init__(self, player_order: List[Player], deck: Deque[Card]):
         pole: Player
+        self.deck: Deque[Card] = deck
         self.cards: List[ActiveCard] = []
         self.player_order: List[Player] = player_order
 
+    def randomly_assign_pole(self) -> Player:
+        pole_player = self.get_random_player()
+        self.set_pole(pole_player)
+        return pole_player
+
     def set_pole(self, player: Player) -> None:
         self.pole = player
+
+    def shuffle_deck(self) -> None:
+        random.shuffle(self.deck)
 
     def begin_round(self) -> None:
         # Flush old cards.
@@ -26,7 +35,9 @@ class Board:
     def number_of_players(self) -> int:
         return len(self.player_order)
 
-    def player_picks(self, player: Player, items: List[Any], num: int = 1) -> Union[List[Any], Any]:
+    def player_picks(
+        self, player: Player, items: List[Any], num: int = 1
+    ) -> Union[List[Any], Any]:
         if num == 1:
             return random.choice(items)
         else:
@@ -41,8 +52,23 @@ class Board:
         opponents = self.get_opponents(player)
         return self.player_picks(player, opponents)
 
+    def deal_cards(self, starting_hand_size: int) -> None:
+        for player in self.player_order:
+            for j in range(starting_hand_size):
+                card = self.deck.pop()
+                player.add_card_to_hand(card)
+
+        assert len(player.hand) == starting_hand_size
+
+    def draw_card(self) -> Card:
+        # TODO(_): Undefined behavior when deck is empty.
+        return self.deck.popleft()
+
     def get_opponents(self, player: Player) -> List[Player]:
         return [p for p in self.player_order if p != player]
+
+    def get_random_player(self) -> Player:
+        return random.choice(self.player_order)
 
     def get_random_opponent(self, player: Player) -> Player:
         return random.choice(self.get_opponents(player))
@@ -55,6 +81,9 @@ class Board:
     def get_pole(self):
         pole_index = self.get_pole_index()
         return self.cards[pole_index]
+
+    def all_players_except_winner(self, winning_player: Player) -> List[Player]:
+        return [p for p in self.player_order if p != winning_player]
 
     def resolved_order(self) -> Order:
         orders = [c.order for c in self.cards]
@@ -103,6 +132,9 @@ class Board:
                 best_card = active_card
 
         return best_card
+
+    def add_cycled_cards_to_bottom_of_deck(self, cycled_cards: List[Card]):
+        self.deck.extend(cycled_cards)
 
     def losing_cards(self) -> List[ActiveCard]:
         all_cards = self.cards

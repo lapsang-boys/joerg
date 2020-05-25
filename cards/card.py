@@ -30,7 +30,7 @@ class Card(ABC):
     def on_win(self, board: "Board", player: "Player", order: Order) -> None:
         pass
 
-    def on_lose(self) -> None:
+    def on_lose(self, board: "Board", player: "Player", order: Order) -> None:
         pass
 
     def on_reveal(self) -> None:
