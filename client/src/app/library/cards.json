@@ -4,181 +4,241 @@
 			"name": "Räv",
 			"power": 4,
 			"ruling": "On Win: Two opponents of your choice initiate trade.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "räv.png",
+			"legendary": false
 		},
 		{
 			"name": "Biet",
 			"power": 2,
 			"ruling": "On Lose: Välj en motspelare och ett random kort i dennes hand. Spelaren spelar med detta kort exponerat.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "biet.png",
+			"legendary": false
 		},
 		{
 			"name": "Förtryckt Aborre",
 			"power": 3,
 			"ruling": "Defense: Förtryckt Aborre får +1 i styrka. Offense: Förtryckt Aborre får -1 styrka",
-			"flavor": "Bara döda fiskar följer med strömmen."
+			"flavor": "Bara döda fiskar följer med strömmen.",
+			"imgSrc": "aborre.png",
+			"legendary": false
 		},
 		{
-			"name": "Pilgiftsgroda",
+			"name": "Paddan",
 			"power": 3,
 			"ruling": "Överraskning: Välj ett av motståndare spelat kort, och välj sedan en till spelare (får inte vara ägaren av kortet). Denna spelare byter ett kort i sin hand mot the valda kortet.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "paddan.png",
+			"legendary": false
 		},
 		{
 			"name": "Igelkotten",
 			"power": 3,
 			"ruling": "Motståndare med 4 eller mer i styrka skadas och förlorar 1 i styrka.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "igelkotten.png",
+			"legendary": false
 		},
 		{
 			"name": "Myrslok",
 			"power": 5,
 			"ruling": "Överraskning: Myrsloken får utbytas mot myra innan resolvfasen inleds.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "myrslok.png",
+			"legendary": false
 		},
 		{
 			"name": "Uttern",
 			"power": 2,
 			"ruling": "Överraskning: Om ett annat kort med 4+ styrka finns uppvisad, minska dess och dennes korts styrka med 1",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "uttern.png",
+			"legendary": false
 		},
 		{
 			"name": "Fjäril",
 			"power": 3,
 			"ruling": "On Lose: You gain pole.",
-			"flavor": "Fjärilens viktigaste funktion är att föröka sig. Vissa arter saknar helt förmågan att äta."
+			"flavor": "Fjärilens viktigaste funktion är att föröka sig. Vissa arter saknar helt förmågan att äta.",
+			"imgSrc": "fjäril.png",
+			"legendary": false
 		},
 		{
 			"name": "Blodhund",
 			"power": 4,
 			"ruling": "On Cycle: Immediately reveal and search through the library for a card of your choice. Reveal chosen card.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "blodhund.png",
+			"legendary": false
 		},
 		{
 			"name": "Groda",
 			"power": 2,
 			"ruling": "Target opponent swaps card with one in their hand.",
-			"flavor": "Grodor hoppar, paddor kryper. Det är skillnaden."
+			"flavor": "Grodor hoppar, paddor kryper. Det är skillnaden.",
+			"imgSrc": "groda.png",
+			"legendary": false
 		},
 		{
 			"name": "Lilla Björn",
 			"power": 4,
 			"ruling": "Innan styrka tar effekt vid strid, välj en ny Polstjärneposition. Legendary.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "lilla_björn.png",
+			"legendary": true
 		},
 		{
 			"name": "Svan",
 			"power": 3,
 			"ruling": "Om styrkan är oavgjord så går svanen segrande oavsett Polstjärneordning.",
-			"flavor": "En svan bråkar en inte med ostraffat."
+			"flavor": "En svan bråkar en inte med ostraffat.",
+			"imgSrc": "svan.png",
+			"legendary": false
 		},
 		{
 			"name": "Myra",
 			"power": 1,
 			"ruling": "-",
-			"flavor": "Ett antal myror är fler än ett lite färre antal elefanter."
+			"flavor": "Ett antal myror är fler än ett lite färre antal elefanter.",
+			"imgSrc": "myra.png",
+			"legendary": false
 		},
 		{
 			"name": "Järv",
 			"power": 4,
 			"ruling": "-",
-			"flavor": "På latin: Gulo Gulo. I 3/3 C 1/1 P 4/4 M 1/2 = 38 tänder."
+			"flavor": "På latin: Gulo Gulo. I 3/3 C 1/1 P 4/4 M 1/2 = 38 tänder.",
+			"imgSrc": "järv.png",
+			"legendary": false
 		},
 		{
 			"name": "Sälspion",
 			"power": 2,
 			"ruling": "Om spelad i attackläge, titta på ett valfritt kort från en motståndares hand.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "sälen.png",
+			"legendary": false
 		},
 		{
 			"name": "Ekoxe",
 			"power": 4,
 			"ruling": "-",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "ekoxe.png",
+			"legendary": false
 		},
 		{
 			"name": "Ekorren",
 			"power": 2,
 			"ruling": "Överraskning: Välj ett ej visat kort som får stumhet.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "ekorren.png",
+			"legendary": false
 		},
 		{
 			"name": "Fiskmås",
 			"power": 5,
 			"ruling": "Överraskning: Du förlorar ett stick!",
-			"flavor": "Falukorv fick namnet för fiskmåsarna klippte dem."
+			"flavor": "Falukorv fick namnet för fiskmåsarna klippte dem.",
+			"imgSrc": "fiskmås.png",
+			"legendary": false
 		},
 		{
 			"name": "Vildsvinet",
 			"power": 5,
 			"ruling": "Överraskning: Du spelar nästa runda blint (korten upp och ner). Man kan inte vinna sista sticket med detta kort.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "vildsvinet.png",
+			"legendary": false
 		},
 		{
 			"name": "Storbent hare",
 			"power": 3,
 			"ruling": "Överraskning: Om detta kort inte är det första som visas denna tur och har störst styrka (>=) lägg permanent till två styrka på detta kort.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "hare.png",
+			"legendary": false
 		},
 		{
 			"name": "Falken",
 			"power": 3,
 			"ruling": "On Win: Titta på valfri spelares hand. Överraskning: Välj ett kort! Om dess styrka är mindre eller lika med 2 lägg på så mycket på falken.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "falken.png",
+			"legendary": false
 		},
 		{
 			"name": "Blåmes",
 			"power": 1,
 			"ruling": "-",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "blåmes.png",
+			"legendary": true
 		},
 		{
 			"name": "Igelkotten 2 - The Return of Glen",
 			"power": 3,
 			"ruling": "Detta kort har 3 i styrka om det spelades i försvar.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "igelkotten2.png",
+			"legendary": false
 		},
 		{
 			"name": "Vässlan",
 			"power": 3,
 			"ruling": "Överraskning: Tvinga spelaren med det senaste sticket att byta sitt kort med lägst styrka med dig.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "vässlan.png",
+			"legendary": false
 		},
 		{
 			"name": "Myggan",
 			"power": 2,
 			"ruling": "Överraskning: Byt detta kort mot ett slumpmässigt kort i valfri spelares hand.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "myggan.png",
+			"legendary": false
 		},
 		{
 			"name": "Gamle älgen",
 			"power": 4,
 			"ruling": "On Lose: Byt detta kort mot en motspelares kort som också förlorade.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "älg.png",
+			"legendary": false
 		},
 		{
 			"name": "Hungrig Varg",
 			"power": 5,
 			"ruling": "Överraskning: om detta kort spelats i försvar: ät upp ett kort som ännu inte visats. Lägg på lika mycket i styrka på vargen som det valda kortet har i styrka, permanent.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "varg.png",
+			"legendary": false
 		},
 		{
 			"name": "Skatan",
 			"power": 3,
 			"ruling": "On Lose: Cycle Skatan, and all players puts 1 card from their hand into 1 pile. Owner of Skatan picks 1 card and returns the rest randomly.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "skatan.png",
+			"legendary": false
 		},
 		{
 			"name": "Tuppen",
 			"power": 2,
 			"ruling": "On Hand Enter: Yell KuckeliKuuu! Tuppen becomes 1 power.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "tuppen.png",
+			"legendary": false
 		},
 		{
 			"name": "Skogens Konung",
 			"power": 4,
 			"ruling": "Överraskning: Titta på alla ouppvända kort.",
-			"flavor": ""
+			"flavor": "",
+			"imgSrc": "älg.png",
+			"legendary": false
 		}
 	]
 }
