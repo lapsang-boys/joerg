@@ -1,7 +1,7 @@
 import random
 from typing import List, Optional, Tuple
 
-from card import Card
+from cards.card import Card
 
 
 class Player:

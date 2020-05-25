@@ -4,13 +4,15 @@ from collections import deque
 from typing import Deque, List
 
 from board import Board
-from card import Card
+from cards.card import Card
+from cards.cards import json_read_card
 from order import Order
 from player import Player
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUM_PLAYERS = 4
 STARTING_HAND_SIZE = 3
+LIBRARY_PATH = "./cards/cards.json"
 
 
 class InvalidLibraryFileError(Exception):
@@ -32,14 +34,14 @@ def deal_cards(cards: Deque[Card], players: List[Player]) -> None:
 
 
 def read_cards() -> Deque[Card]:
-    with open("./cards.json", "r") as fp:
+    with open(LIBRARY_PATH, "r") as fp:
         raw_object = json.load(fp)
 
     raw_cards = raw_object.get("cards", None)
     if not raw_cards:
         raise InvalidLibraryFileError()
 
-    cards = [Card().from_json(rc) for rc in raw_cards]
+    cards = [json_read_card(rc) for rc in raw_cards]
     assert len(cards) == len(
         set(cards)
     ), "Name collision in library! Two cards with same name."
@@ -112,6 +114,7 @@ def main():
         # from pole, find the winning power (lowest for defense, highest for attack), in case of multiple cards with the same power, the card closest from pole wins (linearly, not bilinearly).
         for resolving_card in board.resolve_cards():
             print(resolving_card)
+            resolving_card.card.on_reveal()
 
         winning_card = board.resolve_power()
         for resolving_card in board.resolve_cards():
@@ -119,12 +122,12 @@ def main():
                 "On Win" in resolving_card.card.ruling
                 and resolving_card.card == winning_card.card
             ):
-                print("Trigger On Win!", resolving_card.card)
+                resolving_card.card.on_win()
             elif (
                 "On Lose" in resolving_card.card.ruling
                 and resolving_card.card != winning_card.card
             ):
-                print("Trigger On Lose!", resolving_card.card)
+                resolving_card.card.on_lose()
 
         print("")
         print("Winning card!", winning_card)

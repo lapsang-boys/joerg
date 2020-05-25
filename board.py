@@ -1,7 +1,7 @@
 from typing import List
 
 from active_card import ActiveCard
-from card import Card
+from cards.card import Card
 from order import Order
 from player import Player
 
@@ -69,13 +69,20 @@ class Board:
 
     def resolve_power(self) -> ActiveCard:
         best_card = None
-        lower_better = lambda x, y: x < y
-        higher_better = lambda x, y: x > y
-        is_better = (
-            lower_better if self.resolved_order() == Order.defense else higher_better
-        )
+
+        def is_better(a: Card, b: Card):
+            a.power_resolve()
+            b.power_resolve()
+            # Is card _a_ better than card _b_?
+            if self.resolved_order() == Order.defense:
+                # Lower is better.
+                return a.power < b.power
+            else:
+                # Higher is better.
+                return a.power > b.power
+
         for active_card in self.locked_order_cards():
-            if not best_card or is_better(active_card.card.power, best_card.card.power):
+            if not best_card or is_better(active_card.card, best_card.card):
                 best_card = active_card
 
         return best_card

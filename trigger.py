@@ -8,6 +8,7 @@ class Trigger(Enum):
     on_cycle = 4
     on_hand_enter = 5
     before_power = 6
+    power_resolve = 7
 
     def __repr__(self):
         return self.name

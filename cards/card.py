@@ -1,17 +1,10 @@
+from abc import ABC, abstractmethod
 from typing import Any, List, Mapping, Optional
 
-from cards import (
-    ON_WIN_CARDS,
-    ON_LOSE_CARDS,
-    ON_REVEAL_CARDS,
-    ON_CYCLE_CARDS,
-    ON_HAND_ENTER_CARDS,
-    BEFORE_POWER_CARDS,
-)
 from trigger import Trigger
 
 
-class Card:
+class Card(ABC):
     def __init__(self):
         self.name: str
         self.power: int
@@ -24,7 +17,7 @@ class Card:
         self.power = payload.get("power")
         self.ruling = payload.get("ruling")
         self.flavor = payload.get("flavor")
-        self.triggers = self.add_triggers(self.name)
+        # self.triggers = self.add_triggers(self.name)
 
         assert self.name, f"Missing name from payload: {payload}"
         assert self.power, f"Missing power from payload: {payload}"
@@ -33,22 +26,26 @@ class Card:
 
         return self
 
-    def add_triggers(self, name: str) -> List[Trigger]:
-        triggers: List[Trigger] = []
-        if name in ON_WIN_CARDS:
-            triggers.append(Trigger.on_win)
-        if name in ON_LOSE_CARDS:
-            triggers.append(Trigger.on_lose)
-        if name in ON_REVEAL_CARDS:
-            triggers.append(Trigger.on_reveal)
-        if name in ON_CYCLE_CARDS:
-            triggers.append(Trigger.on_cycle)
-        if name in ON_HAND_ENTER_CARDS:
-            triggers.append(Trigger.on_hand_enter)
-        if name in BEFORE_POWER_CARDS:
-            triggers.append(Trigger.before_power)
+    def on_win(self) -> None:
+        pass
 
-        return triggers
+    def on_lose(self) -> None:
+        pass
+
+    def on_reveal(self) -> None:
+        pass
+
+    def on_cycle(self) -> None:
+        pass
+
+    def on_hand_enter(self) -> None:
+        pass
+
+    def before_power(self) -> None:
+        pass
+
+    def power_resolve(self) -> None:
+        pass
 
     def __repr__(self):
         return f"<{self.power}> {self.name}"
