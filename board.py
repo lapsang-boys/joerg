@@ -101,7 +101,7 @@ class Board:
             if ac.player == self.pole
         )
 
-    def get_pole(self):
+    def get_pole_card(self) -> ActiveCard:
         pole_index = self.get_pole_index()
         return self.played_cards[pole_index]
 
@@ -126,7 +126,7 @@ class Board:
         elif num_defense > num_attack:
             return Order.defense
         elif num_attack == num_defense:
-            pole_active_card = self.get_pole()
+            pole_active_card = self.get_pole_card()
             return pole_active_card.order
 
         raise RuntimeError("Unreachable")
