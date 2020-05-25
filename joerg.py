@@ -55,6 +55,7 @@ BEFORE_POWER_CARDS = [
     "Lilla Björn",
 ]
 
+
 class Order(Enum):
     attack = 1
     defense = 2
@@ -80,7 +81,7 @@ class InvalidLibraryFileError(Exception):
         super().__init__(msg)
 
 
-class Card():
+class Card:
     def __init__(self):
         self.name: str
         self.power: int
@@ -130,7 +131,8 @@ class Card():
     def __eq__(self, other: "Card") -> bool:
         return self.name == other.name
 
-class Player():
+
+class Player:
     def __init__(self, num: int):
         self.num = num
         self.hand: List[Card] = []
@@ -148,7 +150,7 @@ class Player():
 
     def pop_random_card(self) -> Tuple[int, Card]:
         assert len(self.hand) > 0
-        card = self.hand[random.randint(0, self.hand_size()-1)]
+        card = self.hand[random.randint(0, self.hand_size() - 1)]
         return self.remove_card_from_hand(card)
 
     def hand_size(self) -> int:
@@ -180,7 +182,9 @@ def read_cards() -> Deque[Card]:
         raise InvalidLibraryFileError()
 
     cards = [Card().from_json(rc) for rc in raw_cards]
-    assert len(cards) == len(set(cards)), "Name collision in library! Two cards with same name."
+    assert len(cards) == len(
+        set(cards)
+    ), "Name collision in library! Two cards with same name."
 
     return deque(cards)
 
@@ -203,7 +207,7 @@ def trade(card1: Card, player1: Player, card2, player2) -> None:
     assert card1 in player2.hand
 
 
-class ActiveCard():
+class ActiveCard:
     def __init__(self, player: Player, card: Card, order: Order):
         self.player: Player = player
         self.card: Card = card
@@ -213,7 +217,7 @@ class ActiveCard():
         return f"{self.player}: {self.card} {self.order}"
 
 
-class Board():
+class Board:
     def __init__(self, player_order: List[Player]):
         pole: Player
         self.cards: List[ActiveCard] = []
@@ -232,10 +236,12 @@ class Board():
     def resolve_cards(self):
         start_index = self.get_pole_index()
         for i in range(NUM_PLAYERS):
-            yield self.cards[(start_index+i) % NUM_PLAYERS]
+            yield self.cards[(start_index + i) % NUM_PLAYERS]
 
     def get_pole_index(self) -> int:
-        return next(index for index, ac in enumerate(self.cards) if ac.player == self.pole)
+        return next(
+            index for index, ac in enumerate(self.cards) if ac.player == self.pole
+        )
 
     def get_pole(self):
         pole_index = self.get_pole_index()
@@ -267,13 +273,15 @@ class Board():
 
     def get_next_player(self, player: Player) -> Player:
         start_index = self.player_order.index(player)
-        return self.player_order[(start_index+1) % NUM_PLAYERS]
+        return self.player_order[(start_index + 1) % NUM_PLAYERS]
 
     def resolve_power(self) -> ActiveCard:
         best_card = None
         lower_better = lambda x, y: x < y
         higher_better = lambda x, y: x > y
-        is_better = lower_better if self.resolved_order() == Order.defense else higher_better
+        is_better = (
+            lower_better if self.resolved_order() == Order.defense else higher_better
+        )
         for active_card in self.locked_order_cards():
             if not best_card or is_better(active_card.card.power, best_card.card.power):
                 best_card = active_card
@@ -289,7 +297,9 @@ class Board():
         return f"Pole: {self.pole}\nResolved order: {self.resolved_order()}"
 
 
-def all_players_except_winner(players: List[Player], winning_player: Player) -> List[Player]:
+def all_players_except_winner(
+    players: List[Player], winning_player: Player
+) -> List[Player]:
     return [p for p in players if p != winning_player]
 
 
@@ -313,11 +323,11 @@ def main():
         board.set_pole(pole_player)
 
         # trade phase
-            # pick card, pick player
+        # pick card, pick player
         # trade(players[0].hand[2], players[0], players[1].hand[2], players[1])
 
         # commit phase
-            # choose card, choose position
+        # choose card, choose position
 
         for player in players:
             _, random_card = player.pop_random_card()
@@ -325,21 +335,27 @@ def main():
             board.commit_card(player, random_card, random_order)
 
         # reveal phase
-            # beginning from pole, reveal card
-            # trigger abilities
+        # beginning from pole, reveal card
+        # trigger abilities
 
         print(board)
 
         # resolve phase
-            # from pole, find the winning power (lowest for defense, highest for attack), in case of multiple cards with the same power, the card closest from pole wins (linearly, not bilinearly).
+        # from pole, find the winning power (lowest for defense, highest for attack), in case of multiple cards with the same power, the card closest from pole wins (linearly, not bilinearly).
         for resolving_card in board.resolve_cards():
             print(resolving_card)
 
         winning_card = board.resolve_power()
         for resolving_card in board.resolve_cards():
-            if "On Win" in resolving_card.card.ruling and resolving_card.card == winning_card.card:
+            if (
+                "On Win" in resolving_card.card.ruling
+                and resolving_card.card == winning_card.card
+            ):
                 print("Trigger On Win!", resolving_card.card)
-            elif "On Lose" in resolving_card.card.ruling and resolving_card.card != winning_card.card:
+            elif (
+                "On Lose" in resolving_card.card.ruling
+                and resolving_card.card != winning_card.card
+            ):
                 print("Trigger On Lose!", resolving_card.card)
 
         print("")
@@ -355,12 +371,13 @@ def main():
         # When any player recieves their second victory, all other players cycles 1 card.
         if victories[winning_card.player] == 2:
             cycled_cards = []
-            for player in all_players_except_winner(players, winning_player=winning_card.player):
+            for player in all_players_except_winner(
+                players, winning_player=winning_card.player
+            ):
                 cycled_card_index, random_card = player.pop_random_card()
                 cycled_cards.append(random_card)
                 new_card = cards.popleft()
                 player.add_card_to_hand(new_card, index=cycled_card_index)
-
 
             print("CYCLE!")
 
@@ -370,5 +387,5 @@ def main():
     print("")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
