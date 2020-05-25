@@ -61,3 +61,4 @@
 
 - Mess with deck (change order)
 - Change other cards orders (attack to defense, etc)
+- Mess with graveyard (won cards)
