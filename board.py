@@ -9,7 +9,7 @@ from player import Player
 
 
 class Board:
-    def __init__(self, deck: Deque[Card], number_of_players: int):
+    def __init__(self, deck: Deque[Card], number_of_players: int, starting_hand_size: int):
         self.pole: Player
         self.original_deck: List[Card] = list(deck)
         self.deck: Deque[Card] = deck
@@ -19,6 +19,8 @@ class Board:
         self.round_winner: Optional[Player]
         self.graveyard: Dict[Player, List[Card]] = defaultdict(list)
         self.victories: Dict[Player, int] = defaultdict(int)
+
+        self.starting_hand_size: int = starting_hand_size
 
         for p in range(number_of_players):
             player = Player(p)
@@ -55,6 +57,9 @@ class Board:
         self.round_winner = None
         self.round_winning_card = None
 
+        for p in self.players:
+            assert self.starting_hand_size - len(p.hand) == len(self.graveyard[p]), f"Player does not have the right number of cards on hand! Starting hand size: {self.starting_hand_size} | {p} Hand: {p.hand} | Graveyard: {self.graveyard[p]} | "
+
     def commit_card(self, player: Player, card: Card, order: Order):
         self.played_cards.append(ActiveCard(player, card, order))
 
@@ -82,13 +87,13 @@ class Board:
         opponents = self.get_opponents(player)
         return self.player_picks(player, opponents)
 
-    def deal_cards(self, starting_hand_size: int) -> None:
+    def deal_cards(self) -> None:
         for player in self.players:
-            for _ in range(starting_hand_size):
+            for _ in range(self.starting_hand_size):
                 card = self.deck.pop()
                 player.add_card_to_hand(card)
 
-        assert len(player.hand) == starting_hand_size
+        assert len(player.hand) == self.starting_hand_size
 
     def draw_card(self) -> Card:
         # TODO(_): Undefined behavior when deck is empty.
