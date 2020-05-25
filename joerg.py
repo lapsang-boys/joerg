@@ -82,7 +82,6 @@ def main():
 
         # trade phase
         # pick card, pick player
-        # trade(players[0].hand[2], players[0], players[1].hand[2], players[1])
 
         # commit phase
         # choose card, choose position
@@ -115,7 +114,7 @@ def main():
                 "On Win" in resolving_card.card.ruling
                 and resolving_card.card == winning_card.card
             ):
-                resolving_card.card.on_win()
+                resolving_card.on_win(board)
             elif (
                 "On Lose" in resolving_card.card.ruling
                 and resolving_card.card != winning_card.card

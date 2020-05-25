@@ -99,7 +99,7 @@ class Board:
         winning_card = self.resolve_power()
         return [c for c in all_cards if c != winning_card]
 
-    def trade(self, card1: Card, player1: Player, card2: Card, player2: Player) -> None:
+    def trade(self, player1: Player, card1: Card, player2: Player, card2: Card) -> None:
         assert card1 in player1.hand
         assert card2 in player2.hand
 

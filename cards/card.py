@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import Any, List, Mapping, Optional
 
+from order import Order
 from trigger import Trigger
 
 
@@ -26,7 +27,7 @@ class Card(ABC):
 
         return self
 
-    def on_win(self) -> None:
+    def on_win(self, board: "Board", player: "Player", order: Order) -> None:
         pass
 
     def on_lose(self) -> None:

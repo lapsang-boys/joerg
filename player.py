@@ -14,6 +14,9 @@ class Player:
         index = self.hand.index(card)
         return (index, self.hand.pop(index))
 
+    def get_random_card_from_hand(self) -> Card:
+        return random.choice(self.hand)
+
     def add_card_to_hand(self, card: Card, index: Optional[int] = None) -> None:
         card.on_hand_enter()
         if index is not None:

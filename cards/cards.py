@@ -1,5 +1,10 @@
 import logging
+import random
+
+from board import Board
 from cards.card import Card
+from order import Order
+from player import Player
 
 logging.basicConfig(level=logging.INFO)
 
@@ -19,6 +24,11 @@ class Fox(Card):
     def __init__(self):
         super().__init__()
 
+    def on_win(self, board: Board, player: Player, order: Order):
+        opponents = board.get_opponents(player)
+        a, b = random.sample(opponents, 2)
+        board.trade(a, a.get_random_card_from_hand(), b, b.get_random_card_from_hand())
+
         logging.info("FOX WON! Trade has been made!")
 
 
@@ -27,7 +37,11 @@ class Falcon(Card):
     def __init__(self):
         super().__init__()
 
-        logging.info(f"FALCON SEES: {card}")
+    def on_win(self, board: Board, player: Player, order: Order):
+        logging.info("FALCON WON!")
+        opponent = board.get_random_opponent(player)
+        for card in opponent.hand:
+            logging.info(f"FALCON SEES: {card}")
 
     def on_reveal(self):
         logging.debug("Falcon on_reveal")
