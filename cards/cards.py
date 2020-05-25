@@ -304,8 +304,11 @@ class UrsaMinor(Card):
     def __init__(self):
         super().__init__()
 
-    def before_power(self):
-        LOGGER.debug("UrsaMinor before_power")
+    def before_power(self, board: Board, player: Player, order: Order):
+        # Innan styrka tar effekt vid strid, välj en ny Polstjärneposition. Legendary.
+        LOGGER.info("UrsaMinor before_power")
+        new_pole_player = board.player_picks(player, board.players)
+        board.set_pole(new_pole_player)
 
 
 @name("Svan")

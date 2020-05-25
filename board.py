@@ -51,7 +51,7 @@ class Board:
 
     def resolve_before_power(self) -> None:
         for resolving_card in self.get_played_cards():
-            resolving_card.card.before_power()
+            resolving_card.before_power(self)
 
     def begin_round(self) -> None:
         # Flush old cards.

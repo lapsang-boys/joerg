@@ -44,7 +44,7 @@ class Card(ABC):
     def on_hand_enter(self) -> None:
         pass
 
-    def before_power(self) -> None:
+    def before_power(self, board: "Board", player: "Player", order: Order) -> None:
         pass
 
     def power_resolve(self) -> None:
