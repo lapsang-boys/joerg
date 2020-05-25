@@ -33,7 +33,7 @@ class Player:
         return len(self.hand)
 
     def set_card_visible(self, card: Card) -> None:
-        print(f"{self} shows {card}")
+        LOGGER.info(f"{self} shows {card}")
         LOGGER.debug("not implemented: set_card_visible")
 
     def __repr__(self):

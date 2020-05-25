@@ -18,9 +18,13 @@ class Board:
         self.round_winning_card: Optional[Card]
         self.round_winner: Optional[Player]
         self.graveyard: Dict[Player, List[Card]] = defaultdict(list)
+        self.victories: Dict[Player, int] = defaultdict(int)
 
         for p in range(number_of_players):
-            self.players.append(Player(p))
+            player = Player(p)
+            self.players.append(player)
+            self.graveyard[player] = []
+            self.victories[player] = 0
 
     def randomly_assign_pole(self) -> Player:
         pole_player = self.get_random_player()
@@ -210,6 +214,8 @@ class Board:
 
         self.set_round_winner(best_card.player)
         self.set_round_winning_card(best_card.card.copy())
+        self.victories[best_card.player] += 1
+
         return best_card.card
 
     def add_to_graveyard(self, player: Player, card: Card) -> None:
@@ -222,7 +228,7 @@ class Board:
         self.round_winning_card = card
 
     def is_losing_card(self, card: Card) -> bool:
-        return self.round_winning_card == card
+        return self.round_winning_card != card
 
     def is_opponent_card(self, card: Card, player: Player) -> bool:
         ac = next(c for c in self.played_cards if c.card == card)

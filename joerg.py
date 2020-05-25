@@ -14,7 +14,11 @@ STARTING_HAND_SIZE = NUMBER_OF_WINNING_ROUNDS_NEEDED + 1
 LIBRARY_PATH = "./cards/cards.json"
 
 
-def joerg_round(board: Board, victories):
+class Victory(Exception):
+    pass
+
+
+def joerg_round(board: Board):
     board.begin_round()
 
     for player in board.players:
@@ -36,9 +40,8 @@ def joerg_round(board: Board, victories):
     LOGGER.info("")
     LOGGER.info("")
     LOGGER.info(f"Winning card! {winning_card} played by {board.round_winner}")
-    victories[board.round_winner] += 1
-    if victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
-        return
+    if board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
+        raise Victory()
 
     for resolving_card in board.get_played_cards():
         if resolving_card.card == winning_card:
@@ -51,7 +54,9 @@ def joerg_round(board: Board, victories):
     for active_card in board.losing_cards():
         active_card.player.add_card_to_hand(active_card.card)
 
-    if victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1:
+    board.played_cards = []
+
+    if board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1:
         LOGGER.info(f"Cycle! {board.round_winner} has reached 2 wins.")
         LOGGER.info(" ")
         board.cycle_event(board.round_winner)
@@ -59,14 +64,14 @@ def joerg_round(board: Board, victories):
     board.progress_pole()
 
 
-def end_of_game(victories):
+def end_of_game(board: Board):
     LOGGER.info("")
-    winner = max(victories, key=lambda x: victories[x])
+    winner = max(board.victories, key=lambda x: board.victories[x])
     LOGGER.info(f"Winning player: {winner}")
     LOGGER.info("")
     LOGGER.info("Victories")
-    for player in victories:
-        LOGGER.info(f"\t{player} won {victories[player]} sticks")
+    for player in board.victories:
+        LOGGER.info(f"\t{player} won {board.victories[player]} sticks")
 
 
 def init_game() -> Board:
@@ -81,28 +86,31 @@ def init_game() -> Board:
 
 
 def main():
+    print_logo()
+    seed = random.randrange(sys.maxsize)
+    random.seed(seed)
+    LOGGER.warning(f"Seed was: {seed}")
     board = init_game()
 
-    victories = {p: 0 for p in board.players}
     round_number = 0
-    while max(victories.values()) < NUMBER_OF_WINNING_ROUNDS_NEEDED:
+    while max(board.victories.values()) < NUMBER_OF_WINNING_ROUNDS_NEEDED:
         LOGGER.info(" ")
         LOGGER.info(f"Round {round_number} start!")
         LOGGER.info(" ")
-        joerg_round(board, victories)
+        joerg_round(board)
         LOGGER.info("")
         LOGGER.info("Round finished!")
         LOGGER.info("")
         LOGGER.info("-" * 80)
         round_number += 1
 
-    end_of_game(victories)
+    end_of_game(board)
 
 
 if __name__ == "__main__":
     LOGGER = new_logger("joerg", logging.INFO)
-    seed = random.randrange(sys.maxsize)
-    random.seed(seed)
-    LOGGER.warning(f"Seed was: {seed}")
-    print_logo()
-    main()
+    while True:
+        try:
+            main()
+        except Victory:
+            pass

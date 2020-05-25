@@ -89,6 +89,7 @@ class OldElk(Card):
             c for c in opponent_played_cards if board.is_losing_card(c.card)
         ]
         chosen_card: ActiveCard = board.player_picks(player, opponent_losing_cards)
+        LOGGER.info(f"Chosen card: {chosen_card}")
         board.swap_ownage_of_played_cards(self, chosen_card.card)
 
 
