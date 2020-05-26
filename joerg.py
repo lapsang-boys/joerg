@@ -1,6 +1,7 @@
 import logging
 import random
 import sys
+import argparse
 
 from board import Board
 from cards.cards import read_cards
@@ -86,11 +87,23 @@ def init_game() -> Board:
     return board
 
 
-def main():
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', "--seed", help='Set random seed')
+    parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
+    return parser.parse_args()
+
+
+def main(args):
     print_logo()
+
     seed = random.randrange(sys.maxsize)
+    if args.seed:
+        # NOTE: seed can actually be `str` which is wat.
+        seed = int(args.seed)
+
     random.seed(seed)
-    LOGGER.warning(f"Seed was: {seed}")
+    LOGGER.warning(f"Seed is: {seed}")
     board = init_game()
 
     try:
@@ -110,5 +123,11 @@ def main():
 
 
 if __name__ == "__main__":
-    LOGGER = new_logger("joerg", logging.INFO)
-    main()
+    args = parse_args()
+
+    log_level = logging.WARNING
+    if args.verbose:
+        log_level = logging.INFO
+
+    LOGGER = new_logger("joerg", log_level)
+    main(args)
