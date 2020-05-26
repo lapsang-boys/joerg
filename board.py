@@ -1,6 +1,6 @@
 import random
 from collections import defaultdict
-from typing import List, Any, Union, Deque, Optional, Dict
+from typing import List, Any, Union, Deque, Optional, Dict, Set
 
 from played_card import PlayedCard
 from cards.card import Card
@@ -21,6 +21,9 @@ class Board:
         self.round_winner: Optional[Player]
         self.graveyard: Dict[Player, List[Card]] = defaultdict(list)
         self.victories: Dict[Player, int] = defaultdict(int)
+
+        # Card blocked for _int_ number of turns.
+        self.blocked_cards: Dict[Card, int] = defaultdict(int)
 
         self.starting_hand_size: int = starting_hand_size
 
@@ -55,6 +58,15 @@ class Board:
             resolving_card.before_power(self)
 
     def begin_round(self) -> None:
+        cleared_cards: Set[Card] = set()
+        for c in self.blocked_cards:
+            if self.blocked_cards[c] <= 0:
+                cleared_cards.add(c)
+            self.blocked_cards[c] -= 1
+
+        for c in cleared_cards:
+            del self.blocked_cards[c]
+
         # Flush old cards.
         self.played_cards = []
         self.round_winner = None
@@ -66,10 +78,16 @@ class Board:
             ), f"Player does not have the right number of cards on hand! Starting hand size: {self.starting_hand_size} | {p} Hand: {p.hand} | Graveyard: {self.graveyard[p]} | "
 
     def commit_card(self, player: Player, card: Card, order: Order):
+        if card.legendary:
+            self.blocked_cards[card] = 1
         self.played_cards.append(PlayedCard(player, card, order))
 
     def number_of_players(self) -> int:
         return len(self.players)
+
+    def valid_plays(self, cards: List[Card]) -> List[Card]:
+        valid_cards = [c for c in cards if c not in self.blocked_cards]
+        return valid_cards
 
     def player_picks(
         self, player: Player, items: List[Any], num: int = 1

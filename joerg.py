@@ -23,7 +23,10 @@ def joerg_round(board: Board):
     board.begin_round()
 
     for player in board.players:
-        chosen_card = board.player_picks(player, player.hand)
+        valid_cards = board.valid_plays(player.hand)
+        assert len(valid_cards) >= 1, f"No valid cards to play! {player.hand}"
+
+        chosen_card = board.player_picks(player, valid_cards)
         player.remove_card_from_hand(chosen_card)
 
         chosen_order = board.player_picks(player, [Order.attack, Order.defense])
