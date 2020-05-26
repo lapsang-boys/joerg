@@ -119,7 +119,8 @@ def main(args):
             LOGGER.info("-" * 80)
             round_number += 1
     except Victory:
-        end_of_game(board)
+        pass
+    end_of_game(board)
 
 
 if __name__ == "__main__":
