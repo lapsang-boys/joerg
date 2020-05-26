@@ -3,11 +3,11 @@ from collections import deque
 from typing import Deque, List
 
 from played_card import PlayedCard
-from board import Board
+from board import Board, PlayerStates
 from cards.card import Card
 from log import new_logger
 from order import Order
-from player import Player
+from player import Player, HandCardState
 
 LOGGER = new_logger("cards")
 
@@ -279,7 +279,21 @@ class Boar(Card):
         super().__init__()
 
     def on_reveal(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("NOT IMPLEMENTED -- Boar on_reveal")
+        # Överraskning: Du spelar nästa runda blint (korten upp och ner). Man
+        # kan inte vinna sista sticket med detta kort.",
+        LOGGER.info(f"{player} reveals {self.name}!")
+        for card in player.hand:
+            player.set_card_hidden(card)
+
+        def restore_hand():
+            for card in player.hand:
+                # Only restore hidden cards, if they have changed in some other
+                # way. They will keep being that way!
+                if player.hand_states[card] == HandCardState.HiddenFromEveryone:
+                    player.set_card_default(card)
+
+        board.player_states[player].add_state(PlayerStates.HandFaceDown, 1, restore_hand)
+        board.player_states[player].add_state(PlayerStates.UnableToWin, 0, lambda: print("UnableToWin cleared"))
 
 
 @name("Storbent hare")

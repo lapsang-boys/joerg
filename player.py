@@ -58,5 +58,13 @@ class Player:
         self.hand_states[card] = HandCardState.VisibleForEveryone
         LOGGER.info(f"{self} shows {card}")
 
+    def set_card_hidden(self, card: Card) -> None:
+        self.hand_states[card] = HandCardState.HiddenFromEveryone
+        LOGGER.info(f"{self} hides {card}")
+
+    def set_card_default(self, card: Card) -> None:
+        self.hand_states[card] = HandCardState.VisibleOnlyForPlayer
+        LOGGER.info(f"{self} returns {card} to normal (only visible for player)")
+
     def __repr__(self):
         return f"Player {_NAME_LOOKUP[self.num]}"

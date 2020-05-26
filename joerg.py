@@ -41,26 +41,28 @@ def joerg_round(board: Board):
         LOGGER.info(f"{resolving_card}")
 
     winning_card = board.resolve_power()
+    board.resolve_winner(winning_card)
     LOGGER.info("")
     LOGGER.info("")
-    LOGGER.info(f"Winning card! {winning_card} played by {board.round_winner}")
-    if board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
+    LOGGER.info(f"Winning card! {winning_card.card} played by {winning_card.player}")
+    if board.round_winner and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
         raise Victory()
 
     for resolving_card in board.get_played_cards():
-        if resolving_card.card == winning_card:
+        if resolving_card.card == winning_card.card:
             resolving_card.on_win(board)
-        elif resolving_card.card != winning_card:
+        elif resolving_card.card != winning_card.card:
             resolving_card.on_lose(board)
 
-    board.add_to_graveyard(board.round_winner, board.round_winning_card)
+    if board.round_winner:
+        board.add_to_graveyard(board.round_winner, board.round_winning_card)
 
     for played_card in board.losing_cards():
         played_card.player.add_card_to_hand(played_card.card)
 
     board.played_cards = []
 
-    if board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1:
+    if board.round_winner and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1:
         LOGGER.info(f"Cycle! {board.round_winner} has reached 2 wins.")
         LOGGER.info(" ")
         board.cycle_event(board.round_winner)
@@ -81,7 +83,7 @@ def end_of_game(board: Board):
 def init_game() -> Board:
     deck = read_cards(LIBRARY_PATH)
     board = Board(
-        deck, number_of_players=NUMBER_OF_PLAYERS, starting_hand_size=STARTING_HAND_SIZE
+        deck, number_of_players=NUMBER_OF_PLAYERS, starting_hand_size=STARTING_HAND_SIZE, wins_needed=NUMBER_OF_WINNING_ROUNDS_NEEDED
     )
     board.randomly_assign_pole()
     board.shuffle_deck()

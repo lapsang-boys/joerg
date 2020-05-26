@@ -1,16 +1,54 @@
 import random
 from collections import defaultdict
-from typing import List, Any, Union, Deque, Optional, Dict, Set
+from typing import List, Any, Union, Deque, Optional, Dict, Set, Callable
 
 from played_card import PlayedCard
 from cards.card import Card
 from order import Order
 from player import Player
+from enum import Enum
 
+
+class PlayerStates(Enum):
+    HandFaceDown = 1
+    UnableToWin = 2
+
+class Ps:
+    def __init__(self, state: PlayerStates, duration: int, action: Callable[[], None]):
+        self.state: PlayerStates = state
+        self.duration: int = duration
+        self.action: Callable[[], None] = action
+
+
+class PlayerState:
+    def __init__(self):
+        # 0 denotes indefinite.
+        self.states: Dict[PlayerStates, Ps] = {}
+
+    def add_state(self, state, duration, action):
+        self.states[state] = Ps(state, duration, action)
+
+    def has_state(self, state: PlayerStates) -> bool:
+        return state in self.states
+
+    def remove(self, ps: PlayerStates) -> None:
+        assert ps in self.states
+        self.states[ps].action()
+        del self.states[ps]
+
+    def update(self) -> None:
+        cleared_states = set()
+        for state in self.states:
+            if self.states[state].duration <= 0:
+                cleared_states.add(state)
+            self.states[state].duration -= 1
+
+        for state_to_remove in cleared_states:
+            self.remove(state_to_remove)
 
 class Board:
     def __init__(
-        self, deck: Deque[Card], number_of_players: int, starting_hand_size: int
+        self, deck: Deque[Card], number_of_players: int, starting_hand_size: int, wins_needed: int
     ):
         self.pole: Player
         self.original_deck: List[Card] = list(deck)
@@ -24,14 +62,17 @@ class Board:
 
         # Card blocked for _int_ number of turns.
         self.blocked_cards: Dict[Card, int] = defaultdict(int)
+        self.player_states: Dict[Player, PlayerState] = {}
 
         self.starting_hand_size: int = starting_hand_size
+        self.wins_needed: int = wins_needed
 
         for p in range(number_of_players):
             player = Player(p)
             self.players.append(player)
             self.graveyard[player] = []
             self.victories[player] = 0
+            self.player_states[player] = PlayerState()
 
     def randomly_assign_pole(self) -> Player:
         pole_player = self.get_random_player()
@@ -57,7 +98,7 @@ class Board:
         for resolving_card in self.get_played_cards():
             resolving_card.before_power(self)
 
-    def begin_round(self) -> None:
+    def update_blocked_cards(self) -> None:
         cleared_cards: Set[Card] = set()
         for c in self.blocked_cards:
             if self.blocked_cards[c] <= 0:
@@ -66,6 +107,14 @@ class Board:
 
         for c in cleared_cards:
             del self.blocked_cards[c]
+
+    def update_player_states(self) -> None:
+        for player_states in self.player_states.values():
+            player_states.update()
+
+    def begin_round(self) -> None:
+        self.update_blocked_cards()
+        self.update_player_states()
 
         # Flush old cards.
         self.played_cards = []
@@ -249,11 +298,16 @@ class Board:
         if not best_card:
             raise RuntimeError(f"Unable to find best card! Board: {self}")
 
-        self.set_round_winner(best_card.player)
-        self.set_round_winning_card(best_card.card.copy())
-        self.victories[best_card.player] += 1
+        return best_card
 
-        return best_card.card
+    def resolve_winner(self, winning_card: PlayedCard) -> None:
+        if self.victories[winning_card.player]+1 == self.wins_needed and self.player_states[winning_card.player].has_state(PlayerStates.UnableToWin):
+            pass
+        else:
+            self.set_round_winner(winning_card.player)
+            self.set_round_winning_card(winning_card.card.copy())
+            self.victories[winning_card.player] += 1
+
 
     def add_to_graveyard(self, player: Player, card: Card) -> None:
         self.graveyard[player].append(card)
