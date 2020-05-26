@@ -5,8 +5,6 @@
 
 _Easy (everything ready to implement)_
 
-- [ ] Falken
-- [ ] Frog
 - [ ] Hedgehog2TheReturnofGlen
 - [ ] KingoftheForest
 - [ ] Mosquito
@@ -24,6 +22,7 @@ _Medium (new systems)_
 
 _Hard (loosely defined or difficult abilities)_
 
+- [ ] Falken, what happens if you pick an unrevealed card?
 - [ ] Boar, can't win the game, cards upside down
 - [ ] HungryWolf, perm power change, define `eat up`
 - [ ] Rooster, how to trigger, perm power change (maybe player locked)
