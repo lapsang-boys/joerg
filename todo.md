@@ -21,7 +21,6 @@ _Medium (new systems)_
 _Hard (loosely defined or difficult abilities)_
 
 - [ ] Falken, what happens if you pick an unrevealed card?
-- [ ] Boar, can't win the game, cards upside down
 - [ ] HungryWolf, perm power change, define `eat up`
 - [ ] Rooster, how to trigger, perm power change (maybe player locked)
 - [ ] Seagull, return card from graveyard to hand, reduce victory with 1, legendary
@@ -33,14 +32,6 @@ _Hard (loosely defined or difficult abilities)_
 
 - [ ] Temporary / Permanent states, Silence, Temporary / Permanent power changes
 
-**Player statuses**
-
-- [ ] Temporary states
-- [ ] Cards hidden (from oneself)
-- [ ] Single card revealed
-- [ ] Won last stick
-- [ ] Lost last stick
-
 ## New card ideas
 
 - Mess with deck (change order)
@@ -48,6 +39,9 @@ _Hard (loosely defined or difficult abilities)_
 - Mess with graveyard (won cards)
 - Spegel spegel, reflect
 - Block named card from being played, fästing
+
+- Player Won last stick, better or wurst
+- Player Lost last stick, trigger another ability (losing streak), slicka såren
 
 ## Discussions
 
