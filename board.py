@@ -78,6 +78,15 @@ class Board:
         else:
             return random.sample(items, num)
 
+    def get_players_played_card(self, player: Player) -> ActiveCard:
+        for ac in self.played_cards:
+            if ac.player != player:
+                continue
+
+            return ac
+
+        raise RuntimeError("Player haven't played a card this round!")
+
     def get_previous_player(self, player: Player) -> Player:
         origin_player_index = self.players.index(player)
         return self.players[origin_player_index - 1 % self.number_of_players()]

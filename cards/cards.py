@@ -217,6 +217,17 @@ class Frog(Card):
 
     def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.info("Frog on_reveal")
+        # Target opponent swaps card with one in their hand.
+        opponent: Player = board.player_picks(player, board.get_opponents(player))
+
+        chosen_card: Card = board.player_picks(opponent, opponent.hand)
+        opponent.remove_card_from_hand(chosen_card)
+
+        opponents_card = board.get_players_played_card(opponent)
+        LOGGER.info(f"Swapping {opponents_card.card} with {chosen_card}")
+        tmp_card = opponents_card.card.copy()
+        opponents_card.card = chosen_card
+        opponent.add_card_to_hand(tmp_card)
 
 
 @name("Sälspion")
