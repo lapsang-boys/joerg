@@ -13,18 +13,21 @@ class Card(ABC):
         self.name: str
         self.power: int
         self.ruling: str
+        self.legendary: bool
         self.flavor: Optional[str]
 
     def from_json(self, payload: Mapping[str, Any]) -> "Card":
-        assert payload.get("power"), f"Missing power from payload {payload}"
-        assert payload.get("name"), f"Missing name from payload: {payload}"
-        assert payload.get("ruling"), f"Missing ruling from payload: {payload}"
+        assert payload.get("name") is not None, f"Missing name from payload: {payload}"
+        assert payload.get("power") is not None, f"Missing power from payload {payload}"
+        assert payload.get("ruling") is not None, f"Missing ruling from payload: {payload}"
+        assert payload.get("legendary") is not None, f"Missing legendary from payload: {payload}"
         # Flavor is optional
 
         self.name = str(payload.get("name"))
-        self.ruling = str(payload.get("ruling"))
-        self.flavor = str(payload.get("flavor"))
         self.power = int(payload.get("power", 0))
+        self.ruling = str(payload.get("ruling"))
+        self.legendary = bool(payload.get("legendary", False))
+        self.flavor = str(payload.get("flavor"))
 
         return self
 
