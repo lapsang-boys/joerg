@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from board import Board
 
 
-def assert_same_handsizes(func: Callable[["Board"], None]):
+def assert_same_handsizes(func: Callable[["PlayedCard", "Board"], None]):
     def wrapper_func(played_card: "PlayedCard", board: "Board"):
         old_hand_sizes: List[int] = [p.hand_size() for p in board.players]
         return_value = func(played_card, board)
@@ -23,7 +23,7 @@ def assert_same_handsizes(func: Callable[["Board"], None]):
     return wrapper_func
 
 
-def assert_card_only_in_one_place(func: Callable[["Board"], None]):
+def assert_card_only_in_one_place(func: Callable[["PlayedCard", "Board"], None]):
     def wrapper_func(played_card: "PlayedCard", board: "Board"):
         return_value = func(played_card, board)
 
@@ -53,7 +53,7 @@ def assert_card_only_in_one_place(func: Callable[["Board"], None]):
     return wrapper_func
 
 
-def assert_same_deck_size(func: Callable[["Board"], None]):
+def assert_same_deck_size(func: Callable[["PlayedCard", "Board"], None]):
     def wrapper_func(played_card: "PlayedCard", board: "Board"):
         old_deck_size = len(board.deck)
         return_value = func(played_card, board)
