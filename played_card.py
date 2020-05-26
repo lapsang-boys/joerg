@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 
 
 def assert_same_handsizes(func: Callable[["Board"], None]):
-    def wrapper_func(active_card: "ActiveCard", board: "Board"):
+    def wrapper_func(played_card: "PlayedCard", board: "Board"):
         old_hand_sizes: List[int] = [p.hand_size() for p in board.players]
-        return_value = func(active_card, board)
+        return_value = func(played_card, board)
         new_hand_sizes: List[int] = [p.hand_size() for p in board.players]
 
         assert (
@@ -24,8 +24,8 @@ def assert_same_handsizes(func: Callable[["Board"], None]):
 
 
 def assert_card_only_in_one_place(func: Callable[["Board"], None]):
-    def wrapper_func(active_card: "ActiveCard", board: "Board"):
-        return_value = func(active_card, board)
+    def wrapper_func(played_card: "PlayedCard", board: "Board"):
+        return_value = func(played_card, board)
 
         for card in board.original_deck:
             card_in_player_hands = [
@@ -54,9 +54,9 @@ def assert_card_only_in_one_place(func: Callable[["Board"], None]):
 
 
 def assert_same_deck_size(func: Callable[["Board"], None]):
-    def wrapper_func(active_card: "ActiveCard", board: "Board"):
+    def wrapper_func(played_card: "PlayedCard", board: "Board"):
         old_deck_size = len(board.deck)
-        return_value = func(active_card, board)
+        return_value = func(played_card, board)
         assert old_deck_size == len(
             board.deck
         ), f"Deck has not same size! Old: {old_deck_size} == New: {len(board.deck)}"
@@ -65,11 +65,12 @@ def assert_same_deck_size(func: Callable[["Board"], None]):
     return wrapper_func
 
 
-class ActiveCard:
-    def __init__(self, player: Player, card: Card, order: Order):
+class PlayedCard:
+    def __init__(self, player: Player, card: Card, order: Order, revealed = False):
         self.player: Player = player
         self.card: Card = card
         self.order: Order = order
+        self.revealed: bool = revealed
 
     @assert_same_deck_size
     @assert_card_only_in_one_place

@@ -2,7 +2,7 @@ import json
 from collections import deque
 from typing import Deque, List
 
-from active_card import ActiveCard
+from played_card import PlayedCard
 from board import Board
 from cards.card import Card
 from log import new_logger
@@ -86,7 +86,7 @@ class OldElk(Card):
         opponent_losing_cards = [
             c for c in opponent_played_cards if board.is_losing_card(c.card)
         ]
-        chosen_card: ActiveCard = board.player_picks(player, opponent_losing_cards)
+        chosen_card: PlayedCard = board.player_picks(player, opponent_losing_cards)
         LOGGER.info(f"{player} lost with {self.name}: {self.name} swapped with another losing card: {chosen_card.player}'s {chosen_card.card}")
         board.swap_ownage_of_played_cards(self, chosen_card.card)
 
@@ -185,7 +185,7 @@ class Toad(Card):
         # till spelare (får inte vara ägaren av kortet). Denna spelare byter ett
         # kort i sin hand mot the valda kortet.
         opponents_cards = board.get_opponent_played_cards(player)
-        chosen_card: ActiveCard = board.player_picks(player, opponents_cards)
+        chosen_card: PlayedCard = board.player_picks(player, opponents_cards)
 
         not_chosen_cards_players = board.get_opponents(chosen_card.player)
         chosen_player: Player = board.player_picks(player, not_chosen_cards_players)

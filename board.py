@@ -2,7 +2,7 @@ import random
 from collections import defaultdict
 from typing import List, Any, Union, Deque, Optional, Dict
 
-from active_card import ActiveCard
+from played_card import PlayedCard
 from cards.card import Card
 from order import Order
 from player import Player
@@ -15,7 +15,7 @@ class Board:
         self.pole: Player
         self.original_deck: List[Card] = list(deck)
         self.deck: Deque[Card] = deck
-        self.played_cards: List[ActiveCard] = []
+        self.played_cards: List[PlayedCard] = []
         self.players: List[Player] = []
         self.round_winning_card: Optional[Card]
         self.round_winner: Optional[Player]
@@ -65,7 +65,7 @@ class Board:
             ), f"Player does not have the right number of cards on hand! Starting hand size: {self.starting_hand_size} | {p} Hand: {p.hand} | Graveyard: {self.graveyard[p]} | "
 
     def commit_card(self, player: Player, card: Card, order: Order):
-        self.played_cards.append(ActiveCard(player, card, order))
+        self.played_cards.append(PlayedCard(player, card, order))
 
     def number_of_players(self) -> int:
         return len(self.players)
@@ -78,7 +78,7 @@ class Board:
         else:
             return random.sample(items, num)
 
-    def get_players_played_card(self, player: Player) -> ActiveCard:
+    def get_players_played_card(self, player: Player) -> PlayedCard:
         for ac in self.played_cards:
             if ac.player != player:
                 continue
@@ -156,7 +156,7 @@ class Board:
             if ac.player == self.pole
         )
 
-    def get_pole_card(self) -> ActiveCard:
+    def get_pole_card(self) -> PlayedCard:
         pole_index = self.get_pole_index()
         return self.played_cards[pole_index]
 
@@ -181,15 +181,15 @@ class Board:
         elif num_defense > num_attack:
             return Order.defense
         elif num_attack == num_defense:
-            pole_active_card = self.get_pole_card()
-            return pole_active_card.order
+            pole_played_card = self.get_pole_card()
+            return pole_played_card.order
 
         raise RuntimeError("Unreachable")
 
     def get_pole_player(self) -> Player:
         return self.pole
 
-    def get_opponent_played_cards(self, player: Player) -> List[ActiveCard]:
+    def get_opponent_played_cards(self, player: Player) -> List[PlayedCard]:
         return [ac for ac in self.get_played_cards() if ac.player != player]
 
     def get_next_player(self, player: Player) -> Player:
@@ -209,7 +209,7 @@ class Board:
 
         self.played_cards[index_card1]
 
-    def resolve_power(self) -> ActiveCard:
+    def resolve_power(self) -> PlayedCard:
         best_card = None
 
         def is_better(a: Card, b: Card):
@@ -223,9 +223,9 @@ class Board:
                 # Higher is better.
                 return a.power > b.power
 
-        for active_card in self.get_played_cards():
-            if not best_card or is_better(active_card.card, best_card.card):
-                best_card = active_card
+        for played_card in self.get_played_cards():
+            if not best_card or is_better(played_card.card, best_card.card):
+                best_card = played_card
 
         if not best_card:
             raise RuntimeError(f"Unable to find best card! Board: {self}")
@@ -255,7 +255,7 @@ class Board:
     def add_cycled_cards_to_bottom_of_deck(self, cycled_cards: List[Card]):
         self.deck.extend(cycled_cards)
 
-    def losing_cards(self) -> List[ActiveCard]:
+    def losing_cards(self) -> List[PlayedCard]:
         all_cards = self.played_cards
         return [c for c in all_cards if c.card != self.round_winning_card]
 

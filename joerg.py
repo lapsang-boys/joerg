@@ -52,8 +52,8 @@ def joerg_round(board: Board):
 
     board.add_to_graveyard(board.round_winner, board.round_winning_card)
 
-    for active_card in board.losing_cards():
-        active_card.player.add_card_to_hand(active_card.card)
+    for played_card in board.losing_cards():
+        played_card.player.add_card_to_hand(played_card.card)
 
     board.played_cards = []
 
