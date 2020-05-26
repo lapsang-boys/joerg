@@ -6,7 +6,6 @@
 _Easy (everything ready to implement)_
 
 - [ ] SpySeal
-- [ ] Toad
 
 _Medium (new systems)_
 
@@ -25,7 +24,7 @@ _Hard (loosely defined or difficult abilities)_
 - [ ] Boar, can't win the game, cards upside down
 - [ ] HungryWolf, perm power change, define `eat up`
 - [ ] Rooster, how to trigger, perm power change (maybe player locked)
-- [ ] Seagull, return card from graveyard to hand, reduce victory with 1
+- [ ] Seagull, return card from graveyard to hand, reduce victory with 1, legendary
 - [ ] Swan, tiebreaker
 - [ ] Ant, define swap behaviour more rigorously
 - [ ] Anteater, define swap behaviour more rigorously
@@ -35,9 +34,7 @@ _Hard (loosely defined or difficult abilities)_
 - [ ] Legendary
 - [ ] Temporary states
 - [ ] Silence
-- [ ] Visible (in hand)
-- [ ] Revealed / Unrevealed
-- [ ] Permanent power changes
+- [ ] Temporary / Permanent power changes
 
 **Player statuses**
 
