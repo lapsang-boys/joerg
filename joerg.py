@@ -1,7 +1,7 @@
+import argparse
 import logging
 import random
 import sys
-import argparse
 
 from board import Board
 from cards.cards import read_cards
@@ -90,8 +90,10 @@ def init_game() -> Board:
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', "--seed", help='Set random seed')
-    parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
+    parser.add_argument("-s", "--seed", help="Set random seed")
+    parser.add_argument(
+        "-v", "--verbose", help="increase output verbosity", action="store_true"
+    )
     return parser.parse_args()
 
 

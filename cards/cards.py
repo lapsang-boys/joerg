@@ -34,7 +34,9 @@ class Fox(Card):
         b_card: Card = board.player_picks(b, b.hand)
         board.trade(a, a_card, b, b_card)
 
-        LOGGER.info(f"{player} won with {self.name}: Forced trade! {a} trades {a_card} for {b}'s {b_card}")
+        LOGGER.info(
+            f"{player} won with {self.name}: Forced trade! {a} trades {a_card} for {b}'s {b_card}"
+        )
 
 
 @name("Falken")
@@ -61,7 +63,9 @@ class Bee(Card):
         opponent = board.player_picks_opponent(player)
         random_card = opponent.get_random_card_from_hand()
         opponent.set_card_visible(random_card)
-        LOGGER.info(f"{player} lost with {self.name}: {opponent}'s {random_card} is now visible!")
+        LOGGER.info(
+            f"{player} lost with {self.name}: {opponent}'s {random_card} is now visible!"
+        )
 
 
 @name("Fjäril")
@@ -72,7 +76,9 @@ class Butterfly(Card):
     def on_lose(self, board: Board, player: Player, order: Order):
         tmp_pole_player = board.get_previous_player(player)
         board.set_pole(tmp_pole_player)
-        LOGGER.info(f"{player} lost with {self.name}: {player} will get pole next turn!")
+        LOGGER.info(
+            f"{player} lost with {self.name}: {player} will get pole next turn!"
+        )
 
 
 @name("Gamle älgen")
@@ -87,7 +93,9 @@ class OldElk(Card):
             c for c in opponent_played_cards if board.is_losing_card(c.card)
         ]
         chosen_card: PlayedCard = board.player_picks(player, opponent_losing_cards)
-        LOGGER.info(f"{player} lost with {self.name}: {self.name} swapped with another losing card: {chosen_card.player}'s {chosen_card.card}")
+        LOGGER.info(
+            f"{player} lost with {self.name}: {self.name} swapped with another losing card: {chosen_card.player}'s {chosen_card.card}"
+        )
         board.swap_ownage_of_played_cards(self, chosen_card.card)
 
 
@@ -190,10 +198,14 @@ class Toad(Card):
         not_chosen_cards_players = board.get_opponents(chosen_card.player)
         chosen_player: Player = board.player_picks(player, not_chosen_cards_players)
 
-        chosen_card_from_hand: Card = board.player_picks(chosen_player, chosen_player.hand)
+        chosen_card_from_hand: Card = board.player_picks(
+            chosen_player, chosen_player.hand
+        )
         chosen_player.remove_card_from_hand(chosen_card_from_hand)
 
-        LOGGER.info(f"{player} played {self.name}: Swapping {chosen_card.player}'s {chosen_card.card} with {chosen_player}'s {chosen_card_from_hand}")
+        LOGGER.info(
+            f"{player} played {self.name}: Swapping {chosen_card.player}'s {chosen_card.card} with {chosen_player}'s {chosen_card_from_hand}"
+        )
         tmp_card = chosen_card.card.copy()
         chosen_card.card = chosen_card_from_hand
         chosen_player.add_card_to_hand(tmp_card)
