@@ -62,6 +62,7 @@ class Card(ABC):
         new_card.power = self.power
         new_card.ruling = self.ruling
         new_card.flavor = self.flavor
+        new_card.legendary = self.legendary
         return new_card
 
     # TODO(_): Has lots of fun collisions.
