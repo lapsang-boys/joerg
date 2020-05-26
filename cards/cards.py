@@ -34,7 +34,7 @@ class Fox(Card):
         b_card: Card = board.player_picks(b, b.hand)
         board.trade(a, a_card, b, b_card)
 
-        LOGGER.debug("FOX WON! Trade has been made!")
+        LOGGER.info(f"{player} won with {self.name}: Forced trade! {a} trades {a_card} for {b}'s {b_card}")
 
 
 @name("Falken")
@@ -43,10 +43,10 @@ class Falcon(Card):
         super().__init__()
 
     def on_win(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("FALCON WON!")
         opponent = board.player_picks_opponent(player)
+        LOGGER.info(f"{player} won with {self.name}")
         for card in opponent.hand:
-            LOGGER.debug(f"FALCON SEES: {card}")
+            LOGGER.info(f"\t{self.name} sees: {card}")
 
     def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Falcon on_reveal")
@@ -58,10 +58,10 @@ class Bee(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("BEE LOST!")
         opponent = board.player_picks_opponent(player)
         random_card = opponent.get_random_card_from_hand()
         opponent.set_card_visible(random_card)
+        LOGGER.info(f"{player} lost with {self.name}: {opponent}'s {random_card} is now visible!")
 
 
 @name("Fjäril")
@@ -70,10 +70,9 @@ class Butterfly(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("BUTTERFLY LOST!")
         tmp_pole_player = board.get_previous_player(player)
         board.set_pole(tmp_pole_player)
-        LOGGER.debug(f"Make {player} pole next turn!")
+        LOGGER.info(f"{player} lost with {self.name}: {player} will get pole next turn!")
 
 
 @name("Gamle älgen")
@@ -82,14 +81,13 @@ class OldElk(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("OLDELK LOST!")
         # On Lose: Byt detta kort mot en motspelares kort som också förlorade.
         opponent_played_cards = board.get_opponent_played_cards(player)
         opponent_losing_cards = [
             c for c in opponent_played_cards if board.is_losing_card(c.card)
         ]
         chosen_card: ActiveCard = board.player_picks(player, opponent_losing_cards)
-        LOGGER.debug(f"Chosen card: {chosen_card}")
+        LOGGER.info(f"{player} lost with {self.name}: {self.name} swapped with another losing card: {chosen_card.player}'s {chosen_card.card}")
         board.swap_ownage_of_played_cards(self, chosen_card.card)
 
 
@@ -112,14 +110,17 @@ class Magpie(Card):
         new_card = board.draw_card()
         pile.append(new_card)
 
+        LOGGER.info(f"{player} lost with {self.name}!")
         for opponent in board.get_opponents(player):
             throw_away_card = board.player_picks(opponent, opponent.hand)
             opponent.remove_card_from_hand(throw_away_card)
+            LOGGER.info(f"\t{opponent} throws away {throw_away_card}")
             pile.append(throw_away_card)
 
+        LOGGER.info("Picking time!")
         for picking_player in board.players_in_pole_order_from_player(player):
             chosen_card = board.player_picks(picking_player, pile)
-            LOGGER.debug(chosen_card, picking_player, pile)
+            LOGGER.info(f"\t{picking_player} picks {chosen_card}")
             if picking_player == player:
                 board.played_cards[index].card = chosen_card
             else:
@@ -139,14 +140,14 @@ class Mole(Card):
         def flatten(a):
             return sum(a, [])
 
-        LOGGER.debug("MOLE LOST!")
         possible_cards = [
             c
             for c in flatten([cs for cs in board.graveyard.values()])
             if c.power < self.power
         ]
+        LOGGER.info(f"{player} lost with {self.name}!")
         if not possible_cards:
-            LOGGER.info("MOLE: No valid targets!")
+            LOGGER.info(f"{self.name} has no valid targets!")
             return
 
         mole_index = board.get_card_index(self)
@@ -156,7 +157,7 @@ class Mole(Card):
                 index = board.graveyard[p].index(chosen_card)
                 board.graveyard[p].pop(index)
                 board.graveyard[p].insert(index, self)
-                LOGGER.debug(f"Swapped with card: {chosen_card}")
+                LOGGER.info(f"{self.name} swapped with {chosen_card}")
                 break
 
         board.played_cards[mole_index].card = chosen_card
@@ -180,7 +181,22 @@ class Toad(Card):
         super().__init__()
 
     def on_reveal(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("NOT IMPLEMENTED -- Toad on_reveal")
+        # Överraskning: Välj ett av motståndare spelat kort, och välj sedan en
+        # till spelare (får inte vara ägaren av kortet). Denna spelare byter ett
+        # kort i sin hand mot the valda kortet.
+        opponents_cards = board.get_opponent_played_cards(player)
+        chosen_card: ActiveCard = board.player_picks(player, opponents_cards)
+
+        not_chosen_cards_players = board.get_opponents(chosen_card.player)
+        chosen_player: Player = board.player_picks(player, not_chosen_cards_players)
+
+        chosen_card_from_hand: Card = board.player_picks(chosen_player, chosen_player.hand)
+        chosen_player.remove_card_from_hand(chosen_card_from_hand)
+
+        LOGGER.info(f"{player} played {self.name}: Swapping {chosen_card.player}'s {chosen_card.card} with {chosen_player}'s {chosen_card_from_hand}")
+        tmp_card = chosen_card.card.copy()
+        chosen_card.card = chosen_card_from_hand
+        chosen_player.add_card_to_hand(tmp_card)
 
 
 @name("Igelkotten")
@@ -299,7 +315,19 @@ class Mosquito(Card):
         super().__init__()
 
     def on_reveal(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("NOT IMPLEMENTED -- Mosquito on_reveal")
+        LOGGER.info("Mosquito on_reveal")
+        # Överraskning: Byt detta kort mot ett slumpmässigt kort i valfri spelares hand.
+        opponents = board.get_opponents(player)
+        opponent: Player = board.player_picks(player, opponents)
+
+        random_card = opponent.get_random_card_from_hand()
+        opponent.remove_card_from_hand(random_card)
+
+        LOGGER.info(f"{self} swapped with {opponent}'s {random_card}")
+        mygga_ac = board.get_players_played_card(player)
+        tmp_card = mygga_ac.card.copy()
+        mygga_ac.card = random_card
+        opponent.add_card_to_hand(tmp_card)
 
 
 @name("Hungrig Varg")
