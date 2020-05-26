@@ -31,10 +31,7 @@ _Hard (loosely defined or difficult abilities)_
 
 **Card statuses**
 
-- [ ] Legendary
-- [ ] Temporary states
-- [ ] Silence
-- [ ] Temporary / Permanent power changes
+- [ ] Temporary / Permanent states, Silence, Temporary / Permanent power changes
 
 **Player statuses**
 
@@ -49,3 +46,10 @@ _Hard (loosely defined or difficult abilities)_
 - Mess with deck (change order)
 - Change other cards orders (attack to defense, etc)
 - Mess with graveyard (won cards)
+- Spegel spegel, reflect
+- Block named card from being played, fästing
+
+## Discussions
+
+- Split graveyard into two zones: Graveyard (eaten / banished) and paradise (win / stick)
+- The Stacken discussion
