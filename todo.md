@@ -5,11 +5,7 @@
 
 _Easy (everything ready to implement)_
 
-- [ ] Hedgehog2TheReturnofGlen
-- [ ] KingoftheForest
-- [ ] Mosquito
 - [ ] SpySeal
-- [ ] SupressedPerch
 - [ ] Toad
 
 _Medium (new systems)_
@@ -17,8 +13,11 @@ _Medium (new systems)_
 - [ ] Hedgehog, perm power change
 - [ ] BigLeggedHare, perm power change
 - [ ] Otter, temp power change
+- [ ] Hedgehog2TheReturnofGlen, temp power change
+- [ ] SupressedPerch, temp power change
 - [ ] Squirrel, temp silence
 - [ ] Weasel, player status (last winner)
+- [ ] KingoftheForest, card status unrevealed
 
 _Hard (loosely defined or difficult abilities)_
 
