@@ -48,7 +48,7 @@ class Falcon(Card):
         for card in opponent.hand:
             LOGGER.debug(f"FALCON SEES: {card}")
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Falcon on_reveal")
 
 
@@ -170,7 +170,7 @@ class SupressedPerch(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- SupressedPerch on_reveal")
 
 
@@ -179,7 +179,7 @@ class Toad(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Toad on_reveal")
 
 
@@ -188,7 +188,7 @@ class Hedgehog(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Hedgehog on_reveal")
 
 
@@ -197,7 +197,7 @@ class Anteater(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Anteater on_reveal")
 
 
@@ -206,7 +206,7 @@ class Otter(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Otter on_reveal")
 
 
@@ -215,8 +215,8 @@ class Frog(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
-        LOGGER.debug("NOT IMPLEMENTED -- Frog on_reveal")
+    def on_reveal(self, board: Board, player: Player, order: Order):
+        LOGGER.info("Frog on_reveal")
 
 
 @name("Sälspion")
@@ -224,7 +224,7 @@ class SpySeal(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- SpySeal on_reveal")
 
 
@@ -233,7 +233,7 @@ class Squirrel(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Squirrel on_reveal")
 
 
@@ -242,7 +242,7 @@ class Seagull(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Seagull on_reveal")
 
 
@@ -251,7 +251,7 @@ class Boar(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Boar on_reveal")
 
 
@@ -260,7 +260,7 @@ class BigLeggedHare(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- BigLeggedHare on_reveal")
 
 
@@ -269,7 +269,7 @@ class Hedgehog2TheReturnofGlen(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Hedgehog2TheReturnofGlen on_reveal")
 
 
@@ -278,7 +278,7 @@ class Weasel(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Weasel on_reveal")
 
 
@@ -287,7 +287,7 @@ class Mosquito(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- Mosquito on_reveal")
 
 
@@ -296,7 +296,7 @@ class HungryWolf(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- HungryWolf on_reveal")
 
 
@@ -305,7 +305,7 @@ class KingoftheForest(Card):
     def __init__(self):
         super().__init__()
 
-    def on_reveal(self):
+    def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.debug("NOT IMPLEMENTED -- KingoftheForest on_reveal")
 
 

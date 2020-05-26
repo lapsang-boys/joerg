@@ -37,7 +37,7 @@ class Card(ABC):
     def on_lose(self, board: "Board", player: "Player", order: Order) -> None:
         pass
 
-    def on_reveal(self) -> None:
+    def on_reveal(self, board: "Board", player: "Player", order: Order) -> None:
         pass
 
     def on_cycle(self, board: "Board", player: "Player") -> None:

@@ -47,7 +47,7 @@ class Board:
 
     def resolve_on_reveal(self) -> None:
         for resolving_card in self.get_played_cards():
-            resolving_card.card.on_reveal()
+            resolving_card.on_reveal(self)
 
     def resolve_before_power(self) -> None:
         for resolving_card in self.get_played_cards():
