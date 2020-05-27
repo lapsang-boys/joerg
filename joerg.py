@@ -26,10 +26,10 @@ def joerg_round(board: Board):
         valid_cards = board.valid_plays(player.hand)
         assert len(valid_cards) >= 1, f"No valid cards to play! {player.hand}"
 
-        chosen_card = board.player_picks(player, valid_cards)
+        chosen_card = player.player_picks(valid_cards)
         player.remove_card_from_hand(chosen_card)
 
-        chosen_order = board.player_picks(player, [Order.attack, Order.defense])
+        chosen_order = player.player_picks([Order.attack, Order.defense])
         board.commit_card(player, chosen_card, chosen_order)
 
     LOGGER.info(f"{board}")

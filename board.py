@@ -146,14 +146,6 @@ class Board:
         valid_cards = [c for c in cards if c not in self.blocked_cards]
         return valid_cards
 
-    def player_picks(
-        self, player: Player, items: List[Any], num: int = 1
-    ) -> Union[List[Any], Any]:
-        if num == 1:
-            return random.choice(items)
-        else:
-            return random.sample(items, num)
-
     def get_players_played_card(self, player: Player) -> PlayedCard:
         for ac in self.played_cards:
             if ac.player != player:
@@ -171,10 +163,6 @@ class Board:
         start_index = self.get_pole_index()
         for i in range(self.number_of_players()):
             yield self.played_cards[(start_index + i) % len(self.played_cards)]
-
-    def player_picks_opponent(self, player: Player) -> Player:
-        opponents = self.get_opponents(player)
-        return self.player_picks(player, opponents)
 
     def deal_cards(self) -> None:
         for player in self.players:

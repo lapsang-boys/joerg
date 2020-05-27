@@ -29,9 +29,9 @@ class Fox(Card):
 
     def on_win(self, board: Board, player: Player, order: Order):
         opponents = board.get_opponents(player)
-        a, b = board.player_picks(player, opponents, 2)
-        a_card: Card = board.player_picks(a, a.hand)
-        b_card: Card = board.player_picks(b, b.hand)
+        a, b = player.player_picks(opponents, 2)
+        a_card: Card = a.player_picks(a.hand)
+        b_card: Card = b.player_picks(b.hand)
         board.trade(a, a_card, b, b_card)
 
         LOGGER.info(
@@ -45,7 +45,7 @@ class Falcon(Card):
         super().__init__()
 
     def on_win(self, board: Board, player: Player, order: Order):
-        opponent = board.player_picks_opponent(player)
+        opponent = player.player_picks_opponent()
         LOGGER.info(f"{player} won with {self.name}")
         for card in opponent.hand:
             LOGGER.info(f"\t{self.name} sees: {card}")
@@ -60,7 +60,7 @@ class Bee(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        opponent = board.player_picks_opponent(player)
+        opponent = player.player_picks_opponent()
         random_card = opponent.get_random_card_from_hand()
         opponent.set_card_visible(random_card)
         LOGGER.info(
@@ -92,7 +92,7 @@ class OldElk(Card):
         opponent_losing_cards = [
             c for c in opponent_played_cards if board.is_losing_card(c.card)
         ]
-        chosen_card: PlayedCard = board.player_picks(player, opponent_losing_cards)
+        chosen_card: PlayedCard = player.player_picks(opponent_losing_cards)
         LOGGER.info(
             f"{player} lost with {self.name}: {self.name} swapped with another losing card: {chosen_card.player}'s {chosen_card.card}"
         )
@@ -120,14 +120,14 @@ class Magpie(Card):
 
         LOGGER.info(f"{player} lost with {self.name}!")
         for opponent in board.get_opponents(player):
-            throw_away_card = board.player_picks(opponent, opponent.hand)
+            throw_away_card = opponent.player_picks(opponent.hand)
             opponent.remove_card_from_hand(throw_away_card)
             LOGGER.info(f"\t{opponent} throws away {throw_away_card}")
             pile.append(throw_away_card)
 
         LOGGER.info("Picking time!")
         for picking_player in board.players_in_pole_order_from_player(player):
-            chosen_card = board.player_picks(picking_player, pile)
+            chosen_card = picking_player.player_picks(pile)
             LOGGER.info(f"\t{picking_player} picks {chosen_card}")
             if picking_player == player:
                 board.played_cards[index].card = chosen_card
@@ -159,7 +159,7 @@ class Mole(Card):
             return
 
         mole_index = board.get_card_index(self)
-        chosen_card = board.player_picks(player, possible_cards)
+        chosen_card = player.player_picks(possible_cards)
         for p in board.graveyard:
             if chosen_card in board.graveyard[p]:
                 index = board.graveyard[p].index(chosen_card)
@@ -193,14 +193,12 @@ class Toad(Card):
         # till spelare (får inte vara ägaren av kortet). Denna spelare byter ett
         # kort i sin hand mot the valda kortet.
         opponents_cards = board.get_opponent_played_cards(player)
-        chosen_card: PlayedCard = board.player_picks(player, opponents_cards)
+        chosen_card: PlayedCard = player.player_picks(opponents_cards)
 
         not_chosen_cards_players = board.get_opponents(chosen_card.player)
-        chosen_player: Player = board.player_picks(player, not_chosen_cards_players)
+        chosen_player: Player = player.player_picks(not_chosen_cards_players)
 
-        chosen_card_from_hand: Card = board.player_picks(
-            chosen_player, chosen_player.hand
-        )
+        chosen_card_from_hand: Card = chosen_player.player_picks(chosen_player.hand)
         chosen_player.remove_card_from_hand(chosen_card_from_hand)
 
         LOGGER.info(
@@ -246,9 +244,9 @@ class Frog(Card):
     def on_reveal(self, board: Board, player: Player, order: Order):
         LOGGER.info("Frog on_reveal")
         # Target opponent swaps card with one in their hand.
-        opponent: Player = board.player_picks(player, board.get_opponents(player))
+        opponent: Player = player.player_picks(board.get_opponents(player))
 
-        chosen_card: Card = board.player_picks(opponent, opponent.hand)
+        chosen_card: Card = opponent.player_picks(opponent.hand)
         opponent.remove_card_from_hand(chosen_card)
 
         opponents_card = board.get_players_played_card(opponent)
@@ -344,7 +342,7 @@ class Mosquito(Card):
         LOGGER.info("Mosquito on_reveal")
         # Överraskning: Byt detta kort mot ett slumpmässigt kort i valfri spelares hand.
         opponents = board.get_opponents(player)
-        opponent: Player = board.player_picks(player, opponents)
+        opponent: Player = player.player_picks(opponents)
 
         random_card = opponent.get_random_card_from_hand()
         opponent.remove_card_from_hand(random_card)
@@ -381,7 +379,7 @@ class Bloodhound(Card):
 
     def on_cycle(self, board: Board, player: Player) -> None:
         LOGGER.debug("Bloodhound cycle")
-        chosen_card = board.player_picks(player, board.deck)
+        chosen_card = player.player_picks(board.deck)
         board.deck.remove(chosen_card)
         LOGGER.debug(f"Chosen_card {chosen_card}")
         player.add_card_to_hand(chosen_card)
@@ -404,7 +402,7 @@ class UrsaMinor(Card):
     def before_power(self, board: Board, player: Player, order: Order):
         # Innan styrka tar effekt vid strid, välj en ny Polstjärneposition. Legendary.
         LOGGER.debug("UrsaMinor before_power")
-        new_pole_player = board.player_picks(player, board.players)
+        new_pole_player = player.player_picks(board.players)
         board.set_pole(new_pole_player)
 
 

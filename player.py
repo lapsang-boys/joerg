@@ -1,10 +1,11 @@
 import logging
 import random
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Any, Union
 from enum import Enum
 
 from cards.card import Card
 from log import new_logger
+
 
 _NAME_LOOKUP = ["Emil", "Henry", "Robin", "Bob"]
 LOGGER = new_logger("player", logging.DEBUG)
@@ -65,6 +66,16 @@ class Player:
     def set_card_default(self, card: Card) -> None:
         self.hand_states[card] = HandCardState.VisibleOnlyForPlayer
         LOGGER.info(f"{self} returns {card} to normal (only visible for player)")
+
+    def player_picks(self, items: List[Any], num: int = 1) -> Union[List[Any], Any]:
+        if num == 1:
+            return random.choice(items)
+        else:
+            return random.sample(items, num)
+
+    def player_picks_opponent(self, player: "Player") -> "Player":
+        opponents = self.get_opponents(player)
+        return self.player_picks(player, opponents)
 
     def __repr__(self):
         return f"Player {_NAME_LOOKUP[self.num]}"
