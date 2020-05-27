@@ -1,11 +1,10 @@
 import logging
 import random
-from typing import List, Optional, Tuple, Any, Union
 from enum import Enum
+from typing import List, Optional, Tuple, Any, Union, Dict
 
 from cards.card import Card
 from log import new_logger
-
 
 _NAME_LOOKUP = ["Emil", "Henry", "Robin", "Bob"]
 LOGGER = new_logger("player", logging.DEBUG)
@@ -38,7 +37,12 @@ class Player:
     def get_random_card_from_hand(self) -> Card:
         return random.choice(self.hand)
 
-    def add_card_to_hand(self, card: Card, index: Optional[int] = None, state: HandCardState = HandCardState.VisibleOnlyForPlayer) -> None:
+    def add_card_to_hand(
+        self,
+        card: Card,
+        index: Optional[int] = None,
+        state: HandCardState = HandCardState.VisibleOnlyForPlayer,
+    ) -> None:
         assert card not in self.hand
         assert card not in self.hand_states
 

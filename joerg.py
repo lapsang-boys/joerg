@@ -45,7 +45,10 @@ def joerg_round(board: Board):
     LOGGER.info("")
     LOGGER.info("")
     LOGGER.info(f"Winning card! {winning_card.card} played by {winning_card.player}")
-    if board.round_winner and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
+    if (
+        board.round_winner
+        and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED
+    ):
         raise Victory()
 
     board.resolve_win_lose(winning_card)
@@ -58,7 +61,10 @@ def joerg_round(board: Board):
 
     board.played_cards = []
 
-    if board.round_winner and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1:
+    if (
+        board.round_winner
+        and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1
+    ):
         LOGGER.info(f"Cycle! {board.round_winner} has reached 2 wins.")
         LOGGER.info(" ")
         board.cycle_event(board.round_winner)
@@ -79,7 +85,10 @@ def end_of_game(board: Board):
 def init_game() -> Board:
     deck = read_cards(LIBRARY_PATH)
     board = Board(
-        deck, number_of_players=NUMBER_OF_PLAYERS, starting_hand_size=STARTING_HAND_SIZE, wins_needed=NUMBER_OF_WINNING_ROUNDS_NEEDED
+        deck,
+        number_of_players=NUMBER_OF_PLAYERS,
+        starting_hand_size=STARTING_HAND_SIZE,
+        wins_needed=NUMBER_OF_WINNING_ROUNDS_NEEDED,
     )
     board.randomly_assign_pole()
     board.shuffle_deck()

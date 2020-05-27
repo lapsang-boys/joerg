@@ -66,7 +66,7 @@ def assert_same_deck_size(func: Callable[["PlayedCard", "Board"], None]):
 
 
 class PlayedCard:
-    def __init__(self, player: Player, card: Card, order: Order, revealed = False):
+    def __init__(self, player: Player, card: Card, order: Order, revealed=False):
         self.player: Player = player
         self.card: Card = card
         self.order: Order = order

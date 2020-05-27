@@ -1,17 +1,18 @@
 import random
 from collections import defaultdict
-from typing import List, Any, Union, Deque, Optional, Dict, Set, Callable
+from enum import Enum
+from typing import List, Deque, Optional, Dict, Set, Callable
 
-from played_card import PlayedCard
 from cards.card import Card
 from order import Order
+from played_card import PlayedCard
 from player import Player
-from enum import Enum
 
 
 class PlayerStates(Enum):
     HandFaceDown = 1
     UnableToWin = 2
+
 
 class Ps:
     def __init__(self, state: PlayerStates, duration: int, action: Callable[[], None]):
@@ -46,9 +47,14 @@ class PlayerState:
         for state_to_remove in cleared_states:
             self.remove(state_to_remove)
 
+
 class Board:
     def __init__(
-        self, deck: Deque[Card], number_of_players: int, starting_hand_size: int, wins_needed: int
+        self,
+        deck: Deque[Card],
+        number_of_players: int,
+        starting_hand_size: int,
+        wins_needed: int,
     ):
         self.pole: Player
         self.original_deck: List[Card] = list(deck)
@@ -104,7 +110,6 @@ class Board:
                 resolving_card.on_win(self)
             elif resolving_card.card != winning_card.card:
                 resolving_card.on_lose(self)
-
 
     def update_blocked_cards(self) -> None:
         cleared_cards: Set[Card] = set()
@@ -297,13 +302,16 @@ class Board:
         return best_card
 
     def resolve_winner(self, winning_card: PlayedCard) -> None:
-        if self.victories[winning_card.player]+1 == self.wins_needed and self.player_states[winning_card.player].has_state(PlayerStates.UnableToWin):
+        if self.victories[
+            winning_card.player
+        ] + 1 == self.wins_needed and self.player_states[winning_card.player].has_state(
+            PlayerStates.UnableToWin
+        ):
             pass
         else:
             self.set_round_winner(winning_card.player)
             self.set_round_winning_card(winning_card.card.copy())
             self.victories[winning_card.player] += 1
-
 
     def add_to_graveyard(self, player: Player, card: Card) -> None:
         self.graveyard[player].append(card)

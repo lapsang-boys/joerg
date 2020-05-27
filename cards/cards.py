@@ -2,11 +2,11 @@ import json
 from collections import deque
 from typing import Deque, List
 
-from played_card import PlayedCard
 from board import Board, PlayerStates
 from cards.card import Card
 from log import new_logger
 from order import Order
+from played_card import PlayedCard
 from player import Player, HandCardState
 
 LOGGER = new_logger("cards")
@@ -302,8 +302,12 @@ class Boar(Card):
                 if player.hand_states[card] == HandCardState.HiddenFromEveryone:
                     player.set_card_default(card)
 
-        board.player_states[player].add_state(PlayerStates.HandFaceDown, 1, restore_hand)
-        board.player_states[player].add_state(PlayerStates.UnableToWin, 0, lambda: print("UnableToWin cleared"))
+        board.player_states[player].add_state(
+            PlayerStates.HandFaceDown, 1, restore_hand
+        )
+        board.player_states[player].add_state(
+            PlayerStates.UnableToWin, 0, lambda: print("UnableToWin cleared")
+        )
 
 
 @name("Storbent hare")
