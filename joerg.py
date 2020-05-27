@@ -48,11 +48,7 @@ def joerg_round(board: Board):
     if board.round_winner and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED:
         raise Victory()
 
-    for resolving_card in board.get_played_cards():
-        if resolving_card.card == winning_card.card:
-            resolving_card.on_win(board)
-        elif resolving_card.card != winning_card.card:
-            resolving_card.on_lose(board)
+    board.resolve_win_lose(winning_card)
 
     if board.round_winner:
         board.add_to_graveyard(board.round_winner, board.round_winning_card)

@@ -16,13 +16,13 @@ class PlayerStates(Enum):
 class Ps:
     def __init__(self, state: PlayerStates, duration: int, action: Callable[[], None]):
         self.state: PlayerStates = state
+        # 0 denotes indefinite.
         self.duration: int = duration
         self.action: Callable[[], None] = action
 
 
 class PlayerState:
     def __init__(self):
-        # 0 denotes indefinite.
         self.states: Dict[PlayerStates, Ps] = {}
 
     def add_state(self, state, duration, action):
@@ -97,6 +97,14 @@ class Board:
     def resolve_before_power(self) -> None:
         for resolving_card in self.get_played_cards():
             resolving_card.before_power(self)
+
+    def resolve_win_lose(self, winning_card: PlayedCard) -> None:
+        for resolving_card in self.get_played_cards():
+            if resolving_card.card == winning_card.card:
+                resolving_card.on_win(self)
+            elif resolving_card.card != winning_card.card:
+                resolving_card.on_lose(self)
+
 
     def update_blocked_cards(self) -> None:
         cleared_cards: Set[Card] = set()
