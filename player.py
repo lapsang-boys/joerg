@@ -77,9 +77,5 @@ class Player:
         else:
             return random.sample(items, num)
 
-    def player_picks_opponent(self, player: "Player") -> "Player":
-        opponents = self.get_opponents(player)
-        return self.player_picks(player, opponents)
-
     def __repr__(self):
         return f"Player {_NAME_LOOKUP[self.num]}"

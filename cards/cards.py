@@ -60,7 +60,7 @@ class Bee(Card):
         super().__init__()
 
     def on_lose(self, board: Board, player: Player, order: Order):
-        opponent = player.player_picks_opponent()
+        opponent = player.player_picks(board.get_opponents(player))
         random_card = opponent.get_random_card_from_hand()
         opponent.set_card_visible(random_card)
         LOGGER.info(
