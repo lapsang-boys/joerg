@@ -16,7 +16,6 @@ _Medium (new systems)_
 - [ ] SupressedPerch, temp power change
 - [ ] Squirrel, temp silence
 - [ ] Weasel, player status (last winner)
-- [ ] KingoftheForest, card status unrevealed
 
 _Hard (loosely defined or difficult abilities)_
 

@@ -373,7 +373,10 @@ class KingoftheForest(Card):
         super().__init__()
 
     def on_reveal(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("NOT IMPLEMENTED -- KingoftheForest on_reveal")
+        LOGGER.info(f"{player} reveals {self.name}!")
+        hidden_cards = [c for c in board.played_cards if not c.revealed]
+        for c in hidden_cards:
+            LOGGER.info(f"\t{player} sees {c}")
 
 
 @name("Blodhund")

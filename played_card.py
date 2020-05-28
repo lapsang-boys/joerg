@@ -115,4 +115,4 @@ class PlayedCard:
         pass
 
     def __repr__(self) -> str:
-        return f"{self.player}: {self.card} {self.order}"
+        return f"{self.player}: {self.card} {self.order} {self.revealed}"
