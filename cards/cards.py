@@ -306,7 +306,7 @@ class Boar(Card):
             PlayerStates.HandFaceDown, 1, restore_hand
         )
         board.player_states[player].add_state(
-            PlayerStates.UnableToWin, 0, lambda: print("UnableToWin cleared")
+            PlayerStates.UnableToWin, 0, lambda: LOGGER.info(f"Unable to win flag cleared for {player}")
         )
 
 

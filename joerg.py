@@ -44,14 +44,14 @@ def joerg_round(board: Board):
     board.resolve_winner(winning_card)
     LOGGER.info("")
     LOGGER.info("")
-    LOGGER.info(f"Winning card! {winning_card.card} played by {winning_card.player}")
+    LOGGER.info(f"Winning card! {board.round_winning_card} played by {board.round_winner}")
     if (
         board.round_winner
         and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED
     ):
         raise Victory()
 
-    board.resolve_win_lose(winning_card)
+    board.resolve_win_lose()
 
     if board.round_winner:
         board.add_to_graveyard(board.round_winner, board.round_winning_card)

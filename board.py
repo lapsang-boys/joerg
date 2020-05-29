@@ -104,11 +104,11 @@ class Board:
         for resolving_card in self.get_played_cards():
             resolving_card.before_power(self)
 
-    def resolve_win_lose(self, winning_card: PlayedCard) -> None:
+    def resolve_win_lose(self) -> None:
         for resolving_card in self.get_played_cards():
-            if resolving_card.card == winning_card.card:
+            if resolving_card.card == self.round_winning_card:
                 resolving_card.on_win(self)
-            elif resolving_card.card != winning_card.card:
+            elif resolving_card.card != self.round_winning_card:
                 resolving_card.on_lose(self)
 
     def update_blocked_cards(self) -> None:
@@ -302,6 +302,8 @@ class Board:
         return best_card
 
     def resolve_winner(self, winning_card: PlayedCard) -> None:
+        self.set_round_winner(winning_card.player)
+        self.set_round_winning_card(winning_card.card.copy())
         if self.victories[
             winning_card.player
         ] + 1 == self.wins_needed and self.player_states[winning_card.player].has_state(
@@ -309,8 +311,6 @@ class Board:
         ):
             pass
         else:
-            self.set_round_winner(winning_card.player)
-            self.set_round_winning_card(winning_card.card.copy())
             self.victories[winning_card.player] += 1
 
     def add_to_graveyard(self, player: Player, card: Card) -> None:
