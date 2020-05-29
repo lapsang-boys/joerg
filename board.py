@@ -14,7 +14,7 @@ class PlayerStates(Enum):
     UnableToWin = 2
 
 
-class Ps:
+class ActivePlayerState:
     def __init__(self, state: PlayerStates, duration: int, action: Callable[[], None]):
         self.state: PlayerStates = state
         # 0 denotes indefinite.
@@ -22,12 +22,12 @@ class Ps:
         self.action: Callable[[], None] = action
 
 
-class PlayerState:
+class PlayerStateHandler:
     def __init__(self):
-        self.states: Dict[PlayerStates, Ps] = {}
+        self.states: Dict[PlayerStates, ActivePlayerState] = {}
 
     def add_state(self, state, duration, action):
-        self.states[state] = Ps(state, duration, action)
+        self.states[state] = ActivePlayerState(state, duration, action)
 
     def has_state(self, state: PlayerStates) -> bool:
         return state in self.states
@@ -68,7 +68,7 @@ class Board:
 
         # Card blocked for _int_ number of turns.
         self.blocked_cards: Dict[Card, int] = defaultdict(int)
-        self.player_states: Dict[Player, PlayerState] = {}
+        self.player_states: Dict[Player, PlayerStateHandler] = {}
 
         self.starting_hand_size: int = starting_hand_size
         self.wins_needed: int = wins_needed
@@ -78,7 +78,7 @@ class Board:
             self.players.append(player)
             self.graveyard[player] = []
             self.victories[player] = 0
-            self.player_states[player] = PlayerState()
+            self.player_states[player] = PlayerStateHandler()
 
     def randomly_assign_pole(self) -> Player:
         pole_player = self.get_random_player()
