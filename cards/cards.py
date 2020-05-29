@@ -45,7 +45,8 @@ class Falcon(Card):
         super().__init__()
 
     def on_win(self, board: Board, player: Player, order: Order):
-        opponent = player.player_picks_opponent()
+        opponents = board.get_opponents(player)
+        opponent = player.player_picks(opponents)
         LOGGER.info(f"{player} won with {self.name}")
         for card in opponent.hand:
             LOGGER.info(f"\t{self.name} sees: {card}")
