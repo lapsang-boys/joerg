@@ -70,7 +70,7 @@ def joerg_round(board: Board):
         board.cycle_event(board.round_winner)
 
     board.progress_pole()
-
+    board.end_round()
 
 def end_of_game(board: Board):
     LOGGER.info("")

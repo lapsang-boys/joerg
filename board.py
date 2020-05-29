@@ -126,9 +126,6 @@ class Board:
             player_states.update()
 
     def begin_round(self) -> None:
-        self.update_blocked_cards()
-        self.update_player_states()
-
         # Flush old cards.
         self.played_cards = []
         self.round_winner = None
@@ -138,6 +135,10 @@ class Board:
             assert self.starting_hand_size - p.hand_size() == len(
                 self.graveyard[p]
             ), f"Player does not have the right number of cards on hand! Starting hand size: {self.starting_hand_size} | {p} Hand: {p.hand} | Graveyard: {self.graveyard[p]} | "
+
+    def end_round(self) -> None:
+        self.update_blocked_cards()
+        self.update_player_states()
 
     def commit_card(self, player: Player, card: Card, order: Order):
         if card.legendary:
