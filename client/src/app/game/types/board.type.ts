@@ -3,6 +3,7 @@ import { Player } from './player.type';
 import { FromJson } from 'src/app/network/from.json';
 
 export class Board implements FromJson {
+	board_id: number;
 	blocked_cards: Card[];
 	cube: Card[];
 	deck: Card[];
@@ -17,7 +18,8 @@ export class Board implements FromJson {
 	victories: Map<Player, number>;
 	wins_needed: number;
 
-	constructor() {
+	constructor(board_id: number) {
+		this.board_id = board_id;
 	}
 
 	fromJson(json: Object) {
@@ -26,7 +28,5 @@ export class Board implements FromJson {
 		this.played_cards = (json['played_cards'] as object[]).map(raw => new Card(raw));
 		this.players = (json['players'] as object[]).map((raw, index) => new Player(raw, index));
 		this.pole = json['pole'];
-
-		console.log(this);
 	}
 }

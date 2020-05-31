@@ -14,11 +14,13 @@ export class SocketService {
 	constructor() { }
 
 	go() {
-		console.log('go called');
 		this.socket = webSocket('ws://192.168.1.109:8000');
-		console.log(this.socket);
 		this.socket.asObservable().subscribe(data => this.routeServerData(data));
 		this.socket.next({type: 'new_game'});
+	}
+
+	send(payload: object) {
+		this.socket.next(payload);
 	}
 
 	private routeServerData(dataFromServer: object) {
