@@ -1,4 +1,4 @@
-export class CardType {
+export class Card {
 	name: string;
 	power: number;
 	ruling: string;
@@ -6,14 +6,12 @@ export class CardType {
 	imgSrc: string;
 	legendary: boolean;
 
-	static fromJson(json: CardType): CardType {
-		const card = new CardType();
-		card.name = json.name;
-		card.power = json.power;
-		card.ruling = json.ruling;
-		card.flavor = json.flavor;
-		card.imgSrc = json.imgSrc;
-		card.legendary = json.legendary;
-		return card;
+	constructor(json: object) {
+		this.name = json['name'];
+		this.power = json['power'];
+		this.ruling = json['ruling'];
+		this.flavor = json['flavor'];
+		this.imgSrc = json['imgSrc'];
+		this.legendary = json['legendary'];
 	}
 }

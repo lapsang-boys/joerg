@@ -1,35 +1,41 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { FromJson } from './from.json';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class SocketService {
+	private socket: WebSocketSubject<object>;
+	private typeSubject: Map<string, Subject<object>> = new Map();
 
-	myWebSocket: WebSocketSubject<object>;
 
 	constructor() { }
 
 	go() {
 		console.log('go called');
-		this.myWebSocket = webSocket('ws://192.168.1.109:8765');
-
-		console.log(this.myWebSocket);
-		this.myWebSocket.subscribe(dataFromServer => console.log('direct : ' + dataFromServer));
-
-		this.myWebSocket.pipe(
-			tap(a => console.log('a'))
-		);
-
-		this.myWebSocket.asObservable().subscribe(dataFromServer => console.log(dataFromServer));
-		this.myWebSocket.next({message: 'gotcha fam'});
-
-		setInterval(this.asdf, 1000, this.myWebSocket);
+		this.socket = webSocket('ws://192.168.1.109:8000');
+		console.log(this.socket);
+		this.socket.asObservable().subscribe(data => this.routeServerData(data));
+		this.socket.next({type: 'new_game'});
 	}
 
-	asdf(myWebSocket: WebSocketSubject<object>) {
-		console.log(myWebSocket);
-		myWebSocket.next({message: 'gotcha fam2'});
+	private routeServerData(dataFromServer: object) {
+		const subject = this.typeSubject.get(dataFromServer['type']);
+		if (!subject) {
+			console.warn('no subscriber for:', dataFromServer);
+			return;
+		}
+		subject.next(dataFromServer);
+	}
+
+	getTypeObservable<T extends FromJson>(type: string): Observable<object> {
+		if (this.typeSubject.has(type)) {
+			return this.typeSubject.get(type).asObservable();
+		}
+		const typeSubject = new Subject<T>()
+		this.typeSubject.set(type, typeSubject);
+		return this.typeSubject.get(type).asObservable();
 	}
 }

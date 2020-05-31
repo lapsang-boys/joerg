@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CardType } from '../card.type';
+import { Card } from '../card.type';
 
 @Component({
 	selector: 'app-card-front',
@@ -8,7 +8,7 @@ import { CardType } from '../card.type';
 })
 export class CardFrontComponent implements OnInit {
 
-	@Input() card: CardType;
+	@Input() card: Card;
 
 	constructor() { }
 

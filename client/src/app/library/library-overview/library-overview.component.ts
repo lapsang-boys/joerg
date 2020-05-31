@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // Temp import, remove when server is up and running.
 import cards from '../cards.json';
-import { CardType } from 'src/app/card/card.type';
+import { Card } from 'src/app/card/card.type';
 
 @Component({
 	selector: 'app-library-overview',
@@ -9,14 +9,14 @@ import { CardType } from 'src/app/card/card.type';
 	styleUrls: ['./library-overview.component.css']
 })
 export class LibraryOverviewComponent implements OnInit {
-	cards: CardType[] = [];
+	cards: Card[] = [];
 
 	constructor() { }
 
 	ngOnInit(): void {
-		const cardArray = cards['cards'] as CardType[];
+		const cardArray = cards['cards'] as Card[];
 		for (const card of cardArray) {
-			this.cards.push(CardType.fromJson(card));
+			this.cards.push(new Card(card));
 		}
 	}
 

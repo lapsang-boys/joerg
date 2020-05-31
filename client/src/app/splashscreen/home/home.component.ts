@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SocketService } from 'src/app/network/socket.service';
+import { GameService } from 'src/app/game/game.service';
 
 @Component({
 	selector: 'app-home',
@@ -8,10 +8,10 @@ import { SocketService } from 'src/app/network/socket.service';
 })
 export class HomeComponent implements OnInit {
 
-	constructor(private socket: SocketService) { }
+	constructor(private game: GameService) { }
 
 	ngOnInit(): void {
-		this.socket.go();
+		this.game.start();
 	}
 
 }
