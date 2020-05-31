@@ -8,8 +8,8 @@ export class Player {
 
 	PLAYERS = ['Pineapple', 'Lemon', 'Apple', 'Orange', 'Peach'];
 
-	constructor(payload: object, index: number) {
-		this.index = index;
+	constructor(payload: object) {
+		this.index = payload['num'];
 		this.name = this.PLAYERS[this.index];
 		this.id = this.index;
 		this.hand = new Hand(payload);

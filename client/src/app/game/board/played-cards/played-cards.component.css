@@ -1,8 +1,35 @@
-div {
+.temp {
 	border: 1px solid black;
 	display: flex;
 	width: 100%;
 	height: 100%;
 	align-items: center;
 	justify-content: center;
+}
+
+.play-surface {
+	font-size: 7px;
+	display: grid;
+	grid-template-rows: auto 50px auto;
+	grid-template-columns: 1fr;
+	width: 100%;
+	height: 100%;
+}
+
+.other-played-cards-surface {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: space-evenly;
+}
+
+.own-played-cards-surface {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: center;
+}
+
+.card-wrapper.defense {
+	transform: rotate(90deg);
 }

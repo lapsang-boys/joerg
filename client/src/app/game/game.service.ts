@@ -8,19 +8,25 @@ import { Board } from './types/board.type';
 })
 export class GameService {
 	private boardSubject: Subject<Board> = new Subject();
+	private board: Board;
 
 	constructor(private socket: SocketService) { }
 
 	start() {
 		this.socket.go();
-		this.socket.getTypeObservable<Board>('board').subscribe(payload => this.handleUpdate(payload['board']));
+		this.socket.getTypeObservable<Board>('board').subscribe(payload => this.handleUpdate(payload));
 	}
 
-	handleUpdate(rawBoard: object) {
-		console.log(rawBoard);
-		const b = new Board();
-		b.fromJson(rawBoard);
-		this.boardSubject.next(b);
+	next() {
+		this.socket.send({type: 'next_action', board_id: this.board.board_id})
+	}
+
+	handleUpdate(payload: object) {
+		const rawBoard = payload['board'];
+		const boardId = payload['board_id']
+		this.board = new Board(boardId);
+		this.board.fromJson(rawBoard);
+		this.boardSubject.next(this.board);
 	}
 
 	getObservableBoard(): Observable<Board> {

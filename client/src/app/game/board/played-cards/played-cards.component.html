@@ -1,3 +1,13 @@
-<div>
-	<h1>Board</h1>
+<div class="play-surface">
+	<div class="other-played-cards-surface">
+		<div *ngFor="let playedCard of this.otherPlayedCards" class="card-wrapper" [class]="getOrderClass(playedCard)">
+			<app-card-front [card]="playedCard.card"></app-card-front>
+		</div>
+	</div>
+	<button (click)="next()">Next</button>
+	<div class="own-played-cards-surface">
+		<div *ngIf="ownPlayedCard" class="card-wrapper" [class]="getOrderClass(ownPlayedCard)">
+			<app-card-front [card]="ownPlayedCard.card"></app-card-front>
+		</div>
+	</div>
 </div>
