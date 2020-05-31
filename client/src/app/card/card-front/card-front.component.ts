@@ -9,10 +9,14 @@ import { Card } from '../card.type';
 export class CardFrontComponent implements OnInit {
 
 	@Input() card: Card;
+	hovered: boolean = false;
 
 	constructor() { }
 
 	ngOnInit(): void {
 	}
 
+	handleHovered(hovered: boolean) {
+		this.hovered = hovered;
+	}
 }

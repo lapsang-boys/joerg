@@ -9,6 +9,7 @@
 	height: 38em;
 	padding: 1em;
 	box-sizing: border-box;
+	background-color: #fff;
 }
 
 /* Temp styling for the "paper look" of the page */
@@ -17,6 +18,12 @@
 	border-radius: 1em;
 	overflow: hidden;
 	box-shadow: -8px 9px 16px -3px rgba(0, 0, 0, 0.3);
+}
+
+.container:hover {
+	transition: ease-in-out;
+	transition-duration: 0.25s;
+	box-shadow: 0px 0px 20px 10px rgba(255, 241, 0, 0.3);
 }
 
 /* ======== Border ======== */
@@ -34,6 +41,12 @@
 
 .border img {
 	position: relative;
+}
+
+.border app-card-expander {
+	position: absolute;
+	top: 2em;
+	left: 2em;
 }
 
 /* ======== Card content ======== */

@@ -1,0 +1,9 @@
+.expander {
+	width: 4em;
+}
+
+.expander:hover {
+	transition: ease-in-out;
+	transition-duration: 0.25s;
+	transform: scale(1.25);
+}

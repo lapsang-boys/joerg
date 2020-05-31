@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" (mouseenter)="handleHovered(true)" (mouseleave)="handleHovered(false)">
 	<div class="content">
 		<div id="header">
 			<h2 class="title">{{ this.card?.name }}</h2>
@@ -19,6 +19,7 @@
 	</div>
 	<div class="border">
 		<img src="assets/border.png">
+		<app-card-expander *ngIf="hovered"></app-card-expander>
 	</div>
 </div>
 

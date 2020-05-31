@@ -13,6 +13,7 @@ import { PlayedCardsComponent } from './game/board/played-cards/played-cards.com
 import { OtherHandsContainerComponent } from './game/hand/other-hands-container/other-hands-container.component';
 import { BoardComponent } from './game/board/board/board.component';
 import { PlayedCardComponent } from './game/board/played-card/played-card.component';
+import { CardExpanderComponent } from './card/card-expander/card-expander.component';
 
 @NgModule({
 	declarations: [
@@ -26,7 +27,8 @@ import { PlayedCardComponent } from './game/board/played-card/played-card.compon
 		PlayedCardsComponent,
 		OtherHandsContainerComponent,
 		BoardComponent,
-		PlayedCardComponent
+		PlayedCardComponent,
+		CardExpanderComponent
 	],
 	imports: [
 		BrowserModule,
