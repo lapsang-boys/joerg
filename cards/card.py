@@ -25,12 +25,14 @@ class Card(ABC):
         assert (
             payload.get("legendary") is not None
         ), f"Missing legendary from payload: {payload}"
+        # Image source is optional
         # Flavor is optional
 
         self.name = str(payload.get("name"))
         self.power = int(payload.get("power", 0))
         self.ruling = str(payload.get("ruling"))
         self.legendary = bool(payload.get("legendary", False))
+        self.img_src = str(payload.get("imgSrc"))
         self.flavor = str(payload.get("flavor"))
 
         return self
@@ -67,6 +69,7 @@ class Card(ABC):
         new_card.ruling = self.ruling
         new_card.flavor = self.flavor
         new_card.legendary = self.legendary
+        new_card.img_src = self.img_src
         return new_card
 
     # TODO(_): Has lots of fun collisions.
