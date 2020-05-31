@@ -4,7 +4,10 @@
 			<app-card-front [card]="playedCard.card"></app-card-front>
 		</div>
 	</div>
-	<button (click)="next()">Next</button>
+	<div>
+		<button (click)="next()">Next</button>
+		<h2>Pole: {{ poleIndex }}</h2>
+	</div>
 	<div class="own-played-cards-surface">
 		<div *ngIf="ownPlayedCard" class="card-wrapper" [class]="getOrderClass(ownPlayedCard)">
 			<app-card-front [card]="ownPlayedCard.card"></app-card-front>

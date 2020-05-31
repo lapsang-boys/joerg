@@ -1,6 +1,6 @@
 .container {
 	display: grid;
-	grid-template-rows: 25% 1fr auto;
-	height: 90%;
-	justify-content: center;
+	grid-template-rows: auto 1fr auto;
+	height: 100%;
+	width: 100%;
 }

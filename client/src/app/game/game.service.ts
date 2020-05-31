@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SocketService } from '../network/socket.service';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Board } from './types/board.type';
 
 @Injectable({
