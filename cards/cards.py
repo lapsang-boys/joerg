@@ -306,9 +306,14 @@ class Boar(Card):
         board.player_states[player].add_state(
             PlayerStates.HandFaceDown, 1, restore_hand
         )
-        board.player_states[player].add_state(
-            PlayerStates.UnableToWin, 0, lambda: LOGGER.info(f"Unable to win flag cleared for {player}")
-        )
+
+        # Player should be unable to win last round with the Boar.
+        if board.player_will_win_next_round(player):
+            board.player_states[player].add_state(
+                PlayerStates.UnableToWin,
+                0,
+                lambda: LOGGER.info(f"Unable to win flag cleared for {player}"),
+            )
 
 
 @name("Storbent hare")
