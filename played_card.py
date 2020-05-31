@@ -27,7 +27,7 @@ def assert_card_only_in_one_place(func: Callable[["PlayedCard", "Board"], None])
     def wrapper_func(played_card: "PlayedCard", board: "Board"):
         return_value = func(played_card, board)
 
-        for card in board.original_deck:
+        for card in board.cube:
             card_in_player_hands = [
                 any([c == card for c in p.hand]) for p in board.players
             ].count(True)

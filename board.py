@@ -60,7 +60,7 @@ class Board:
         wins_needed: int,
     ):
         self.pole: Player
-        self.original_deck: List[Card] = list(deck)
+        self.cube: List[Card] = list(deck)
         self.deck: Deque[Card] = deck
         self.played_cards: List[PlayedCard] = []
         self.players: List[Player] = []
@@ -376,7 +376,7 @@ class Board:
     def serialize(self):
         return {
             "pole": self.pole.num,
-            "original_deck": self.original_deck,
+            "cube": self.cube,
             "deck": self.deck,
             "played_cards": self.played_cards,
             "players": self.players,
