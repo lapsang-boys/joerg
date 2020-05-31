@@ -44,33 +44,19 @@ def joerg_round(board: Board):
     board.resolve_winner(winning_card)
     LOGGER.info("")
     LOGGER.info("")
-    LOGGER.info(f"Winning card! {board.round_winning_card} played by {board.round_winner}")
+    LOGGER.info(f"Winning card! {winning_card.card} played by {winning_card.player}")
     if (
-        board.round_winner
-        and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED
+        winning_card.player
+        and board.victories[winning_card.player] == NUMBER_OF_WINNING_ROUNDS_NEEDED
     ):
         raise Victory()
 
     board.resolve_win_lose()
-
-    if board.round_winner:
-        board.add_to_graveyard(board.round_winner, board.round_winning_card)
-
-    for played_card in board.losing_cards():
-        played_card.player.add_card_to_hand(played_card.card)
-
-    board.played_cards = []
-
-    if (
-        board.round_winner
-        and board.victories[board.round_winner] == NUMBER_OF_WINNING_ROUNDS_NEEDED - 1
-    ):
-        LOGGER.info(f"Cycle! {board.round_winner} has reached 2 wins.")
-        LOGGER.info(" ")
-        board.cycle_event(board.round_winner)
-
+    board.end_resolve_phase()
+    board.cycle_phase()
     board.progress_pole()
     board.end_round()
+
 
 def end_of_game(board: Board):
     LOGGER.info("")

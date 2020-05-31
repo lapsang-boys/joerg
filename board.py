@@ -7,6 +7,9 @@ from cards.card import Card
 from order import Order
 from played_card import PlayedCard
 from player import Player
+from log import new_logger
+
+LOGGER = new_logger("board")
 
 
 class PlayerStates(Enum):
@@ -110,6 +113,19 @@ class Board:
                 resolving_card.on_win(self)
             elif resolving_card.card != self.round_winning_card:
                 resolving_card.on_lose(self)
+
+    def end_resolve_phase(self) -> None:
+        # TODO(_): Bug with boar last round.
+        if self.round_winner:
+            self.add_to_graveyard(self.round_winner, self.round_winning_card)
+
+        self.return_losing_cards()
+        # Remove all played cards on board.
+        self.played_cards = []
+
+    def return_losing_cards(self) -> None:
+        for played_card in self.losing_cards():
+            played_card.player.add_card_to_hand(played_card.card)
 
     def update_blocked_cards(self) -> None:
         cleared_cards: Set[Card] = set()
@@ -279,6 +295,12 @@ class Board:
 
         self.played_cards[index_card1]
 
+    def cycle_phase(self):
+        if self.round_winner and self.player_will_win_next_round(self.round_winner):
+            LOGGER.info(f"Cycle! {self.round_winner} has reached 2 wins.")
+            LOGGER.info(" ")
+            self.cycle_event(self.round_winner)
+
     def resolve_power(self) -> PlayedCard:
         best_card = None
 
@@ -302,16 +324,17 @@ class Board:
 
         return best_card
 
+    def player_will_win_next_round(self, player: Player) -> bool:
+        return self.victories[player] + 1 == self.wins_needed
+
     def resolve_winner(self, winning_card: PlayedCard) -> None:
-        self.set_round_winner(winning_card.player)
-        self.set_round_winning_card(winning_card.card.copy())
-        if self.victories[
+        if self.player_will_win_next_round(winning_card.player) and self.player_states[
             winning_card.player
-        ] + 1 == self.wins_needed and self.player_states[winning_card.player].has_state(
-            PlayerStates.UnableToWin
-        ):
+        ].has_state(PlayerStates.UnableToWin):
             pass
         else:
+            self.set_round_winner(winning_card.player)
+            self.set_round_winning_card(winning_card.card.copy())
             self.victories[winning_card.player] += 1
 
     def add_to_graveyard(self, player: Player, card: Card) -> None:
