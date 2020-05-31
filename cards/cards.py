@@ -263,7 +263,14 @@ class SpySeal(Card):
         super().__init__()
 
     def on_reveal(self, board: Board, player: Player, order: Order):
-        LOGGER.debug("NOT IMPLEMENTED -- SpySeal on_reveal")
+        if not order == Order.attack:
+            return
+
+        LOGGER.info(f"{player} revealed {self.name}")
+        opponents = board.get_opponents(player)
+        opponent: Player = player.player_picks(opponents)
+        random_card: Card = opponent.get_random_card_from_hand()
+        LOGGER.info(f"{player} sees {opponent}'s {random_card.name}")
 
 
 @name("Ekorren")
