@@ -11,6 +11,8 @@ import { GameLayoutComponent } from './game/layout/game-layout/game-layout.compo
 import { PlayerHandComponent } from './game/hand/player-hand/player-hand.component';
 import { PlayedCardsComponent } from './game/board/played-cards/played-cards.component';
 import { OtherHandsContainerComponent } from './game/hand/other-hands-container/other-hands-container.component';
+import { BoardComponent } from './game/board/board/board.component';
+import { PlayedCardComponent } from './game/board/played-card/played-card.component';
 
 @NgModule({
 	declarations: [
@@ -22,7 +24,9 @@ import { OtherHandsContainerComponent } from './game/hand/other-hands-container/
 		GameLayoutComponent,
 		PlayerHandComponent,
 		PlayedCardsComponent,
-		OtherHandsContainerComponent
+		OtherHandsContainerComponent,
+		BoardComponent,
+		PlayedCardComponent
 	],
 	imports: [
 		BrowserModule,

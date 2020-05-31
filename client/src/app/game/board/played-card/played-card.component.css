@@ -1,0 +1,25 @@
+.container {
+	display: grid;
+	grid-template-columns: auto auto;
+	justify-items: center;
+	justify-content: center;
+	align-items: center;
+	grid-gap: 5em;
+}
+
+.container.defense {
+	grid-template-columns: auto;
+}
+
+.card-wrapper.defense {
+	transform: rotate(90deg);
+}
+
+.pole {
+	width: 10em;
+}
+
+.defense .pole {
+	position: relative;
+	top: -7em;
+}

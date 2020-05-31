@@ -1,0 +1,6 @@
+<div class="container" [class]="getOrderClass()">
+	<div class="card-wrapper" [class]="getOrderClass()">
+		<app-card-front [card]="this.playedCard?.card"></app-card-front>
+	</div>
+	<img class="pole" *ngIf="this.pole" src="assets/pole.png">
+</div>

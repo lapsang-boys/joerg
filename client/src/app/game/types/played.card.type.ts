@@ -10,7 +10,6 @@ export class PlayedCard {
 	PLAYERS = ['Pineapple', 'Lemon', 'Apple', 'Orange', 'Peach'];
 
 	constructor(json: object) {
-		console.log('played card const', json)
 		this.card = new Card(json['card']);
 		this.order = PlayOrder[json['order'] as keyof PlayOrder];
 		this.player = new Player(json['player']);
