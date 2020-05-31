@@ -61,8 +61,8 @@ class Board:
         self.deck: Deque[Card] = deck
         self.played_cards: List[PlayedCard] = []
         self.players: List[Player] = []
-        self.round_winning_card: Optional[Card]
-        self.round_winner: Optional[Player]
+        self.round_winning_card: Optional[Card] = None
+        self.round_winner: Optional[Player] = None
         self.graveyard: Dict[Player, List[Card]] = defaultdict(list)
         self.victories: Dict[Player, int] = defaultdict(int)
 
@@ -349,6 +349,24 @@ class Board:
 
         assert card2 in player1.hand
         assert card1 in player2.hand
+
+    def serialize(self):
+        return {
+            "pole": self.pole.num,
+            "original_deck": self.original_deck,
+            "deck": self.deck,
+            "played_cards": self.played_cards,
+            "players": self.players,
+            "round_winning_card": self.round_winning_card,
+            "round_winner": self.round_winner,
+            "graveyard": {p.num: graveyard for p, graveyard in self.graveyard.items()},
+            "victories": {p.num: victories for p, victories in self.victories.items()},
+            # Card blocked for _int_ number of turns.
+            "blocked_cards": self.blocked_cards,
+            "player_states": {p.num: ps for p, ps in self.player_states.items()},
+            "starting_hand_size": self.starting_hand_size,
+            "wins_needed": self.wins_needed,
+        }
 
     def __repr__(self):
         return f"Pole: {self.pole}\nResolved order: {self.resolved_order()}"

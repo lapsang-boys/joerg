@@ -77,5 +77,12 @@ class Player:
         else:
             return random.sample(items, num)
 
+    def serialize(self):
+        return {
+            "num": self.num,
+            "hand": self.hand,
+            "hand_states": {c.name: hcs.name for c, hcs in self.hand_states.items()},
+        }
+
     def __repr__(self):
         return f"Player {_NAME_LOOKUP[self.num]}"
