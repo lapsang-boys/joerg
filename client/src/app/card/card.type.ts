@@ -11,7 +11,7 @@ export class Card {
 		this.power = json['power'];
 		this.ruling = json['ruling'];
 		this.flavor = json['flavor'];
-		this.imgSrc = json['imgSrc'];
+		this.imgSrc = json['img_src'];
 		this.legendary = json['legendary'];
 	}
 }

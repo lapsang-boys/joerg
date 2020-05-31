@@ -1,0 +1,10 @@
+.hand-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: space-evenly;
+}
+
+.hand-wrapper {
+	margin: 1em;
+}

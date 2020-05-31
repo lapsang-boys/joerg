@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { SocketService } from '../network/socket.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Board } from './types/board.type';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class GameService {
-	private boardSubject: BehaviorSubject<Board> = new BehaviorSubject(new Board());
+	private boardSubject: Subject<Board> = new Subject();
 
 	constructor(private socket: SocketService) { }
 

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LibraryOverviewComponent } from './library/library-overview/library-overview.component';
 import { HomeComponent } from './splashscreen/home/home.component';
+import { GameLayoutComponent } from './game/layout/game-layout/game-layout.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,10 @@ const routes: Routes = [
 	{
 		path: 'library',
 		component: LibraryOverviewComponent
+	},
+	{
+		path: 'play',
+		component: GameLayoutComponent
 	},
 	{ path: '**', redirectTo: '' }
 ];

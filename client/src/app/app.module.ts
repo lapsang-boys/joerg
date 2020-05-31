@@ -7,6 +7,10 @@ import { NavbarComponent } from './nav/navbar/navbar.component';
 import { LibraryOverviewComponent } from './library/library-overview/library-overview.component';
 import { HomeComponent } from './splashscreen/home/home.component';
 import { CardFrontComponent } from './card/card-front/card-front.component';
+import { GameLayoutComponent } from './game/layout/game-layout/game-layout.component';
+import { PlayerHandComponent } from './game/hand/player-hand/player-hand.component';
+import { PlayedCardsComponent } from './game/board/played-cards/played-cards.component';
+import { OtherHandsContainerComponent } from './game/hand/other-hands-container/other-hands-container.component';
 
 @NgModule({
 	declarations: [
@@ -14,7 +18,11 @@ import { CardFrontComponent } from './card/card-front/card-front.component';
 		NavbarComponent,
 		LibraryOverviewComponent,
 		HomeComponent,
-		CardFrontComponent
+		CardFrontComponent,
+		GameLayoutComponent,
+		PlayerHandComponent,
+		PlayedCardsComponent,
+		OtherHandsContainerComponent
 	],
 	imports: [
 		BrowserModule,

@@ -1,0 +1,6 @@
+<div class="hand-container">
+	<div *ngFor="let player of this.players" class="hand-wrapper">
+		<app-player-hand [player]="player" [renderSize]="3 + 4/this.players.length"></app-player-hand>
+	</div>
+</div>
+
