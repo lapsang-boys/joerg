@@ -14,7 +14,7 @@ export class LibraryOverviewComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit(): void {
-		const cardArray = cards['cards'] as Card[];
+		const cardArray = cards['cards'] as object[];
 		for (const card of cardArray) {
 			this.cards.push(new Card(card));
 		}
