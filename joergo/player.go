@@ -1,4 +1,4 @@
-package player
+package joerg
 
 import (
 	"encoding/json"
@@ -6,9 +6,6 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-
-	"github.com/lapsang-boys/joerg/action"
-	"github.com/lapsang-boys/joerg/card"
 )
 
 type HandCardState int
@@ -22,18 +19,18 @@ const (
 type Player struct {
 	Num              int
 	Name             string
-	Hand             []card.Carder
-	HandStates       map[card.Carder]HandCardState
+	Hand             []Carder
+	HandStates       map[Carder]HandCardState
 	ReceiveChoice    chan []byte
 	OutgoingMessages chan []byte
 }
 
-func New(num int, name string, recvChoice chan []byte, outgoingMessages chan []byte) *Player {
+func NewPlayer(num int, name string, recvChoice chan []byte, outgoingMessages chan []byte) *Player {
 	return &Player{
 		Num:              num,
 		Name:             name,
-		Hand:             make([]card.Carder, 0),
-		HandStates:       make(map[card.Carder]HandCardState),
+		Hand:             make([]Carder, 0),
+		HandStates:       make(map[Carder]HandCardState),
 		ReceiveChoice:    recvChoice,
 		OutgoingMessages: outgoingMessages,
 	}
@@ -42,7 +39,7 @@ func New(num int, name string, recvChoice chan []byte, outgoingMessages chan []b
 func (p *Player) MarshalJSON() ([]byte, error) {
 	var out struct {
 		Name       string
-		Hand       []card.Carder
+		Hand       []Carder
 		HandStates map[string]HandCardState
 	}
 	out.Name = p.Name
@@ -76,7 +73,7 @@ func (p *Player) Picks(items []interface{}, context string, numItems uint) (v in
 	fmt.Println("In between!")
 	respPayload := <-p.ReceiveChoice
 	fmt.Println("Received choice")
-	var choice action.ChoiceAction
+	var choice ChoiceAction
 	err = json.Unmarshal(respPayload, &choice)
 	if err != nil {
 		return nil, err
@@ -94,11 +91,11 @@ func (p *Player) RandomChoice(items []interface{}, context string, numItems uint
 	return items[randIdx], nil
 }
 
-func (p *Player) AddCardToHand(c card.Carder) {
+func (p *Player) AddCardToHand(c Carder) {
 	p.Hand = append(p.Hand, c)
 }
 
-func (p *Player) RemoveCardFromHand(c card.Carder) {
+func (p *Player) RemoveCardFromHand(c Carder) {
 	for i, hc := range p.Hand {
 		if hc.Name() == c.Name() {
 			// Remove element.

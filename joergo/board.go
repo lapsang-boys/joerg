@@ -1,15 +1,10 @@
-package board
+package joerg
 
 import (
 	"errors"
 	"fmt"
 	"log"
 	"math/rand"
-
-	"github.com/lapsang-boys/joerg/card"
-	"github.com/lapsang-boys/joerg/order"
-	"github.com/lapsang-boys/joerg/played_card"
-	"github.com/lapsang-boys/joerg/player"
 )
 
 const (
@@ -24,22 +19,22 @@ var (
 
 // https://play.golang.org/p/i1BGlRsP19
 type Board struct {
-	Players          []*player.Player
-	Pole             *player.Player
-	Cube             *card.Cube
-	Deck             []card.Carder // Make private later.
-	PlayedCards      []played_card.PlayedCard
-	RoundWinner      *player.Player
-	RoundWinningCard card.Carder
+	Players          []*Player
+	Pole             *Player
+	Cube             *Cube
+	Deck             []Carder // Make private later.
+	PlayedCards      []PlayedCard
+	RoundWinner      *Player
+	RoundWinningCard Carder
 	NumPlayers       uint
 	StartingHandSize uint
 	WinsNeeded       uint
-	BestCard         *played_card.PlayedCard // Make private later.
+	BestCard         *PlayedCard // Make private later.
 	Victories        map[int]int
 }
 
-func New(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoice chan []byte, outgoingMessages chan []byte) (*Board, error) {
-	cube, err := card.ReadCube(LIBRARY_PATH)
+func NewBoard(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoice chan []byte, outgoingMessages chan []byte) (*Board, error) {
+	cube, err := ReadCube(LIBRARY_PATH)
 	if err != nil {
 		return nil, err
 	}
@@ -54,9 +49,9 @@ func New(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoice cha
 		return nil, errors.New("Illegal startingHandSize")
 	}
 
-	players := []*player.Player{}
+	players := []*Player{}
 	for i := 0; i < int(numPlayers); i++ {
-		players = append(players, player.New(
+		players = append(players, NewPlayer(
 			i,
 			names[i],
 			recvChoice,
@@ -81,7 +76,7 @@ func New(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoice cha
 	return &b, nil
 }
 
-func (b *Board) AddPlayer(p *player.Player) (err error) {
+func (b *Board) AddPlayer(p *Player) (err error) {
 	if len(b.Players) == int(b.NumPlayers) {
 		return errors.New("Unable to add any more players!")
 	}
@@ -118,7 +113,7 @@ func (b *Board) ResolveOnReveal() {
 	log.Println("ResolveOnReveal")
 	for _, pc := range b.PlayedCards {
 		pc.Revealed = true
-		pc.Card.OnReveal()
+		pc.Card.OnReveal(b, pc.Player)
 		log.Println(pc.Card)
 	}
 }
@@ -136,10 +131,10 @@ func (b *Board) ResolveWinLose() {
 
 func (b *Board) EndResolvePhase() {
 	b.ReturnLosingCards()
-	b.PlayedCards = []played_card.PlayedCard{}
+	b.PlayedCards = []PlayedCard{}
 }
 
-func (b *Board) LosingCards() (pcs []played_card.PlayedCard) {
+func (b *Board) LosingCards() (pcs []PlayedCard) {
 	for _, pc := range b.PlayedCards {
 		if pc.Card.Name() == b.RoundWinningCard.Name() {
 			continue
@@ -155,7 +150,7 @@ func (b *Board) ReturnLosingCards() {
 	}
 }
 
-func (b *Board) AllPlayersExceptWinner() (ps []*player.Player) {
+func (b *Board) AllPlayersExceptWinner() (ps []*Player) {
 	for _, p := range b.Players {
 		if p.Name == b.RoundWinner.Name {
 			continue
@@ -165,14 +160,14 @@ func (b *Board) AllPlayersExceptWinner() (ps []*player.Player) {
 	return ps
 }
 
-func (b *Board) AddCycledCardsToBottomOfDeck(cycledCards []card.Carder) {
+func (b *Board) AddCycledCardsToBottomOfDeck(cycledCards []Carder) {
 	b.Deck = append(b.Deck, cycledCards...)
 }
 
-func (b *Board) cycleEvent(trgP *player.Player) error {
+func (b *Board) cycleEvent(trgP *Player) error {
 	fallingBehind := b.AllPlayersExceptWinner()
 
-	cycledCards := []card.Carder{}
+	cycledCards := []Carder{}
 	for _, p := range fallingBehind {
 		cycledCard, err := b.cycleForPlayer(p)
 		if err != nil {
@@ -184,7 +179,7 @@ func (b *Board) cycleEvent(trgP *player.Player) error {
 	return nil
 }
 
-func (b *Board) cycleForPlayer(p *player.Player) (card.Carder, error) {
+func (b *Board) cycleForPlayer(p *Player) (Carder, error) {
 	selection := make([]interface{}, 0, len(p.Hand))
 	for _, c := range p.Hand {
 		selection = append(selection, c)
@@ -193,7 +188,7 @@ func (b *Board) cycleForPlayer(p *player.Player) (card.Carder, error) {
 	if err != nil {
 		return nil, err
 	}
-	chosenCard, ok := chosenCardInt.(card.Carder)
+	chosenCard, ok := chosenCardInt.(Carder)
 	if !ok {
 		return nil, errors.New("Unable to type assert cycled card.")
 	}
@@ -206,7 +201,7 @@ func (b *Board) cycleForPlayer(p *player.Player) (card.Carder, error) {
 	return chosenCard, nil
 }
 
-func (b *Board) DrawCard() card.Carder {
+func (b *Board) DrawCard() Carder {
 	if len(b.Deck) < 1 {
 		panic("DrawCard: no cards to draw!")
 	}
@@ -216,7 +211,7 @@ func (b *Board) DrawCard() card.Carder {
 }
 
 // def cycle_for_player(self, player: Player) -> Card:
-//     chosen_card = player.player_picks(player.hand, "Chose card to cycle.")
+//     chosen_card = player_picks(player.hand, "Chose card to cycle.")
 
 //     self.player_cycle_card(player, chosen_card)
 
@@ -226,7 +221,7 @@ func (b *Board) DrawCard() card.Carder {
 //     player.remove_card_from_hand(card)
 //     card.on_cycle(self, player)
 
-func (b *Board) PlayerWillWinNextRound(p *player.Player) bool {
+func (b *Board) PlayerWillWinNextRound(p *Player) bool {
 	return b.Victories[p.Num] == int(b.WinsNeeded)-1
 }
 
@@ -243,7 +238,7 @@ func (b *Board) ProgressPole() {
 	b.Pole = b.NextPlayer(b.Pole)
 }
 
-func (b *Board) NextPlayer(p *player.Player) *player.Player {
+func (b *Board) NextPlayer(p *Player) *Player {
 	return b.Players[(p.Num+1)%len(b.Players)]
 }
 
@@ -259,17 +254,17 @@ func (b *Board) ResolveBeforePower() {
 	}
 }
 
-func (b *Board) PoleCard() played_card.PlayedCard {
+func (b *Board) PoleCard() PlayedCard {
 	fmt.Println(b.PlayedCards)
 	return b.PlayedCards[b.Pole.Num]
 }
 
-func (b *Board) ResolveOrder() order.Order {
+func (b *Board) ResolveOrder() Order {
 	atk, def := 0, 0
 	for _, pc := range b.PlayedCards {
-		if pc.Order == order.Attack {
+		if pc.Order == OrderAttack {
 			atk += 1
-		} else if pc.Order == order.Defense {
+		} else if pc.Order == OrderDefense {
 			def += 1
 		}
 	}
@@ -279,9 +274,9 @@ func (b *Board) ResolveOrder() order.Order {
 	}
 
 	if atk > def {
-		return order.Attack
+		return OrderAttack
 	} else if def > atk {
-		return order.Defense
+		return OrderDefense
 	} else if atk == def {
 		polePc := b.PoleCard()
 		return polePc.Order
@@ -289,8 +284,8 @@ func (b *Board) ResolveOrder() order.Order {
 	panic("Unreachable")
 }
 
-func (b *Board) PlayedCardsInOrder() []played_card.PlayedCard {
-	cards := make([]played_card.PlayedCard, 0, len(b.Players))
+func (b *Board) PlayedCardsInOrder() []PlayedCard {
+	cards := make([]PlayedCard, 0, len(b.Players))
 	for i := 0; i < len(b.Players); i++ {
 		c := b.PlayedCards[(i+b.Pole.Num)%len(b.Players)]
 		cards = append(cards, c)
@@ -299,17 +294,17 @@ func (b *Board) PlayedCardsInOrder() []played_card.PlayedCard {
 }
 
 func (b *Board) ResolvePower() {
-	var bestCard *played_card.PlayedCard
+	var bestCard *PlayedCard
 	log.Println("ResolvePower")
-	defCmp := func(a card.Carder, b card.Carder) bool {
+	defCmp := func(a Carder, b Carder) bool {
 		return a.Power() > b.Power()
 	}
-	atkCmp := func(a card.Carder, b card.Carder) bool {
+	atkCmp := func(a Carder, b Carder) bool {
 		return a.Power() > b.Power()
 	}
-	var isBetter func(card.Carder, card.Carder) bool
+	var isBetter func(Carder, Carder) bool
 	resolvedOrder := b.ResolveOrder()
-	if resolvedOrder == order.Attack {
+	if resolvedOrder == OrderAttack {
 		// Higher is better.
 		isBetter = atkCmp
 	} else {
@@ -348,13 +343,13 @@ func (b *Board) ResolveWinner() {
 }
 
 func (b *Board) BeginRound() {
-	b.PlayedCards = make([]played_card.PlayedCard, 0, len(b.Players))
+	b.PlayedCards = make([]PlayedCard, 0, len(b.Players))
 	b.RoundWinner = nil
 	b.RoundWinningCard = nil
 }
 
-func (b *Board) commitCard(p *player.Player, c card.Carder, o order.Order) {
-	pc := played_card.PlayedCard{
+func (b *Board) commitCard(p *Player, c Carder, o Order) {
+	pc := PlayedCard{
 		Player:   p,
 		Card:     c,
 		Order:    o,
@@ -373,7 +368,7 @@ func (b *Board) CommitPhase() (err error) {
 		if err != nil {
 			return err
 		}
-		chosenCard, ok := chosenCardInt.(card.Carder)
+		chosenCard, ok := chosenCardInt.(Carder)
 		if !ok {
 			return errors.New("Type assertion failed")
 		}
@@ -381,13 +376,13 @@ func (b *Board) CommitPhase() (err error) {
 		p.RemoveCardFromHand(chosenCard)
 
 		selection = make([]interface{}, 0, 2)
-		selection = append(selection, order.Attack)
-		selection = append(selection, order.Defense)
+		selection = append(selection, OrderAttack)
+		selection = append(selection, OrderDefense)
 		chosenOrderInt, err := p.Picks(selection, p.Name+": Choose card's order!", 1)
 		if err != nil {
 			return err
 		}
-		chosenOrder, ok := chosenOrderInt.(order.Order)
+		chosenOrder, ok := chosenOrderInt.(Order)
 		if !ok {
 			return errors.New("Type assertion failed")
 		}
