@@ -1,4 +1,4 @@
-package board
+package joerg
 
 import (
 	"errors"

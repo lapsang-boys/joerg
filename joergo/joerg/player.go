@@ -1,4 +1,4 @@
-package player
+package joerg
 
 import (
 	"encoding/json"

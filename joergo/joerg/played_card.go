@@ -1,4 +1,4 @@
-package played_card
+package joerg
 
 import (
 	"github.com/lapsang-boys/joerg/card"
