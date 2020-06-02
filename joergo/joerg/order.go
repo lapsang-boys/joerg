@@ -3,15 +3,15 @@ package joerg
 type Order int
 
 const (
-	Attack Order = iota
-	Defense
+	OrderAttack Order = iota
+	OrderDefense
 )
 
 func (o Order) String() string {
 	switch o {
-	case Attack:
+	case OrderAttack:
 		return "Attack"
-	case Defense:
+	case OrderDefense:
 		return "Defense"
 	}
 	panic("Unreachable")
