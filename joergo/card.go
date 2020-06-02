@@ -36,14 +36,14 @@ type UrsaMinor struct{ Card }
 type Weasel struct{ Card }
 type Wolverine struct{ Card }
 
-func (bt BlueTit) OnReveal() {
+func (bt BlueTit) OnReveal(b *Board, p *Player) {
 	log.Println("reveal")
 }
 
 type Carder interface {
 	Power() int
 	Name() string
-	OnReveal()
+	OnReveal(b *Board, p *Player)
 	OnLose()
 	OnWin()
 	OnCycle()
@@ -67,9 +67,9 @@ func (c Card) Name() string {
 	return c.Nam
 }
 
-func (c Card) OnReveal()      {}
-func (c Card) OnWin()         {}
-func (c Card) OnLose()        {}
-func (c Card) OnCycle()       {}
-func (c Card) OnHandEnter()   {}
-func (c Card) OnBeforePower() {}
+func (c Card) OnReveal(b *Board, p *Player) {}
+func (c Card) OnWin()                       {}
+func (c Card) OnLose()                      {}
+func (c Card) OnCycle()                     {}
+func (c Card) OnHandEnter()                 {}
+func (c Card) OnBeforePower()               {}

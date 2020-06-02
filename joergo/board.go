@@ -113,7 +113,7 @@ func (b *Board) ResolveOnReveal() {
 	log.Println("ResolveOnReveal")
 	for _, pc := range b.PlayedCards {
 		pc.Revealed = true
-		pc.Card.OnReveal()
+		pc.Card.OnReveal(b, pc.Player)
 		log.Println(pc.Card)
 	}
 }
