@@ -9,8 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 
-	"github.com/lapsang-boys/joerg/action"
-	"github.com/lapsang-boys/joerg/board"
+	"github.com/lapsang-boys/joerg"
 
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
@@ -18,7 +17,7 @@ import (
 
 var (
 	upgrader  = websocket.Upgrader{} // use default options
-	boards    = map[int]*board.Board{}
+	boards    = map[int]*joerg.Board{}
 	logger, _ = zap.NewDevelopment()
 	sugar     = logger.Sugar()
 )
@@ -30,14 +29,14 @@ func newGame(message []byte, recvChoice, outgoingMessages chan []byte) {
 		}
 	}()
 
-	var ng action.NewGame
+	var ng joerg.NewGame
 	err := json.Unmarshal(message, &ng)
 	if err != nil {
 		outgoingMessages <- []byte(err.Error())
 		return
 	}
 	sugar.Info("NewGame", ng)
-	b, err := board.New(ng.NumPlayers, ng.StartingHandSize, ng.WinsNeeded, recvChoice, outgoingMessages)
+	b, err := joerg.NewBoard(ng.NumPlayers, ng.StartingHandSize, ng.WinsNeeded, recvChoice, outgoingMessages)
 	if err != nil {
 		sugar.Info("err", err)
 		outgoingMessages <- []byte(err.Error())
@@ -96,7 +95,7 @@ outer:
 	}
 }
 
-func sendBoard(b *board.Board, outgoingMessages chan []byte) {
+func sendBoard(b *joerg.Board, outgoingMessages chan []byte) {
 	buf, err := json.Marshal(b)
 	if err != nil {
 		outgoingMessages <- []byte(err.Error())
@@ -107,7 +106,7 @@ func sendBoard(b *board.Board, outgoingMessages chan []byte) {
 }
 
 func nextAction(message []byte, outgoingMessages chan []byte) {
-	var na action.NextAction
+	var na joerg.NextAction
 	err := json.Unmarshal(message, &na)
 	if err != nil {
 		outgoingMessages <- []byte(err.Error())
@@ -154,12 +153,12 @@ func handleMessage(message []byte, recvChoice chan []byte, outgoingMessages chan
 		return errors.New("type not string")
 	}
 	sugar.Info("Chosing message action")
-	switch action.ActionType(t) {
-	case action.NewGameType:
+	switch joerg.ActionType(t) {
+	case joerg.ActionNewGameType:
 		go newGame(message, recvChoice, outgoingMessages)
-	case action.NextActionType:
+	case joerg.ActionNextActionType:
 		go nextAction(message, outgoingMessages)
-	case action.ChoiceType:
+	case joerg.ActionChoiceType:
 		go choice(message, recvChoice, outgoingMessages)
 	default:
 		return fmt.Errorf("Unknown type: %s", t)

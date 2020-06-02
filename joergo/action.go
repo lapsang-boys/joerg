@@ -3,9 +3,9 @@ package joerg
 type ActionType string
 
 const (
-	NewGameType    ActionType = "newGame"
-	NextActionType            = "nextAction"
-	ChoiceType                = "choice"
+	ActionNewGameType    ActionType = "newGame"
+	ActionNextActionType            = "nextAction"
+	ActionChoiceType                = "choice"
 )
 
 type NewGame struct {

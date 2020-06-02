@@ -33,7 +33,7 @@ type Board struct {
 	Victories        map[int]int
 }
 
-func New(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoice chan []byte, outgoingMessages chan []byte) (*Board, error) {
+func NewBoard(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoice chan []byte, outgoingMessages chan []byte) (*Board, error) {
 	cube, err := ReadCube(LIBRARY_PATH)
 	if err != nil {
 		return nil, err
