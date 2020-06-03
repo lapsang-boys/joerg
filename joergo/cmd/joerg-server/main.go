@@ -242,7 +242,9 @@ func server(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	var addr string
+	flag.StringVar(&addr, "addr", ":8080", "address to listen on")
 	flag.Parse()
 	http.HandleFunc("/", server)
-	sugar.Fatal(http.ListenAndServe("localhost:8080", nil))
+	sugar.Fatal(http.ListenAndServe(addr, nil))
 }
