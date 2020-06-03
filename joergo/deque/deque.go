@@ -33,8 +33,5 @@ func (s *Deque) Eject() interface{} {
 }
 
 func (s *Deque) IsEmpty() bool {
-	if len(s.Items) == 0 {
-		return true
-	}
-	return false
+	return len(s.Items) == 0
 }

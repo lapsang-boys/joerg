@@ -4,8 +4,8 @@ type ActionType string
 
 const (
 	ActionNewGameType    ActionType = "newGame"
-	ActionNextActionType            = "nextAction"
-	ActionChoiceType                = "choice"
+	ActionNextActionType ActionType = "nextAction"
+	ActionChoiceType     ActionType = "choice"
 )
 
 type NewGame struct {

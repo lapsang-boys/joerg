@@ -40,13 +40,13 @@ func NewBoard(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoic
 	}
 
 	if numPlayers < MINIMUM_PLAYERS || numPlayers > MAXIMUM_PLAYERS {
-		return nil, errors.New("Illegal number of numPlayers")
+		return nil, errors.New("illegal number of numPlayers")
 	}
 	if winsNeeded == 0 || winsNeeded > startingHandSize {
-		return nil, errors.New("Illegal winsNeeded")
+		return nil, errors.New("illegal winsNeeded")
 	}
 	if int(startingHandSize*numPlayers) > len(cube.Cards)-int(numPlayers) {
-		return nil, errors.New("Illegal startingHandSize")
+		return nil, errors.New("illegal startingHandSize")
 	}
 
 	players := []*Player{}
@@ -78,7 +78,7 @@ func NewBoard(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoic
 
 func (b *Board) AddPlayer(p *Player) (err error) {
 	if len(b.Players) == int(b.NumPlayers) {
-		return errors.New("Unable to add any more players!")
+		return errors.New("unable to add any more players(!)")
 	}
 	b.Players = append(b.Players, p)
 	return nil
@@ -190,7 +190,7 @@ func (b *Board) cycleForPlayer(p *Player) (Carder, error) {
 	}
 	chosenCard, ok := chosenCardInt.(Carder)
 	if !ok {
-		return nil, errors.New("Unable to type assert cycled card.")
+		return nil, errors.New("unable to type assert cycled card")
 	}
 
 	p.RemoveCardFromHand(chosenCard)

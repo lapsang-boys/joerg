@@ -82,7 +82,7 @@ func newGame(message []byte, recvChoice, outgoingMessages chan []byte) {
 	}
 	i := 0
 outer:
-	for true {
+	for {
 		for _, step := range steps {
 			log.Println(i)
 			step()
@@ -146,7 +146,7 @@ func handleMessage(message []byte, recvChoice chan []byte, outgoingMessages chan
 	}
 	var typ interface{}
 	if typ, ok = m["type"]; !ok {
-		return errors.New("not typer json payload!")
+		return errors.New("not typer json payload(!)")
 	}
 	t, ok := typ.(string)
 	if !ok {
@@ -161,7 +161,7 @@ func handleMessage(message []byte, recvChoice chan []byte, outgoingMessages chan
 	case joerg.ActionChoiceType:
 		go choice(message, recvChoice, outgoingMessages)
 	default:
-		return fmt.Errorf("Unknown type: %s", t)
+		return fmt.Errorf("unknown type: %s", t)
 	}
 	return nil
 }
