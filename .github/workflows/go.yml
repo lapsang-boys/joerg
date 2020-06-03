@@ -2,9 +2,15 @@ name: Go
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master ] 
+    paths:
+    - 'joergo/**'
+    - '.github/go.yml'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'joergo/**'
+    - '.github/go.yml'
 
 jobs:
 
