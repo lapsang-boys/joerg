@@ -6,6 +6,7 @@
 	<app-played-cards></app-played-cards>
 	<div *ngIf="choice">
 		You have a choice!
+		{{ choice.context }}
 		<ul>
 			<li *ngFor="let item of choice.items; let i = index">
 				<button (click)="choose(i)">{{ item | json }}</button>
