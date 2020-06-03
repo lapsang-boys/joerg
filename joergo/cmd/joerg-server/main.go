@@ -84,7 +84,7 @@ func newGame(message []byte, recvChoice, outgoingMessages chan []byte) {
 outer:
 	for true {
 		for _, step := range steps {
-			log.Println(i, step)
+			log.Println(i)
 			step()
 			sendBoard(b, outgoingMessages)
 			i += 1
