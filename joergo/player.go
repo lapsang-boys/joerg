@@ -8,46 +8,40 @@ import (
 	"math/rand"
 )
 
+//go:generate stringer -type HandCardState -linecomment
+
 type HandCardState int
 
 const (
-	VisibleOnlyForPlayer HandCardState = iota
-	VisibleForEveryone
-	HiddenFromEveryone
+	VisibleOnlyForPlayer HandCardState = iota // VisibleOnlyForPlayer
+	VisibleForEveryone                        // VisibleForEveryone
+	HiddenFromEveryone                        // HiddenFromEveryone
 )
 
+func (h HandCardState) MarshalText() (text []byte, err error) {
+	return []byte(h.String()), nil
+}
+
 type Player struct {
-	Num              int
-	Name             string
-	Hand             []Carder
-	HandStates       map[Carder]HandCardState
-	ReceiveChoice    chan []byte
-	OutgoingMessages chan []byte
+	Num  int      `json:"num"`
+	Name string   `json:"name"`
+	Hand []Carder `json:"hand"`
+	// Map from card name to hand card state.
+	HandStates    map[string]HandCardState `json:"handStates"`
+	receiveChoice chan []byte              `json:"-"`
+
+	sendObject func(typ string, v interface{}) `json:"-"`
 }
 
-func NewPlayer(num int, name string, recvChoice chan []byte, outgoingMessages chan []byte) *Player {
+func NewPlayer(num int, name string, recvChoice chan []byte, sendObject func(typ string, v interface{})) *Player {
 	return &Player{
-		Num:              num,
-		Name:             name,
-		Hand:             make([]Carder, 0),
-		HandStates:       make(map[Carder]HandCardState),
-		ReceiveChoice:    recvChoice,
-		OutgoingMessages: outgoingMessages,
+		Num:           num,
+		Name:          name,
+		Hand:          make([]Carder, 0),
+		HandStates:    make(map[string]HandCardState),
+		receiveChoice: recvChoice,
+		sendObject:    sendObject,
 	}
-}
-
-func (p *Player) MarshalJSON() ([]byte, error) {
-	var out struct {
-		Name       string
-		Hand       []Carder
-		HandStates map[string]HandCardState
-	}
-	out.Name = p.Name
-	out.Hand = p.Hand
-	for k, v := range p.HandStates {
-		out.HandStates[k.Name()] = v
-	}
-	return json.Marshal(out)
 }
 
 // TODO(_): Implement multiple choice.
@@ -58,20 +52,15 @@ func (p *Player) Picks(items []interface{}, context string, numItems uint) (v in
 	var out struct {
 		Items    []interface{} `json:"items"`
 		Context  string        `json:"context"`
-		NumItems uint          `json:"num_items"`
+		NumItems uint          `json:"numItems"`
 	}
 	out.Items = items
 	out.Context = context
 	out.NumItems = numItems
-	fmt.Println(json.Marshal(items))
-	payload, err := json.Marshal(out)
-	if err != nil {
-		return nil, err
-	}
 	fmt.Println("Sending choice!")
-	p.OutgoingMessages <- payload
+	p.sendObject("choice", out)
 	fmt.Println("In between!")
-	respPayload := <-p.ReceiveChoice
+	respPayload := <-p.receiveChoice
 	fmt.Println("Received choice")
 	var choice ChoiceAction
 	err = json.Unmarshal(respPayload, &choice)

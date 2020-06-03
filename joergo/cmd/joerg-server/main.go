@@ -13,16 +13,16 @@ import (
 
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
+	//"go.uber.org/zap/zapcore"
 )
 
 var (
-	upgrader  = websocket.Upgrader{} // use default options
-	boards    = map[int]*joerg.Board{}
+	//logger, _ = zap.NewDevelopment(zap.IncreaseLevel(zapcore.WarnLevel))
 	logger, _ = zap.NewDevelopment()
 	sugar     = logger.Sugar()
 )
 
-func newGame(message []byte, recvChoice, outgoingMessages chan []byte) {
+func (srv *Server) newGame(message []byte, c Connection) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in f", r)
@@ -32,25 +32,40 @@ func newGame(message []byte, recvChoice, outgoingMessages chan []byte) {
 	var ng joerg.NewGame
 	err := json.Unmarshal(message, &ng)
 	if err != nil {
-		outgoingMessages <- []byte(err.Error())
+		c.sendError(err)
 		return
 	}
 	sugar.Info("NewGame", ng)
-	b, err := joerg.NewBoard(ng.NumPlayers, ng.StartingHandSize, ng.WinsNeeded, recvChoice, outgoingMessages)
+
+	var (
+		names = []string{"Bob", "Emil", "Henry", "Robin"}
+	)
+
+	players := make([]*joerg.Player, int(ng.NumPlayers))
+	for i := range players {
+		players[i] = joerg.NewPlayer(
+			i,
+			names[i],
+			c.recvChoice,
+			c.sendObject,
+		)
+	}
+
+	b, err := joerg.NewBoard(ng.StartingHandSize, ng.WinsNeeded, players)
 	if err != nil {
 		sugar.Info("err", err)
-		outgoingMessages <- []byte(err.Error())
+		c.sendError(err)
 		return
 	}
 	boardId := rand.Intn(100)
 	sugar.Info("board_id", boardId)
 	sugar.Info("board", b)
-	boards[boardId] = b
+	srv.boards[boardId] = b
 
 	commitWrapped := func() {
 		err = b.CommitPhase()
 		if err != nil {
-			outgoingMessages <- []byte(err.Error())
+			c.sendError(err)
 			return
 		}
 	}
@@ -58,7 +73,7 @@ func newGame(message []byte, recvChoice, outgoingMessages chan []byte) {
 	cycleWrapped := func() {
 		err = b.CyclePhase()
 		if err != nil {
-			outgoingMessages <- []byte(err.Error())
+			c.sendError(err)
 			return
 		}
 	}
@@ -86,7 +101,14 @@ outer:
 		for _, step := range steps {
 			log.Println(i)
 			step()
-			sendBoard(b, outgoingMessages)
+			out := struct {
+				Board   *joerg.Board `json:"board"`
+				BoardId int          `json:"boardId"`
+			}{
+				Board:   b,
+				BoardId: boardId,
+			}
+			c.sendObject("board", out)
 			i += 1
 			if i >= 200 {
 				break outer
@@ -95,45 +117,65 @@ outer:
 	}
 }
 
-func sendBoard(b *joerg.Board, outgoingMessages chan []byte) {
-	buf, err := json.Marshal(b)
-	if err != nil {
-		outgoingMessages <- []byte(err.Error())
+func (c Connection) sendError(err error) {
+	if err == nil {
 		return
 	}
-	log.Println("Sending Board!")
-	outgoingMessages <- buf
+	out := out{
+		Type:    "error",
+		Payload: err.Error(),
+	}
+	buf, err := json.Marshal(out)
+	if err != nil {
+		sugar.Warn("unable to marshal error", zap.Error(err))
+		return
+	}
+	sugar.Info("Sending Error!")
+	c.outgoingMessages <- buf
 }
 
-func nextAction(message []byte, outgoingMessages chan []byte) {
-	var na joerg.NextAction
-	err := json.Unmarshal(message, &na)
+type out struct {
+	Type    string      `json:"type"`
+	Payload interface{} `json:"payload"`
+}
+
+func (c Connection) sendObject(typ string, v interface{}) {
+	out := out{
+		Type:    typ,
+		Payload: v,
+	}
+	buf, err := json.MarshalIndent(out, "", "\t")
 	if err != nil {
-		outgoingMessages <- []byte(err.Error())
+		sugar.Warn("send object", zap.Error(err))
+		c.sendError(err)
 		return
 	}
+	sugar.Info(string(buf))
+	log.Println("Sending Object!")
+	c.outgoingMessages <- buf
+}
+
+func (srv *Server) nextAction(message []byte, c Connection) {
+	var na joerg.NextAction
+	err := json.Unmarshal(message, &na)
+	c.sendError(err)
 	sugar.Info("NextAction", na)
-	b, ok := boards[na.BoardId]
+	b, ok := srv.boards[na.BoardId]
 	if !ok {
-		outgoingMessages <- []byte("Invalid board_id")
+		c.sendError(errors.New("invalid board_id"))
 		return
 	}
 	b.Next()
 
-	buf, err := json.Marshal(b)
-	if err != nil {
-		outgoingMessages <- []byte("Invalid board_id")
-		return
-	}
-	outgoingMessages <- buf
+	c.sendObject("nextAction", b)
 }
 
-func choice(message []byte, recvChoice chan []byte, outgoingMessages chan []byte) {
+func (srv *Server) choice(message []byte, c Connection) {
 	sugar.Debug("choice: sending choice message into recvChoice")
-	recvChoice <- message
+	c.recvChoice <- message
 }
 
-func handleMessage(message []byte, recvChoice chan []byte, outgoingMessages chan []byte) (err error) {
+func (srv *Server) handleMessage(message []byte, c Connection) (err error) {
 	var v interface{}
 	err = json.Unmarshal(message, &v)
 	if err != nil {
@@ -155,11 +197,11 @@ func handleMessage(message []byte, recvChoice chan []byte, outgoingMessages chan
 	sugar.Info("Chosing message action")
 	switch joerg.ActionType(t) {
 	case joerg.ActionNewGameType:
-		go newGame(message, recvChoice, outgoingMessages)
+		go srv.newGame(message, c)
 	case joerg.ActionNextActionType:
-		go nextAction(message, outgoingMessages)
+		go srv.nextAction(message, c)
 	case joerg.ActionChoiceType:
-		go choice(message, recvChoice, outgoingMessages)
+		go srv.choice(message, c)
 	default:
 		return fmt.Errorf("unknown type: %s", t)
 	}
@@ -186,7 +228,7 @@ func NewConnection(ws *websocket.Conn) Connection {
 	}
 }
 
-func (c *Connection) Send() {
+func (c Connection) Send() {
 	defer c.ws.Close()
 	for msg := range c.outgoingMessages {
 		sugar.Info("Sender: got message sending!")
@@ -198,7 +240,7 @@ func (c *Connection) Send() {
 	}
 }
 
-func (c *Connection) Recv() {
+func (c Connection) Recv() {
 	defer c.ws.Close()
 	for {
 		_, msg, err := c.ws.ReadMessage()
@@ -211,24 +253,36 @@ func (c *Connection) Recv() {
 	}
 }
 
-func (c *Connection) Handle() {
+func (srv *Server) Handle(c Connection) {
 	for msg := range c.incomingMessages {
 		sugar.Info("Handler: handling message")
-		err := handleMessage(msg, c.recvChoice, c.outgoingMessages)
+		err := srv.handleMessage(msg, c)
 		if err != nil {
 			sugar.Info("handle:", zap.Error(err))
 			sugar.Info("Handler: Sending error!")
-			c.outgoingMessages <- []byte(err.Error())
+			c.sendError(err)
 			continue
 		}
 	}
 }
 
-func server(w http.ResponseWriter, r *http.Request) {
-	upgrader.CheckOrigin = func(*http.Request) bool {
+type Server struct {
+	upgrader websocket.Upgrader // use default options
+	boards   map[int]*joerg.Board
+}
+
+func NewServer() *Server {
+	return &Server{
+		upgrader: websocket.Upgrader{}, // use default options
+		boards:   make(map[int]*joerg.Board),
+	}
+}
+
+func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	srv.upgrader.CheckOrigin = func(*http.Request) bool {
 		return true
 	}
-	ws, err := upgrader.Upgrade(w, r, nil)
+	ws, err := srv.upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		sugar.Info("upgrade:", zap.Error(err))
 		return
@@ -238,13 +292,13 @@ func server(w http.ResponseWriter, r *http.Request) {
 
 	go conn.Send()
 	go conn.Recv()
-	go conn.Handle()
+	go srv.Handle(conn)
 }
 
 func main() {
 	var addr string
 	flag.StringVar(&addr, "addr", ":8080", "address to listen on")
 	flag.Parse()
-	http.HandleFunc("/", server)
-	sugar.Fatal(http.ListenAndServe(addr, nil))
+	srv := NewServer()
+	sugar.Fatal(http.ListenAndServe(addr, srv))
 }

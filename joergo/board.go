@@ -13,27 +13,28 @@ const (
 	MAXIMUM_PLAYERS = 6
 )
 
-var (
-	names = []string{"Bob", "Emil", "Henry", "Robin"}
-)
-
 // https://play.golang.org/p/i1BGlRsP19
 type Board struct {
-	Players          []*Player
-	Pole             *Player
-	Cube             *Cube
-	Deck             []Carder // Make private later.
-	PlayedCards      []PlayedCard
-	RoundWinner      *Player
-	RoundWinningCard Carder
-	NumPlayers       uint
-	StartingHandSize uint
-	WinsNeeded       uint
-	BestCard         *PlayedCard // Make private later.
-	Victories        map[int]int
+	Players          []*Player    `json:"players"`
+	Pole             *Player      `json:"pole"`
+	Cube             *Cube        `json:"cube"`
+	Deck             []Carder     `json:"deck"` // Make private later.
+	PlayedCards      []PlayedCard `json:"playedCards"`
+	RoundWinner      *Player      `json:"roundWinner"`
+	RoundWinningCard Carder       `json:"roundWinningCard"`
+	NumPlayers       uint         `json:"numPlayers"`
+	StartingHandSize uint         `json:"startingHandSize"`
+	WinsNeeded       uint         `json:"winsNeeded"`
+	BestCard         *PlayedCard  `json:"bestCard"` // Make private later.
+	Victories        map[int]int  `json:"victories"`
 }
 
-func NewBoard(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoice chan []byte, outgoingMessages chan []byte) (*Board, error) {
+func NewBoard(
+	startingHandSize uint,
+	winsNeeded uint,
+	players []*Player,
+) (*Board, error) {
+	numPlayers := len(players)
 	cube, err := ReadCube(LIBRARY_PATH)
 	if err != nil {
 		return nil, err
@@ -45,18 +46,8 @@ func NewBoard(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoic
 	if winsNeeded == 0 || winsNeeded > startingHandSize {
 		return nil, errors.New("illegal winsNeeded")
 	}
-	if int(startingHandSize*numPlayers) > len(cube.Cards)-int(numPlayers) {
+	if int(startingHandSize)*numPlayers > len(cube.Cards)-int(numPlayers) {
 		return nil, errors.New("illegal startingHandSize")
-	}
-
-	players := []*Player{}
-	for i := 0; i < int(numPlayers); i++ {
-		players = append(players, NewPlayer(
-			i,
-			names[i],
-			recvChoice,
-			outgoingMessages,
-		))
 	}
 
 	victories := make(map[int]int)
@@ -66,7 +57,7 @@ func NewBoard(numPlayers uint, startingHandSize uint, winsNeeded uint, recvChoic
 
 	b := Board{
 		Players:          players,
-		NumPlayers:       numPlayers,
+		NumPlayers:       uint(numPlayers),
 		StartingHandSize: startingHandSize,
 		WinsNeeded:       winsNeeded,
 		Cube:             cube,
