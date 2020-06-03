@@ -6,11 +6,9 @@ export class Player {
 	index: number;
 	hand: Hand;
 
-	PLAYERS = ['Pineapple', 'Lemon', 'Apple', 'Orange', 'Peach'];
-
 	constructor(payload: object) {
 		this.index = payload['num'];
-		this.name = this.PLAYERS[this.index];
+		this.name = payload['Name'];
 		this.id = this.index;
 		this.hand = new Hand(payload);
 	}
