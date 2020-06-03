@@ -29,7 +29,7 @@ func (srv *Server) newGame(message []byte, c Connection) {
 		}
 	}()
 
-	var ng joerg.NewGame
+	var ng joerg.NewGameRequest
 	err := json.Unmarshal(message, &ng)
 	if err != nil {
 		c.sendError(err)
@@ -101,14 +101,12 @@ outer:
 		for _, step := range steps {
 			log.Println(i)
 			step()
-			out := struct {
-				Board   *joerg.Board `json:"board"`
-				BoardId int          `json:"boardId"`
-			}{
+			out := joerg.BoardResponse{
+				Type:    joerg.ResponseTypeBoard,
 				Board:   b,
 				BoardId: boardId,
 			}
-			c.sendObject("board", out)
+			c.sendObject(out)
 			i += 1
 			if i >= 200 {
 				break outer
@@ -121,9 +119,9 @@ func (c Connection) sendError(err error) {
 	if err == nil {
 		return
 	}
-	out := out{
-		Type:    "error",
-		Payload: err.Error(),
+	out := joerg.ErrorResponse{
+		Type:  "error",
+		Error: err.Error(),
 	}
 	buf, err := json.Marshal(out)
 	if err != nil {
@@ -134,17 +132,8 @@ func (c Connection) sendError(err error) {
 	c.outgoingMessages <- buf
 }
 
-type out struct {
-	Type    string      `json:"type"`
-	Payload interface{} `json:"payload"`
-}
-
-func (c Connection) sendObject(typ string, v interface{}) {
-	out := out{
-		Type:    typ,
-		Payload: v,
-	}
-	buf, err := json.MarshalIndent(out, "", "\t")
+func (c Connection) sendObject(v interface{}) {
+	buf, err := json.MarshalIndent(v, "", "\t")
 	if err != nil {
 		sugar.Warn("send object", zap.Error(err))
 		c.sendError(err)
@@ -156,7 +145,7 @@ func (c Connection) sendObject(typ string, v interface{}) {
 }
 
 func (srv *Server) nextAction(message []byte, c Connection) {
-	var na joerg.NextAction
+	var na joerg.NextActionRequest
 	err := json.Unmarshal(message, &na)
 	c.sendError(err)
 	sugar.Info("NextAction", na)
@@ -167,7 +156,7 @@ func (srv *Server) nextAction(message []byte, c Connection) {
 	}
 	b.Next()
 
-	c.sendObject("nextAction", b)
+	c.sendObject(b)
 }
 
 func (srv *Server) choice(message []byte, c Connection) {
@@ -176,31 +165,27 @@ func (srv *Server) choice(message []byte, c Connection) {
 }
 
 func (srv *Server) handleMessage(message []byte, c Connection) (err error) {
-	var v interface{}
-	err = json.Unmarshal(message, &v)
+	var m map[string]interface{}
+	err = json.Unmarshal(message, &m)
 	if err != nil {
 		return err
 	}
-	sugar.Info("raw payload", v)
-	m, ok := v.(map[string]interface{})
+	sugar.Info("raw payload", m)
+	typ, ok := m["type"]
 	if !ok {
-		return errors.New("json is not object ")
-	}
-	var typ interface{}
-	if typ, ok = m["type"]; !ok {
 		return errors.New("not typer json payload(!)")
 	}
 	t, ok := typ.(string)
 	if !ok {
 		return errors.New("type not string")
 	}
-	sugar.Info("Chosing message action")
-	switch joerg.ActionType(t) {
-	case joerg.ActionNewGameType:
+	sugar.Info("Choosing message request type")
+	switch joerg.RequestType(t) {
+	case joerg.RequestTypeNewGame:
 		go srv.newGame(message, c)
-	case joerg.ActionNextActionType:
+	case joerg.RequestTypeNextAction:
 		go srv.nextAction(message, c)
-	case joerg.ActionChoiceType:
+	case joerg.RequestTypeChoice:
 		go srv.choice(message, c)
 	default:
 		return fmt.Errorf("unknown type: %s", t)

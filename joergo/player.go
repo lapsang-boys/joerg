@@ -12,15 +12,15 @@ import (
 
 type HandCardState int
 
-const (
-	VisibleOnlyForPlayer HandCardState = iota // VisibleOnlyForPlayer
-	VisibleForEveryone                        // VisibleForEveryone
-	HiddenFromEveryone                        // HiddenFromEveryone
-)
-
 func (h HandCardState) MarshalText() (text []byte, err error) {
 	return []byte(h.String()), nil
 }
+
+const (
+	VisibleOnlyForPlayer HandCardState = iota + 1 // VisibleOnlyForPlayer
+	VisibleForEveryone                            // VisibleForEveryone
+	HiddenFromEveryone                            // HiddenFromEveryone
+)
 
 type Player struct {
 	Num  int      `json:"num"`
@@ -30,10 +30,10 @@ type Player struct {
 	HandStates    map[string]HandCardState `json:"handStates"`
 	receiveChoice chan []byte
 
-	sendObject func(typ string, v interface{})
+	sendObject func(v interface{})
 }
 
-func NewPlayer(num int, name string, recvChoice chan []byte, sendObject func(typ string, v interface{})) *Player {
+func NewPlayer(num int, name string, recvChoice chan []byte, sendObject func(v interface{})) *Player {
 	return &Player{
 		Num:           num,
 		Name:          name,
@@ -44,30 +44,60 @@ func NewPlayer(num int, name string, recvChoice chan []byte, sendObject func(typ
 	}
 }
 
-// TODO(_): Implement multiple choice.
-func (p *Player) Picks(items []interface{}, context string, numItems uint) (v interface{}, err error) {
+func (p *Player) PickCard(cards []Carder, context string) (card Carder, err error) {
+	var items []interface{}
+	for _, card := range cards {
+		items = append(items, card)
+	}
 	if p.Num != 0 {
-		return p.RandomChoice(items, context, numItems)
+		choice, err := p.RandomChoice(items, context, 1)
+		return choice.(Carder), err
 	}
-	var out struct {
-		Items    []interface{} `json:"items"`
-		Context  string        `json:"context"`
-		NumItems uint          `json:"numItems"`
+	out := ServerRequestChoice{
+		Type:     RpcTypeChoice,
+		Items:    items,
+		Context:  context,
+		NumItems: 1,
 	}
-	out.Items = items
-	out.Context = context
-	out.NumItems = numItems
 	fmt.Println("Sending choice!")
-	p.sendObject("choice", out)
+	p.sendObject(out)
 	fmt.Println("In between!")
 	respPayload := <-p.receiveChoice
 	fmt.Println("Received choice")
-	var choice ChoiceAction
+	var choice ChoiceResponse
 	err = json.Unmarshal(respPayload, &choice)
 	if err != nil {
 		return nil, err
 	}
-	return items[choice.Choice], nil
+	return cards[choice.Choice], nil
+}
+
+func (p *Player) PickOrder(context string) (order Order, err error) {
+	items := []interface{}{
+		OrderAttack,
+		OrderDefense,
+	}
+	if p.Num != 0 {
+		choice, err := p.RandomChoice(items, context, 1)
+		return choice.(Order), err
+	}
+	out := ServerRequestChoice{
+		Type:     RpcTypeChoice,
+		Items:    items,
+		Context:  context,
+		NumItems: 1,
+	}
+	fmt.Println("Sending choice!")
+	p.sendObject(out)
+	fmt.Println("In between!")
+	respPayload := <-p.receiveChoice
+	fmt.Println("Received choice")
+	var choice ChoiceResponse
+	err = json.Unmarshal(respPayload, &choice)
+	if err != nil {
+		return 0, err
+	}
+	return items[choice.Choice].(Order), nil
 }
 
 func (p *Player) RandomChoice(items []interface{}, context string, numItems uint) (v interface{}, err error) {

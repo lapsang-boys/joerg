@@ -104,7 +104,7 @@ func (b *Board) ResolveOnReveal() {
 	log.Println("ResolveOnReveal")
 	for _, pc := range b.PlayedCards {
 		pc.Revealed = true
-		pc.Card.OnReveal(b, pc.Player)
+		pc.Card.OnReveal(b, pc.Player, pc.Order)
 		log.Println(pc.Card)
 	}
 }
@@ -113,9 +113,9 @@ func (b *Board) ResolveWinLose() {
 	log.Println("ResolveOnReveal")
 	for _, pc := range b.PlayedCards {
 		if pc.Card.Name() == b.RoundWinningCard.Name() {
-			pc.Card.OnWin()
+			pc.Card.OnWin(b, pc.Player, pc.Order)
 		} else {
-			pc.Card.OnLose()
+			pc.Card.OnLose(b, pc.Player, pc.Order)
 		}
 	}
 }
@@ -171,17 +171,9 @@ func (b *Board) cycleEvent(trgP *Player) error {
 }
 
 func (b *Board) cycleForPlayer(p *Player) (Carder, error) {
-	selection := make([]interface{}, 0, len(p.Hand))
-	for _, c := range p.Hand {
-		selection = append(selection, c)
-	}
-	chosenCardInt, err := p.Picks(selection, "Chose card to cycle.", 1)
+	chosenCard, err := p.PickCard(p.Hand, "Choose card to cycle.")
 	if err != nil {
 		return nil, err
-	}
-	chosenCard, ok := chosenCardInt.(Carder)
-	if !ok {
-		return nil, errors.New("unable to type assert cycled card")
 	}
 
 	p.RemoveCardFromHand(chosenCard)
@@ -200,17 +192,6 @@ func (b *Board) DrawCard() Carder {
 	b.Deck = b.Deck[1:]
 	return tmp
 }
-
-// def cycle_for_player(self, player: Player) -> Card:
-//     chosen_card = player_picks(player.hand, "Chose card to cycle.")
-
-//     self.player_cycle_card(player, chosen_card)
-
-//     return chosen_card
-
-// def player_cycle_card(self, player: Player, card: Card):
-//     player.remove_card_from_hand(card)
-//     card.on_cycle(self, player)
 
 func (b *Board) PlayerWillWinNextRound(p *Player) bool {
 	return b.Victories[p.Num] == int(b.WinsNeeded)-1
@@ -351,35 +332,19 @@ func (b *Board) commitCard(p *Player, c Carder, o Order) {
 
 func (b *Board) CommitPhase() (err error) {
 	for _, p := range b.Players {
-		selection := make([]interface{}, 0, len(p.Hand))
-		for _, c := range p.Hand {
-			selection = append(selection, c)
-		}
-		chosenCardInt, err := p.Picks(selection, p.Name+": Choose a card to commit!", 1)
+		chosenCard, err := p.PickCard(p.Hand, p.Name+": Choose a card to commit!")
 		if err != nil {
 			return err
-		}
-		chosenCard, ok := chosenCardInt.(Carder)
-		if !ok {
-			return errors.New("Type assertion failed")
 		}
 
 		p.RemoveCardFromHand(chosenCard)
 
-		selection = make([]interface{}, 0, 2)
-		selection = append(selection, OrderAttack)
-		selection = append(selection, OrderDefense)
-		chosenOrderInt, err := p.Picks(selection, p.Name+": Choose card's order!", 1)
+		chosenOrder, err := p.PickOrder(p.Name + ": Choose card's order!")
 		if err != nil {
 			return err
 		}
-		chosenOrder, ok := chosenOrderInt.(Order)
-		if !ok {
-			return errors.New("Type assertion failed")
-		}
-		fmt.Println("Chosen card: \n", chosenCard)
-		fmt.Printf("Chosen card: %#v\n", chosenCard)
-		fmt.Printf("Chosen order: %s\n", chosenOrder)
+		log.Printf("Chosen card: %#v", chosenCard)
+		log.Printf("Chosen order: %s", chosenOrder)
 		b.commitCard(p, chosenCard, chosenOrder)
 	}
 	return nil

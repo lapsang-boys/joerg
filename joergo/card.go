@@ -1,54 +1,14 @@
 package joerg
 
-import (
-	"log"
-)
-
-type Ant struct{ Card }
-type Anteater struct{ Card }
-type Bee struct{ Card }
-type BigLeggedHare struct{ Card }
-type Bloodhound struct{ Card }
-type BlueTit struct{ Card }
-type Boar struct{ Card }
-type Butterfly struct{ Card }
-type Falcon struct{ Card }
-type Fox struct{ Card }
-type Frog struct{ Card }
-type Hedgehog struct{ Card }
-type Hedgehog2TheReturnofGlen struct{ Card }
-type HungryWolf struct{ Card }
-type KingoftheForest struct{ Card }
-type Magpie struct{ Card }
-type Mole struct{ Card }
-type Mosquito struct{ Card }
-type OldElk struct{ Card }
-type Otter struct{ Card }
-type Rooster struct{ Card }
-type Seagull struct{ Card }
-type SpySeal struct{ Card }
-type Squirrel struct{ Card }
-type StagBeetle struct{ Card }
-type SupressedPerch struct{ Card }
-type Swan struct{ Card }
-type Toad struct{ Card }
-type UrsaMinor struct{ Card }
-type Weasel struct{ Card }
-type Wolverine struct{ Card }
-
-func (bt BlueTit) OnReveal(b *Board, p *Player) {
-	log.Println("reveal")
-}
-
 type Carder interface {
 	Power() int
 	Name() string
-	OnReveal(b *Board, p *Player)
-	OnLose()
-	OnWin()
-	OnCycle()
-	OnHandEnter()
-	OnBeforePower()
+	OnReveal(b *Board, p *Player, order Order)
+	OnLose(b *Board, p *Player, order Order)
+	OnWin(b *Board, p *Player, order Order)
+	OnCycle(b *Board, p *Player, order Order)
+	OnHandEnter(b *Board, p *Player, order Order)
+	OnBeforePower(b *Board, p *Player, order Order)
 }
 
 type Card struct {
@@ -67,9 +27,9 @@ func (c Card) Name() string {
 	return c.Nam
 }
 
-func (c Card) OnReveal(b *Board, p *Player) {}
-func (c Card) OnWin()                       {}
-func (c Card) OnLose()                      {}
-func (c Card) OnCycle()                     {}
-func (c Card) OnHandEnter()                 {}
-func (c Card) OnBeforePower()               {}
+func (c Card) OnReveal(b *Board, p *Player, order Order)      {}
+func (c Card) OnWin(b *Board, p *Player, order Order)         {}
+func (c Card) OnLose(b *Board, p *Player, order Order)        {}
+func (c Card) OnCycle(b *Board, p *Player, order Order)       {}
+func (c Card) OnHandEnter(b *Board, p *Player, order Order)   {}
+func (c Card) OnBeforePower(b *Board, p *Player, order Order) {}

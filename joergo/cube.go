@@ -2,13 +2,18 @@ package joerg
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 )
 
+// Cube is a custom deck of cards, often composed with a specific theme.
 type Cube struct {
+	// Cards contained within cube.
 	Cards []Carder `json:"cards"`
 }
 
+// lookup returns the underlying implementation of the given card, which handles
+// reveal actions and other card specific rules.
 func lookup(card Card) Carder {
 	switch card.Name() {
 	case "Biet":
@@ -73,12 +78,14 @@ func lookup(card Card) Carder {
 		return Boar{card}
 	case "Vässlan":
 		return Weasel{card}
+	default:
+		panic(fmt.Errorf("support for card %q has not been implemented yet", card.Name()))
 	}
-	panic("Unmapped card:" + card.Name())
 }
 
-func ReadCube(path string) (*Cube, error) {
-	buf, err := ioutil.ReadFile(path)
+// ReadCube reads the custom deck of cards specified in the given JSON file.
+func ReadCube(jsonPath string) (*Cube, error) {
+	buf, err := ioutil.ReadFile(jsonPath)
 	if err != nil {
 		return nil, err
 	}
