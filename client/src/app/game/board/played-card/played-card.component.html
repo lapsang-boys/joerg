@@ -1,6 +1,6 @@
 <div class="container" [class]="getOrderClass()">
 	<div class="card-wrapper" [class]="getOrderClass()">
-		<app-card-front [card]="this.playedCard?.card"></app-card-front>
+		<app-card [card]="this.playedCard?.card"></app-card>
 	</div>
 	<img class="pole" *ngIf="this.pole" src="assets/pole.png">
 </div>

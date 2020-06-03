@@ -1,6 +1,6 @@
 <h3>{{ this.player?.name }}</h3>
 <div class="hand-container" [style.font-size.px]="this.renderSize">
 	<div *ngFor="let card of this.player?.hand?.cards" class="card-wrapper">
-		<app-card-front [card]="card"></app-card-front>
+		<app-card [card]="card"></app-card>
 	</div>
 </div>

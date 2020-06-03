@@ -1,0 +1,10 @@
+<div class="container" (mouseenter)="handleHovered(true)" (mouseleave)="handleHovered(false)">
+	<div *ngIf="faceup" [@cardAnimation]>
+		<app-card-front
+			[card]="this.card"
+			[hoveredObservable]="this.hoveredSubject.asObservable()"></app-card-front>
+	</div>
+	<div *ngIf="!faceup" [@cardAnimation]>
+		<app-card-back></app-card-back>
+	</div>
+</div>

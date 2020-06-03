@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Card } from '../card.type';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-card-front',
@@ -9,14 +10,12 @@ import { Card } from '../card.type';
 export class CardFrontComponent implements OnInit {
 
 	@Input() card: Card;
+	@Input() hoveredObservable: Observable<boolean>;
 	hovered: boolean = false;
 
 	constructor() { }
 
 	ngOnInit(): void {
-	}
-
-	handleHovered(hovered: boolean) {
-		this.hovered = hovered;
+		this.hoveredObservable.subscribe(hovered => this.hovered = hovered);
 	}
 }

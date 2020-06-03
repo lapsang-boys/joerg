@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +15,8 @@ import { OtherHandsContainerComponent } from './game/hand/other-hands-container/
 import { BoardComponent } from './game/board/board/board.component';
 import { PlayedCardComponent } from './game/board/played-card/played-card.component';
 import { CardExpanderComponent } from './card/card-expander/card-expander.component';
+import { CardComponent } from './card/card/card.component';
+import { CardBackComponent } from './card/card-back/card-back.component';
 
 @NgModule({
 	declarations: [
@@ -28,10 +31,13 @@ import { CardExpanderComponent } from './card/card-expander/card-expander.compon
 		OtherHandsContainerComponent,
 		BoardComponent,
 		PlayedCardComponent,
-		CardExpanderComponent
+		CardExpanderComponent,
+		CardComponent,
+		CardBackComponent
 	],
 	imports: [
 		BrowserModule,
+		BrowserAnimationsModule,
 		AppRoutingModule
 	],
 	providers: [],
