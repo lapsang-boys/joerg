@@ -4,34 +4,34 @@ import { FromJson } from 'src/app/network/from.json';
 import { PlayedCard } from './played.card.type';
 
 export class Board implements FromJson {
-	board_id: number;
-	blocked_cards: Card[];
+	boardId: number;
+	blockedCards: Card[];
 	cube: Card[];
 	deck: Card[];
 	graveyard: Map<Player, Card[]>;
-	played_cards: PlayedCard[];
-	player_states: object;
+	playedCards: PlayedCard[];
+	playerStates: object;
 	players: Player[];
-	pole: number;
-	round_winner: number;
-	round_winning_card: Card;
-	starting_hand_size: number;
+	pole: Player;
+	roundWinner: number;
+	roundWinningCard: Card;
+	startingHandSize: number;
 	victories: Map<Player, number>;
-	wins_needed: number;
+	winsNeeded: number;
 
-	constructor(board_id: number) {
-		this.board_id = board_id;
+	constructor(boardId: number) {
+		this.boardId = boardId;
 	}
 
 	fromJson(json: Object) {
-		console.log(json);
+		console.log("board", json);
 		this.deck = (json['deck'] as object[]).map(raw => new Card(raw));
-		this.cube = (json['cube'] as object[]).map(raw => new Card(raw));
-		this.played_cards = (json['played_cards'] as object[]).map(raw => new PlayedCard(raw));
+		this.cube = (json['cube']['cards'] as object[]).map(raw => new Card(raw));
+		this.playedCards = (json['playedCards'] as object[]).map(raw => new PlayedCard(raw));
 		this.players = (json['players'] as object[]).map((raw) => new Player(raw));
 		this.pole = json['pole'];
-		if (json['round_winning_card']) {
-			this.round_winning_card = new Card(json['round_winning_card']);
+		if (json['roundWinningCard']) {
+			this.roundWinningCard = new Card(json['roundWinningCard']);
 		}
 	}
 }

@@ -16,8 +16,8 @@ export class PlayedCardsComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.game.getObservableBoard().subscribe(board => {
-			this.ownPlayedCard = board.played_cards[0];
-			this.otherPlayedCards = board.played_cards.slice(1);
+			this.ownPlayedCard = board.playedCards[0];
+			this.otherPlayedCards = board.playedCards.slice(1);
 		});
 	}
 

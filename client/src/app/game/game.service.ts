@@ -14,16 +14,16 @@ export class GameService {
 
 	start() {
 		this.socket.go();
-		this.socket.getTypeObservable<Board>('board').subscribe(payload => this.handleUpdate(payload));
+		this.socket.getTypeObservable<Board>('board').subscribe(payload => this.boardUpdate(payload));
 	}
 
 	next() {
-		this.socket.send({type: 'next_action', board_id: this.board.board_id})
+		this.socket.send({type: 'nextAction', boardId: this.board.boardId})
 	}
 
-	handleUpdate(payload: object) {
-		const rawBoard = payload['board'];
-		const boardId = payload['board_id']
+	boardUpdate(payload: object) {
+		const rawBoard = payload['payload']['board'];
+		const boardId = payload['payload']['boardId']
 		this.board = new Board(boardId);
 		this.board.fromJson(rawBoard);
 		this.boardSubject.next(this.board);

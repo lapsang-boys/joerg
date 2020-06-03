@@ -14,7 +14,7 @@ export class BoardComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.game.getObservableBoard().subscribe(board => {
-			this.poleIndex = board.pole;
+			this.poleIndex = board.pole.index;
 		});
 	}
 

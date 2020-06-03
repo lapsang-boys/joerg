@@ -29,7 +29,7 @@ export class PlayedCardComponent implements OnInit {
 	}
 
 	isPole(): boolean {
-		const poleIndex = this.board.pole;
+		const poleIndex = this.board.pole.index;
 		const playerIndex = this.playedCard.player.index;
 		return poleIndex === playerIndex;
 	}

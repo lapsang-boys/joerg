@@ -16,7 +16,7 @@ export class SocketService {
 	go() {
 		this.socket = webSocket('ws://192.168.1.109:8000');
 		this.socket.asObservable().subscribe(data => this.routeServerData(data));
-		this.socket.next({type: 'newGame', numPlayers: 4, winsNeeded: 3, startingHandSize: 4});
+		this.socket.next({type: 'newGame', numPlayers: 4, startingHandSize: 4, winsNeeded: 3});
 	}
 
 	send(payload: object) {
