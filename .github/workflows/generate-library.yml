@@ -6,8 +6,14 @@ name: Node.js CI
 on:
   push:
     branches: [ master ]
+    paths:
+    - 'client/**'
+    - '.github/workflows/generate-library.yml'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'client/**'
+    - '.github/workflows/generate-library.yml'
 
 jobs:
   build:
