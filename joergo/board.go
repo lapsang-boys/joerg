@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	LIBRARY_PATH    = "cards.json"
+	LIBRARY_PATH    = "../cards.json"
 	MINIMUM_PLAYERS = 3
 	MAXIMUM_PLAYERS = 6
 )
