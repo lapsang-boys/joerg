@@ -4,4 +4,12 @@
 		<h2>Pole: {{ poleIndex }}</h2>
 	</div>
 	<app-played-cards></app-played-cards>
+	<div *ngIf="choice">
+		You have a choice!
+		<ul>
+			<li *ngFor="let item of choice.items; let i = index">
+				<button (click)="choose(i)">{{ item | json }}</button>
+			</li>
+		</ul>
+	</div>
 </section>
