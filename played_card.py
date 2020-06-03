@@ -86,7 +86,7 @@ class PlayedCard:
 
     @assert_same_deck_size
     @assert_card_only_in_one_place
-    @assert_same_handsizes
+    # @assert_same_handsizes
     def on_reveal(self, board: "Board") -> None:
         self.card.on_reveal(board, self.player, self.order)
 

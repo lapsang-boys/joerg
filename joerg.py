@@ -3,11 +3,10 @@ import logging
 import random
 import sys
 
-from board import Board
+from board import Board, Victory, PlayerPolicy
 from cards.cards import read_cards
 from log import new_logger
 from logo import print_logo
-from order import Order
 
 NUMBER_OF_WINNING_ROUNDS_NEEDED = 3
 NUMBER_OF_PLAYERS = 4
@@ -15,22 +14,40 @@ STARTING_HAND_SIZE = NUMBER_OF_WINNING_ROUNDS_NEEDED + 1
 LIBRARY_PATH = "./cards/cards.json"
 
 
-class Victory(Exception):
-    pass
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--seed", help="Set random seed")
+    parser.add_argument(
+        "-v", "--verbose", help="increase output verbosity", action="store_true"
+    )
+    return parser.parse_args()
+
+
+def init_game() -> Board:
+    deck = read_cards(LIBRARY_PATH)
+
+    player_policies = [PlayerPolicy.Human]
+    for p_num in range(NUMBER_OF_PLAYERS-1):
+        player_policies.append(PlayerPolicy.Bot)
+
+    board = Board(
+        deck,
+        number_of_players=NUMBER_OF_PLAYERS,
+        starting_hand_size=STARTING_HAND_SIZE,
+        wins_needed=NUMBER_OF_WINNING_ROUNDS_NEEDED,
+        player_policies=player_policies,
+    )
+    board.randomly_assign_pole()
+    board.shuffle_deck()
+    board.deal_cards()
+
+
+    return board
 
 
 def joerg_round(board: Board):
     board.begin_round()
-
-    for player in board.players:
-        valid_cards = board.valid_plays(player.hand)
-        assert len(valid_cards) >= 1, f"No valid cards to play! {player.hand}"
-
-        chosen_card = player.player_picks(valid_cards)
-        player.remove_card_from_hand(chosen_card)
-
-        chosen_order = player.player_picks([Order.attack, Order.defense])
-        board.commit_card(player, chosen_card, chosen_order)
+    board.commit_phase()
 
     LOGGER.info(f"{board}")
 
@@ -40,17 +57,8 @@ def joerg_round(board: Board):
     for resolving_card in board.get_played_cards():
         LOGGER.info(f"{resolving_card}")
 
-    winning_card = board.resolve_power()
-    board.resolve_winner(winning_card)
-    LOGGER.info("")
-    LOGGER.info("")
-    LOGGER.info(f"Winning card! {winning_card.card} played by {winning_card.player}")
-    if (
-        winning_card.player
-        and board.victories[winning_card.player] == NUMBER_OF_WINNING_ROUNDS_NEEDED
-    ):
-        raise Victory()
-
+    board.resolve_power()
+    board.resolve_winner()
     board.resolve_win_lose()
     board.end_resolve_phase()
     board.cycle_phase()
@@ -66,30 +74,6 @@ def end_of_game(board: Board):
     LOGGER.info("Victories")
     for player in board.victories:
         LOGGER.info(f"\t{player} won {board.victories[player]} sticks")
-
-
-def init_game() -> Board:
-    deck = read_cards(LIBRARY_PATH)
-    board = Board(
-        deck,
-        number_of_players=NUMBER_OF_PLAYERS,
-        starting_hand_size=STARTING_HAND_SIZE,
-        wins_needed=NUMBER_OF_WINNING_ROUNDS_NEEDED,
-    )
-    board.randomly_assign_pole()
-    board.shuffle_deck()
-    board.deal_cards()
-
-    return board
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--seed", help="Set random seed")
-    parser.add_argument(
-        "-v", "--verbose", help="increase output verbosity", action="store_true"
-    )
-    return parser.parse_args()
 
 
 def main(args):

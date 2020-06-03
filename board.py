@@ -17,6 +17,10 @@ class PlayerStates(Enum):
     UnableToWin = 2
 
 
+class Victory(Exception):
+    pass
+
+
 class ActivePlayerState:
     def __init__(self, state: PlayerStates, duration: int, action: Callable[[], None]):
         self.state: PlayerStates = state
@@ -93,6 +97,17 @@ class Board:
 
     def shuffle_deck(self) -> None:
         random.shuffle(self.deck)
+
+    def commit_phase(self) -> None:
+        for player in self.players:
+            valid_cards = self.valid_plays(player.hand)
+            assert len(valid_cards) >= 1, f"No valid cards to play! {player.hand}"
+
+            chosen_card = player_picks(player, valid_cards, "Chose a card to commit!")
+            player.remove_card_from_hand(chosen_card)
+
+            chosen_order = player_picks(player, [Order.attack, Order.defense], "Chose card order!")
+            self.commit_card(player, chosen_card, chosen_order)
 
     def progress_pole(self) -> None:
         next_player = self.get_next_player(self.get_pole_player())
@@ -217,11 +232,11 @@ class Board:
         self.add_cycled_cards_to_bottom_of_deck(cycled_cards)
 
     def cycle_for_player(self, player: Player) -> Card:
-        random_card = player.get_random_card_from_hand()
+        chosen_card = player.player_picks(player.hand, "Chose card to cycle.")
 
-        self.player_cycle_card(player, random_card)
+        self.player_cycle_card(player, chosen_card)
 
-        return random_card
+        return chosen_card
 
     def player_cycle_card(self, player: Player, card: Card):
         player.remove_card_from_hand(card)
@@ -322,20 +337,33 @@ class Board:
         if not best_card:
             raise RuntimeError(f"Unable to find best card! Board: {self}")
 
-        return best_card
+        self.best_card = best_card
 
     def player_will_win_next_round(self, player: Player) -> bool:
         return self.victories[player] + 1 == self.wins_needed
 
-    def resolve_winner(self, winning_card: PlayedCard) -> None:
-        if self.player_will_win_next_round(winning_card.player) and self.player_states[
-            winning_card.player
-        ].has_state(PlayerStates.UnableToWin):
-            pass
-        else:
-            self.set_round_winner(winning_card.player)
-            self.set_round_winning_card(winning_card.card.copy())
-            self.victories[winning_card.player] += 1
+    def resolve_winner(self) -> None:
+        if self.player_will_win_next_round(
+            self.best_card.player
+        ) and self.player_states[self.best_card.player].has_state(
+            PlayerStates.UnableToWin
+        ):
+            return
+
+        self.set_round_winner(self.best_card.player)
+        self.set_round_winning_card(self.best_card.card.copy())
+        self.victories[self.best_card.player] += 1
+
+        LOGGER.info("")
+        LOGGER.info("")
+        LOGGER.info(
+            f"Winning card! {self.best_card.card} played by {self.best_card.player}"
+        )
+        if (
+            self.best_card.player
+            and self.victories[self.best_card.player] == self.wins_needed
+        ):
+            raise Victory()
 
     def add_to_graveyard(self, player: Player, card: Card) -> None:
         self.graveyard[player].append(card)
@@ -385,8 +413,8 @@ class Board:
             "graveyard": {p.num: graveyard for p, graveyard in self.graveyard.items()},
             "victories": {p.num: victories for p, victories in self.victories.items()},
             # Card blocked for _int_ number of turns.
-            "blocked_cards": self.blocked_cards,
-            "player_states": {p.num: ps for p, ps in self.player_states.items()},
+            "blocked_cards": {c.name: turns for c, turns in self.blocked_cards.items()},
+            "player_states": {p.num: {asdf.name: qwerty for asdf, qwerty in ps.states.items()} for p, ps in self.player_states.items()},
             "starting_hand_size": self.starting_hand_size,
             "wins_needed": self.wins_needed,
         }
