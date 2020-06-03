@@ -8,14 +8,13 @@ WIP
 ## Installation
 
 ```bash
-$ python -m venv .venv
-$ source .venv/bin/activate
-(.venv) $ pip install -r ./requirements.txt
+$ git clone --recursive git@github.com:lapsang-boys/joerg.git
+$ cd joerg/joerggo
+$ go install ./cmd/joerg-server
 ```
 
 ## Usage
 
 ```bash
-(.venv) $ python joerg.py
+$ joerg-server
 ```
-
