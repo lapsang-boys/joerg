@@ -225,6 +225,9 @@ func (c *Connection) Handle() {
 }
 
 func server(w http.ResponseWriter, r *http.Request) {
+	upgrader.CheckOrigin = func(*http.Request) bool {
+		return true
+	}
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		sugar.Info("upgrade:", zap.Error(err))
