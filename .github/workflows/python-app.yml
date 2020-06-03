@@ -6,8 +6,14 @@ name: Python application
 on:
   push:
     branches: [ master ]
+    paths:
+    - 'py-joerg/**'
+    - '.github/workflows/python-app.yml'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'py-joerg/**'
+    - '.github/workflows/python-app.yml'
 
 jobs:
   build:
