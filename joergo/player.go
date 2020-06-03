@@ -28,9 +28,9 @@ type Player struct {
 	Hand []Carder `json:"hand"`
 	// Map from card name to hand card state.
 	HandStates    map[string]HandCardState `json:"handStates"`
-	receiveChoice chan []byte              `json:"-"`
+	receiveChoice chan []byte
 
-	sendObject func(typ string, v interface{}) `json:"-"`
+	sendObject func(typ string, v interface{})
 }
 
 func NewPlayer(num int, name string, recvChoice chan []byte, sendObject func(typ string, v interface{})) *Player {

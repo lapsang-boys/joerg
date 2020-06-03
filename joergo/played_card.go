@@ -1,8 +1,8 @@
 package joerg
 
 type PlayedCard struct {
-	Player   *Player
-	Card     Carder
-	Order    Order
-	Revealed bool
+	Player   *Player `json:"player"`
+	Card     Carder  `json:"card"`
+	Order    Order   `json:"order"`
+	Revealed bool    `json:"revealed"`
 }
