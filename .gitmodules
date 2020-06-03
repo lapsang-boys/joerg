@@ -1,0 +1,3 @@
+[submodule "client/src/assets/art"]
+	path = client/src/assets/art
+	url = git@github.com:lapsang-boys/joerg-assets
