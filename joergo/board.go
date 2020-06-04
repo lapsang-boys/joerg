@@ -210,6 +210,30 @@ func (b *Board) ProgressPole() {
 	b.Pole = b.NextPlayer(b.Pole)
 }
 
+func (b *Board) SetPole(p *Player) {
+	b.Pole = p
+}
+
+func (b *Board) Opponents(p *Player) []*Player {
+	players := []*Player{}
+	for _, opp := range b.Players {
+		if opp.Name == p.Name {
+			continue
+		}
+		players = append(players, opp)
+	}
+	return players
+}
+
+func (b *Board) PlayersPlayedCard(p *Player) PlayedCard {
+	for _, pc := range b.PlayedCards {
+		if pc.Player.Name == p.Name {
+			return pc
+		}
+	}
+	panic(fmt.Sprintf("Player %s haven't played a card!", p.Name))
+}
+
 func (b *Board) NextPlayer(p *Player) *Player {
 	return b.Players[(p.Num+1)%len(b.Players)]
 }
