@@ -118,6 +118,10 @@ func (p *Player) RandomChoice(items []interface{}, context string, numItems uint
 	return items[randIdx], nil
 }
 
+func (p *Player) RandomCardInHand() Carder {
+	return p.Hand[rand.Intn(len(p.Hand))]
+}
+
 func (p *Player) AddCardToHand(c Carder) {
 	p.Hand = append(p.Hand, c)
 }
