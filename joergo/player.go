@@ -104,7 +104,7 @@ func (p *Player) RandomChoice(items []interface{}, context string, numItems uint
 	fmt.Println(p.Name + ": Making random choice")
 	fmt.Println(context)
 	if len(items) == 0 {
-		return nil, errors.New("choice: items list is empty.")
+		return nil, errors.New("choice: items list is empty")
 	}
 	randIdx := rand.Intn(len(items))
 	return items[randIdx], nil
