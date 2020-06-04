@@ -29,7 +29,7 @@ export class Board implements FromJson {
 		this.cube = (json['cube']['cards'] as object[]).map(raw => new Card(raw));
 		this.playedCards = (json['playedCards'] as object[]).map(raw => new PlayedCard(raw));
 		this.players = (json['players'] as object[]).map((raw) => new Player(raw));
-		this.pole = json['pole'];
+		this.pole = new Player(json['pole']);
 		if (json['roundWinningCard']) {
 			this.roundWinningCard = new Card(json['roundWinningCard']);
 		}
