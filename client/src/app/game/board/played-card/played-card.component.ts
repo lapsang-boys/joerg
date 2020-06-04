@@ -25,7 +25,7 @@ export class PlayedCardComponent implements OnInit {
 	}
 
 	getOrderClass() {
-		return PlayOrder[this.playedCard.order];
+		return this.playedCard.order;
 	}
 
 	isPole(): boolean {
