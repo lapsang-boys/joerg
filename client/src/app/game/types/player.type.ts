@@ -8,7 +8,7 @@ export class Player {
 
 	constructor(payload: object) {
 		this.index = payload['num'];
-		this.name = payload['Name'];
+		this.name = payload['name'];
 		this.id = this.index;
 		this.hand = new Hand(payload);
 	}
