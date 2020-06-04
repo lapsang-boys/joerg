@@ -28,15 +28,15 @@ export class GameService {
 	}
 
 	boardUpdate(payload: object) {
-		const rawBoard = payload['payload']['board'];
-		const boardId = payload['payload']['boardId']
+		const rawBoard = payload['board'];
+		const boardId = payload['boardId']
 		this.board = new Board(boardId);
 		this.board.fromJson(rawBoard);
 		this.boardSubject.next(this.board);
 	}
 
 	choiceUpdate(payload: object) {
-		const rawChoice = payload['payload'];
+		const rawChoice = payload;
 		const choice = new Choice();
 		choice.fromJson(rawChoice);
 		this.choiceSubject.next(choice);
@@ -44,7 +44,7 @@ export class GameService {
 
 	errorUpdate(payload: object) {
 		const joergError = new JoergError();
-		joergError.fromJson(payload);
+		joergError.fromJson(payload["error"]);
 		this.errorSubject.next(joergError);
 	}
 
