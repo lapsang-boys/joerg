@@ -16,25 +16,25 @@ const (
 	RpcTypeChoice     RpcType = "choice"
 )
 
-type NewGameRequest struct {
+type ClientNewGameRequest struct {
 	Type             string `json:"type"`
 	NumPlayers       uint   `json:"numPlayers"`
 	StartingHandSize uint   `json:"startingHandSize"`
 	WinsNeeded       uint   `json:"winsNeeded"`
 }
 
-type BoardResponse struct {
+type ServerBoardResponse struct {
 	Type    RpcType `json:"type"`
 	Board   *Board  `json:"board"`
 	BoardId int     `json:"boardId"`
 }
 
-type NextActionRequest struct {
+type ClientNextActionRequest struct {
 	Type    string `json:"type"`
 	BoardId int    `json:"boardId"`
 }
 
-type ChoiceResponse struct {
+type ClientChoiceResponse struct {
 	Type     string `json:"type"`
 	Choice   int    `json:"choice"`
 	BoardId  int    `json:"boardId"`

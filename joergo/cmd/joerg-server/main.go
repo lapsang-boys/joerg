@@ -29,7 +29,7 @@ func (srv *Server) newGame(message []byte, c Connection) {
 		}
 	}()
 
-	var ng joerg.NewGameRequest
+	var ng joerg.ClientNewGameRequest
 	err := json.Unmarshal(message, &ng)
 	if err != nil {
 		c.sendError(err)
@@ -101,7 +101,7 @@ outer:
 		for _, step := range steps {
 			log.Println(i)
 			step()
-			out := joerg.BoardResponse{
+			out := joerg.ServerBoardResponse{
 				Type:    joerg.ResponseTypeBoard,
 				Board:   b,
 				BoardId: boardId,
@@ -145,7 +145,7 @@ func (c Connection) sendObject(v interface{}) {
 }
 
 func (srv *Server) nextAction(message []byte, c Connection) {
-	var na joerg.NextActionRequest
+	var na joerg.ClientNextActionRequest
 	err := json.Unmarshal(message, &na)
 	c.sendError(err)
 	sugar.Info("NextAction", na)
