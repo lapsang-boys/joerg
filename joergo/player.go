@@ -3,7 +3,6 @@ package joerg
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"math/rand"
 )
@@ -44,6 +43,23 @@ func NewPlayer(num int, name string, recvChoice chan []byte, sendObject func(v i
 	}
 }
 
+func (p *Player) pick(items []interface{}, context string) (ClientChoiceResponse, error) {
+	out := ServerRequestChoice{
+		Type:     RpcTypeChoice,
+		Items:    items,
+		Context:  context,
+		NumItems: 1,
+	}
+	log.Println("Sending choice!")
+	p.sendObject(out)
+	log.Println("In between!")
+	respPayload := <-p.receiveChoice
+	log.Println("Received choice")
+	var choice ClientChoiceResponse
+	err := json.Unmarshal(respPayload, &choice)
+	return choice, err
+}
+
 func (p *Player) PickCard(cards []Carder, context string) (card Carder, err error) {
 	var items []interface{}
 	for _, card := range cards {
@@ -53,19 +69,7 @@ func (p *Player) PickCard(cards []Carder, context string) (card Carder, err erro
 		choice, err := p.RandomChoice(items, context, 1)
 		return choice.(Carder), err
 	}
-	out := ServerRequestChoice{
-		Type:     RpcTypeChoice,
-		Items:    items,
-		Context:  context,
-		NumItems: 1,
-	}
-	fmt.Println("Sending choice!")
-	p.sendObject(out)
-	fmt.Println("In between!")
-	respPayload := <-p.receiveChoice
-	fmt.Println("Received choice")
-	var choice ChoiceResponse
-	err = json.Unmarshal(respPayload, &choice)
+	choice, err := p.pick(items, context)
 	if err != nil {
 		return nil, err
 	}
@@ -81,28 +85,32 @@ func (p *Player) PickOrder(context string) (order Order, err error) {
 		choice, err := p.RandomChoice(items, context, 1)
 		return choice.(Order), err
 	}
-	out := ServerRequestChoice{
-		Type:     RpcTypeChoice,
-		Items:    items,
-		Context:  context,
-		NumItems: 1,
-	}
-	fmt.Println("Sending choice!")
-	p.sendObject(out)
-	fmt.Println("In between!")
-	respPayload := <-p.receiveChoice
-	fmt.Println("Received choice")
-	var choice ChoiceResponse
-	err = json.Unmarshal(respPayload, &choice)
+	choice, err := p.pick(items, context)
 	if err != nil {
 		return 0, err
 	}
 	return items[choice.Choice].(Order), nil
 }
 
+func (p *Player) PickPlayer(players []*Player, context string) (*Player, error) {
+	var items []interface{}
+	for _, p := range players {
+		items = append(items, p)
+	}
+	if p.Num != 0 {
+		choice, err := p.RandomChoice(items, context, 1)
+		return choice.(*Player), err
+	}
+	choice, err := p.pick(items, context)
+	if err != nil {
+		return nil, err
+	}
+	return items[choice.Choice].(*Player), nil
+}
+
 func (p *Player) RandomChoice(items []interface{}, context string, numItems uint) (v interface{}, err error) {
-	fmt.Println(p.Name + ": Making random choice")
-	fmt.Println(context)
+	log.Println(p.Name + ": Making random choice")
+	log.Println(context)
 	if len(items) == 0 {
 		return nil, errors.New("choice: items list is empty")
 	}
