@@ -246,6 +246,7 @@ func (b *Board) EndRound() {
 func (b *Board) ResolveBeforePower() {
 	log.Println("ResolveBeforePower")
 	for _, pc := range b.PlayedCards {
+		pc.Card.OnBeforePower(b, pc.Player, pc.Order)
 		log.Println(pc)
 	}
 }
