@@ -1,0 +1,6 @@
+<h1>The Library</h1>
+<div class="library-container">
+	<div *ngFor="let card of this.cards" class="card-wrapper">
+		<app-card [card]="card" (click)="add(card)"></app-card>
+	</div>
+</div>

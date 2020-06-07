@@ -1,0 +1,11 @@
+.library-container {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: center;
+	overflow: auto;
+}
+
+.card-wrapper {
+	margin: 1em;
+}

@@ -1,0 +1,11 @@
+<div class="outer">
+	<h1 (click)="changeName()">{{ cubeName }}</h1>
+	<div class="cards">
+		<ng-container *ngIf="!noCards; else nocards">
+			<app-card-compact *ngFor="let card of cube.cards" [card]="card"></app-card-compact>
+		</ng-container>
+	</div>
+	<ng-template #nocards>
+		This will be filled with cards eventually!
+	</ng-template>
+</div>

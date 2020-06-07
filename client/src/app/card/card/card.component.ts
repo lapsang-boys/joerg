@@ -28,12 +28,12 @@ export class CardComponent implements OnInit {
 	@Input() card: Card;
 	hovered = false;
 	hoveredSubject: BehaviorSubject<boolean> = new BehaviorSubject(this.hovered);
-	faceup = false;
+	faceup = true;
 
 	constructor() { }
 
 	ngOnInit(): void {
-		setInterval(() => this.setFacing(), 2000);
+		// setInterval(() => this.setFacing(), 2000);
 	}
 
 	handleHovered(hovered: boolean) {

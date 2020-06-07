@@ -17,6 +17,10 @@ import { PlayedCardComponent } from './game/board/played-card/played-card.compon
 import { CardExpanderComponent } from './card/card-expander/card-expander.component';
 import { CardComponent } from './card/card/card.component';
 import { CardBackComponent } from './card/card-back/card-back.component';
+import { CubeDesignerComponent } from './cube/cube-designer/cube-designer.component';
+import { CubeOverviewComponent } from './cube/cube-overview/cube-overview.component';
+import { CardCompactComponent } from './card/card-compact/card-compact.component';
+import { CubeLibraryComponent } from './cube/cube-library/cube-library.component';
 
 @NgModule({
 	declarations: [
@@ -33,7 +37,11 @@ import { CardBackComponent } from './card/card-back/card-back.component';
 		PlayedCardComponent,
 		CardExpanderComponent,
 		CardComponent,
-		CardBackComponent
+		CardBackComponent,
+		CubeDesignerComponent,
+		CubeOverviewComponent,
+		CardCompactComponent,
+		CubeLibraryComponent
 	],
 	imports: [
 		BrowserModule,
