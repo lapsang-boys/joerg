@@ -47,4 +47,21 @@ func (um UrsaMinor) OnBeforePower(b *Board, p *Player, order Order) {
 	b.SetPole(chosenPlayer)
 	log.Printf("%s chose %s to gain pole before power resolves", p.Name, chosenPlayer.Name)
 }
+
+func (m Mosquito) OnReveal(b *Board, p *Player, order Order) {
+	// Överraskning: Byt detta kort mot ett slumpmässigt kort i valfri spelares hand.
+	// log.Printf("%s reveals %s", p.Name, m.Name())
+	// opponent, err := p.PickPlayer(b.Opponents(p), fmt.Sprintf("Pick a player, %s will be swapped with a random card from their hand.", m.Name()))
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
+
+	// randomCard := opponent.RandomCardInHand()
+	// opponent.RemoveCardFromHand(randomCard)
+
+	// log.Printf("%s swapped with %s's %s", m.Name(), opponent.Name, randomCard.Name())
+	// myggaAc := b.PlayersPlayedCard(p)
+	// opponent.AddCardToHand(myggaAc.Card)
+	// myggaAc.Card = randomCard
 }

@@ -1,0 +1,28 @@
+.outer {
+	display: grid;
+	grid-template-columns: 8em auto;
+	align-items: center;
+	width: 100%;
+	padding: 0 1em;
+	box-sizing: border-box;
+	border: 1px solid black;
+}
+
+.identifier {
+	font-family: 'Cinzel';
+	display: grid;
+	grid-template-columns: 1em auto;
+}
+
+.identifier .power {
+}
+
+.identifier .name {
+}
+
+.profile img {
+	width: 100%;
+	height: 3em;
+	object-fit: cover;
+	object-position: 50% 30%;
+}

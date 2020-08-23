@@ -1,0 +1,4 @@
+.outer {
+	display: grid;
+	grid-template-columns: 25em auto;
+}

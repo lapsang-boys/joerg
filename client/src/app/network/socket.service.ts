@@ -14,7 +14,7 @@ export class SocketService {
 	constructor() { }
 
 	go() {
-		this.socket = webSocket('ws://192.168.1.109:8000');
+		this.socket = webSocket('ws://192.168.1.109:8080');
 		this.socket.asObservable().subscribe(data => this.routeServerData(data));
 		this.socket.next({type: 'newGame', numPlayers: 4, startingHandSize: 4, winsNeeded: 3});
 	}
