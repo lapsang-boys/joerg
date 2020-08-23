@@ -20,7 +20,10 @@ export class CubeService {
 	this.update();
   }
 
-  update(): void {
-	this.cubeSubject.next(this._cube);
+  update(cube?: Cube): void {
+    if (cube) {
+      this._cube = cube;
+    }
+    this.cubeSubject.next(this._cube);
   }
 }

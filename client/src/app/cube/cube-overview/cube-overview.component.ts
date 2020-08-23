@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Cube } from "../cube.type";
 import cards from 'src/app/library/cards.json';
 import { CubeService } from "../cube.service";
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-cube-overview',
@@ -28,5 +29,10 @@ export class CubeOverviewComponent implements OnInit {
 
   changeName() {
 	console.log("You pressed cube name!")
+  }
+
+  dragCardDrop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.cube.cards, event.previousIndex, event.currentIndex);
+    this.cubeService.update(this.cube);
   }
 }

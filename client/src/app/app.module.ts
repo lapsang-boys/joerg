@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { DragDropModule } from '@angular/cdk/drag-drop'; 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './nav/navbar/navbar.component';
@@ -46,7 +48,8 @@ import { CubeLibraryComponent } from './cube/cube-library/cube-library.component
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
-		AppRoutingModule
+		AppRoutingModule,
+		DragDropModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent]
