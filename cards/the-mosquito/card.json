@@ -1,0 +1,9 @@
+{
+    "name": "Myggan",
+    "en": "The Mosquito",
+    "power": 2,
+    "ruling": "Överraskning: Byt detta kort mot ett slumpmässigt kort i valfri spelares hand.",
+    "flavor": "",
+    "portrait": "myggan.png",
+    "legendary": false
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Fjällräven",
+    "en": "Arctic fox",
+    "power": 4,
+    "ruling": "Om det är lika många kort spelade i attack som i försvar så har Fjällräven prioritet över polstjärnan.",
+    "flavor": "I fjällen kan ingen höra dig frysa",
+    "portrait": "./arctic-fox.png",
+    "legendary": false
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Vässlan",
+    "en": "The Weasel",
+    "power": 3,
+    "ruling": "Överraskning: Tvinga spelaren med det senaste sticket att byta sitt kort med lägst styrka med dig.",
+    "flavor": "",
+    "portrait": "vässlan.png",
+    "legendary": false
+}

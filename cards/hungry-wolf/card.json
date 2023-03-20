@@ -1,0 +1,9 @@
+{
+    "name": "Hungrig Varg",
+    "en": "Hungry Wolf",
+    "power": 5,
+    "ruling": "Överraskning: om detta kort spelats i försvar: ät upp ett kort som ännu inte visats. Lägg på lika mycket i styrka på vargen som det valda kortet har i styrka, permanent.",
+    "flavor": "",
+    "portrait": "varg.png",
+    "legendary": false
+}

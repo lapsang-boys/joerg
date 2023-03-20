@@ -1,0 +1,9 @@
+{
+    "name": "Igelkotten",
+    "en": "Hedgehog",
+    "power": 3,
+    "ruling": "Motståndare med 4 eller mer i styrka skadas och förlorar 1 i styrka.",
+    "flavor": "",
+    "portrait": "igelkotten.png",
+    "legendary": false
+}

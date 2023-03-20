@@ -1,0 +1,9 @@
+{
+    "name": "Förtryckt Aborre",
+    "en": "Suppressed Perch",
+    "power": 3,
+    "ruling": "Defense: Förtryckt Aborre får +1 i styrka. Offense: Förtryckt Aborre får -1 styrka",
+    "flavor": "Bara döda fiskar följer med strömmen.",
+    "portrait": "aborre.png",
+    "legendary": false
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Vildsvinet",
+    "en": "Boar",
+    "power": 5,
+    "ruling": "Överraskning: Du spelar nästa runda blint (korten upp och ner). Man kan inte vinna sista sticket med detta kort.",
+    "flavor": "",
+    "portrait": "vildsvinet.png",
+    "legendary": false
+}

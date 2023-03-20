@@ -1,0 +1,9 @@
+{
+    "name": "Svan",
+    "en": "Swan",
+    "power": 3,
+    "ruling": "Om styrkan är oavgjord så går svanen segrande oavsett Polstjärneordning.",
+    "flavor": "En svan bråkar en inte med ostraffat.",
+    "portrait": "svan.png",
+    "legendary": false
+}

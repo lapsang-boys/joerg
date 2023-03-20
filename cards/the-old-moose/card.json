@@ -1,0 +1,9 @@
+{
+    "name": "Gamle älgen",
+    "en": "The Old Moose",
+    "power": 4,
+    "ruling": "On Lose: Byt detta kort mot en motspelares kort som också förlorade.",
+    "flavor": "",
+    "portrait": "älg.png",
+    "legendary": false
+}

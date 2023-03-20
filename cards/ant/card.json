@@ -1,0 +1,9 @@
+{
+    "name": "Myra",
+    "en": "Ant",
+    "power": 1,
+    "ruling": "-",
+    "flavor": "Ett antal myror är fler än ett lite färre antal elefanter.",
+    "portrait": "myra.png",
+    "legendary": false
+}

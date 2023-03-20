@@ -1,0 +1,9 @@
+{
+    "name": "Myrslok",
+    "en": "Anteater",
+    "power": 5,
+    "ruling": "Överraskning: Myrsloken får utbytas mot myra innan resolvfasen inleds.",
+    "flavor": "",
+    "portrait": "myrslok.png",
+    "legendary": false
+}

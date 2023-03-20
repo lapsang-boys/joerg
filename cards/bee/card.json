@@ -1,0 +1,9 @@
+{
+    "name": "Biet",
+    "en": "Bee",
+    "power": 2,
+    "ruling": "On Lose: Välj en motspelare och ett random kort i dennes hand. Spelaren spelar med detta kort exponerat.",
+    "flavor": "",
+    "portrait": "biet.png",
+    "legendary": false
+}

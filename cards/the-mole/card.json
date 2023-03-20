@@ -1,0 +1,9 @@
+{
+    "name": "Mullvaden",
+    "en": "The Mole",
+    "power": 3,
+    "ruling": "On Lose: Byt det här kortet mot valfritt kort i en stickhög som har lägre styrka.",
+    "flavor": "",
+    "portrait": "vässlan.png",
+    "legendary": false
+}

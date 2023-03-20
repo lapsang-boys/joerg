@@ -1,0 +1,9 @@
+{
+    "name": "Groda",
+    "en": "Frog",
+    "power": 2,
+    "ruling": "Target opponent swaps card with one in their hand.",
+    "flavor": "Grodor hoppar, paddor kryper. Det är skillnaden.",
+    "portrait": "groda.png",
+    "legendary": false
+}

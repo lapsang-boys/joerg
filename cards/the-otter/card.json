@@ -1,0 +1,9 @@
+{
+    "name": "Uttern",
+    "en": "The Otter",
+    "power": 2,
+    "ruling": "Överraskning: Om ett annat kort med 4+ styrka finns uppvisad, minska dess och dennes korts styrka med 1",
+    "flavor": "",
+    "portrait": "uttern.png",
+    "legendary": false
+}

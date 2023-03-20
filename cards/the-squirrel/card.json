@@ -1,0 +1,9 @@
+{
+    "name": "Ekorren",
+    "en": "The Squirrel",
+    "power": 2,
+    "ruling": "Överraskning: Välj ett ej visat kort som får stumhet.",
+    "flavor": "",
+    "portrait": "ekorren.png",
+    "legendary": false
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Falken",
+    "en": "The Falcon",
+    "power": 3,
+    "ruling": "On Win: Titta på valfri spelares hand. Överraskning: Välj ett kort! Om dess styrka är mindre eller lika med 2 lägg på så mycket på falken.",
+    "flavor": "",
+    "portrait": "falken.png",
+    "legendary": false
+}

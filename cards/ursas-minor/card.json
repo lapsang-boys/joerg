@@ -1,0 +1,9 @@
+{
+    "name": "Lilla Björn",
+    "en": "Ursas Minor",
+    "power": 4,
+    "ruling": "Innan styrka tar effekt vid strid, välj en ny Polstjärneposition. Legendary.",
+    "flavor": "",
+    "portrait": "lilla_björn.png",
+    "legendary": true
+}

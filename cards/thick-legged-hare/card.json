@@ -1,0 +1,9 @@
+{
+    "name": "Storbent hare",
+    "en": "Thick Legged Hare",
+    "power": 3,
+    "ruling": "Överraskning: Om detta kort inte är det första som visas denna tur och har störst styrka (>=) lägg permanent till två styrka på detta kort.",
+    "flavor": "",
+    "portrait": "hare.png",
+    "legendary": false
+}

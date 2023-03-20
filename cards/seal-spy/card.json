@@ -1,0 +1,9 @@
+{
+    "name": "Sälspion",
+    "en": "Seal Spy",
+    "power": 2,
+    "ruling": "Om spelad i attackläge, titta på ett valfritt kort från en motståndares hand.",
+    "flavor": "",
+    "portrait": "sälen.png",
+    "legendary": false
+}

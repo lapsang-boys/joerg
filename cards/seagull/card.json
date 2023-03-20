@@ -1,0 +1,9 @@
+{
+    "name": "Fiskmås",
+    "en": "Seagull",
+    "power": 5,
+    "ruling": "Överraskning: Du förlorar ett stick!",
+    "flavor": "Falukorv fick namnet för fiskmåsarna klippte dem.",
+    "portrait": "fiskmås.png",
+    "legendary": false
+}

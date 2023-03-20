@@ -1,0 +1,9 @@
+{
+    "name": "Skatan",
+    "en": "Magpie",
+    "power": 3,
+    "ruling": "On Lose: Cycle Skatan, and all players puts 1 card from their hand into 1 pile. Owner of Skatan picks 1 card and returns the rest randomly.",
+    "flavor": "",
+    "portrait": "skatan.png",
+    "legendary": false
+}

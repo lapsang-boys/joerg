@@ -1,0 +1,9 @@
+{
+    "name": "Paddan",
+    "en": "The Toad",
+    "power": 3,
+    "ruling": "Överraskning: Välj ett av motståndare spelat kort, och välj sedan en till spelare (får inte vara ägaren av kortet). Denna spelare byter ett kort i sin hand mot the valda kortet.",
+    "flavor": "",
+    "portrait": "paddan.png",
+    "legendary": false
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Räv",
+    "en": "Fox",
+    "power": 4,
+    "ruling": "On Win: Two opponents of your choice initiate trade.",
+    "flavor": "",
+    "portrait": "räv.png",
+    "legendary": false
+}

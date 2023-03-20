@@ -1,0 +1,9 @@
+{
+    "name": "Blodhund",
+    "en": "Bloodhound",
+    "power": 4,
+    "ruling": "On Cycle: Immediately reveal and search through the library for a card of your choice. Reveal chosen card.",
+    "flavor": "",
+    "portrait": "blodhund.png",
+    "legendary": false
+}
