@@ -4,6 +4,7 @@
     "power": 3,
     "ruling": "On Lose: You gain pole.",
     "flavor": "Fjärilens viktigaste funktion är att föröka sig. Vissa arter saknar helt förmågan att äta.",
+    "img_desc": "a butterfly that lights up its surroundings even when its a gray and gloomy day",
     "portrait": "fjäril.png",
     "legendary": false
 }

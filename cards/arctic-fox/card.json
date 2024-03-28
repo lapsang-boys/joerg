@@ -4,6 +4,7 @@
     "power": 4,
     "ruling": "Om det är lika många kort spelade i attack som i försvar så har Fjällräven prioritet över polstjärnan.",
     "flavor": "I fjällen kan ingen höra dig frysa",
+    "img_desc": "a sly fox observing its prey, knowing its thick fur puts it in an advantage in the chilling regions of the Arctic north",
     "portrait": "./arctic-fox.png",
     "legendary": false
 }

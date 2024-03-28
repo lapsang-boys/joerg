@@ -4,6 +4,7 @@
     "power": 3,
     "ruling": "Om styrkan är oavgjord så går svanen segrande oavsett Polstjärneordning.",
     "flavor": "En svan bråkar en inte med ostraffat.",
+    "img_desc": "a formidable battle ready swan that almost never wins a fight",
     "portrait": "svan.png",
     "legendary": false
 }

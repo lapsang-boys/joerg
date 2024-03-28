@@ -4,6 +4,7 @@
     "power": 2,
     "ruling": "Target opponent swaps card with one in their hand.",
     "flavor": "Grodor hoppar, paddor kryper. Det är skillnaden.",
+    "img_desc": "TODO: prompt from GPT",
     "portrait": "groda.png",
     "legendary": false
 }
